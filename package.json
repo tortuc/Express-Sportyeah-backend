@@ -1,0 +1,54 @@
+{
+  "name": "sportyeah",
+  "version": "1.0.0",
+  "description": "Proyecta tus apps...",
+  "main": "sportyeah.js",
+  "repository": {
+    "type": "git",
+    "url": " git+ssh://ubuntu@kudiska.com/var/git/backend.git"
+  },
+  "scripts": {
+    "tsc": "tsc --watch",
+    "start": "cd build && node sportyeah.js",
+    "build": "mkdir -p build && cp package.json build/ && cd build && npm install && cd .. && cp ./src/app.config ./build && mkdir -p ./build/views && cp -rf ./src/views/* ./build/views && tsc",
+    "test": "echo \"Error: no hay tests para ejecutar\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Sapviremoto",
+  "license": "ISC",
+  "dependencies": {
+    "@supercharge/request-ip": "^1.1.2",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/express": "^4.17.8",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/node": "^14.11.2",
+    "@types/nodemailer": "^6.4.0",
+    "@types/socket.io": "^2.1.11",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "es6-promise": "^4.2.8",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.1.0",
+    "geoip-lite": "^1.4.2",
+    "ini": "^1.3.5",
+    "ip": "^1.1.5",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongoose": "^5.10.7",
+    "mysql": "^2.18.1",
+    "mysql-named-params-escape": "^1.0.2",
+    "nodemailer": "^6.4.12",
+    "nodemailer-express-handlebars": "^4.0.0",
+    "open-graph": "^0.2.4",
+    "request-ip": "^2.1.3",
+    "safe-access": "^0.1.0",
+    "socket.io": "^3.1.0",
+    "ts-mongoose": "0.0.21",
+    "typescript": "^4.1.0-beta"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.7.36",
+    "ts-config": "^20.10.0",
+    "ts-node": "^9.0.0"
+  }
+}
