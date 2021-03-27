@@ -46,15 +46,15 @@ export class App {
   private config(): void {
     // Usamos el body parser
     this.app.use(
-      body_parser.urlencoded({
+      express.urlencoded({
         extended: false,
       })
     );
 
-    this.app.use(body_parser.json());
+    this.app.use(express.json());
 
     // Usamos CORS
-    this.app.use(cors());
+    this.app.use(cors({origin:['https://app.sportyeah.com','https://www.sportyeah.com']}));
     this.app.options("*", cors());
   }
 

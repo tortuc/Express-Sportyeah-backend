@@ -18,7 +18,7 @@ const schema = createSchema({
   attempts: Type.number({ default: 0 }),
   photo: Type.string({
     default:
-      "https://files.sportyeah.com/v1/image/get/1616192587926",
+      "https://files.sportyeah.com/v1/image/get/1616530480396",
   }),
   photoBanner: Type.string({
     default:
