@@ -8,7 +8,8 @@
  * 
  */
 
-export class Alert
+
+export class PostFilter
 {
     private constructor()
     {
@@ -16,36 +17,21 @@ export class Alert
     }
 
 
-  public static  filtrarArrays(post){
-    let likes = [];
-    let comments = [];
-    let shareds = [];
-    
-    likes = post.filter((post:any)=>{
-    return (post.likes.length > 0)
-   })
-     
-   comments = post.filter((post:any)=>{
-    return (post.comments.length > 0)
-   })
-     
-   shareds = post.filter((post:any)=>{
-    return (post.shareds.length > 0)
-   })
-
-    //Ordena de mayor a menor el post con mas reacciones
-    likes.sort(function(b, a) {
-        return a.likes.length - b.likes.length ;
-        });
-      
-        //Ordena de mayor a menor el post con mas comentarios
-        comments.sort(function(b, a) {
-        return a.comments.length - b.comments.length ;
-        });
-      
-        //Ordena de mayor a menor el post con mas veces compartido
-        shareds.sort(function(b, a) {
-        return a.shareds.length - b.shareds.length ;
-        });
-}
+    public static filterQuestionsAnswered(post:any,idUser){
+      let i = 0
+      post.question.questionGroup.forEach(element => {
+        
+       element.users.forEach(element2 => {
+        
+         if(idUser == element2.id){
+          post.question.questionGroup[i].voted = true
+          console.log("si es voted")
+         }
+       });
+       console.log(element)
+       i ++
+      });
+      // console.log(post.question.questionGroup)
+      return true
+    }
 }

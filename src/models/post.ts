@@ -16,6 +16,7 @@ const schema = createSchema({
     user: Type.objectId({ ref: 'User', required: true }),
     post: Type.objectId({ ref: 'Post', default: null }),
     news: Type.objectId({ default: null, required: false, ref: 'News' }),
+    question: Type.objectId({ ref: 'Question', required: false }),
     message: Type.string(),
     image: Type.string(),
     video: Type.string({ default: null }),
@@ -114,7 +115,7 @@ const Post = typedModel('Post', schema, undefined, undefined, {
     },
 
     findOnePost(id) {
-        return Post.findById(id).populate('user post news')
+        return Post.findById(id).populate('user post news question')
     .populate({ path: 'post', populate: { path: 'user news' } })
     .populate({path:'news',populate:{path:'user'}})
     },

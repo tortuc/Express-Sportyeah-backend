@@ -6,7 +6,7 @@ import Like from "../models/like";
 import Comment from "../models/comment";
 import User from "../models/user";
 import { Alert } from "../helpers/alert";
-
+import { PostFilter } from "../helpers/postFilter"
 /**
  * PostController
  *
@@ -292,6 +292,7 @@ export class PostController extends BaseController {
   public getPost(request: Request, response: Response) {
     Post.findOnePost(request.params.id)
       .then((post) => {
+      // let ok = PostFilter.filterQuestionsAnswered(post)
         if (post) {
           Like.getLikesByPost(post._id)
             .then((likes) => {
@@ -305,6 +306,7 @@ export class PostController extends BaseController {
                         comments,
                         shareds,
                       });
+                      PostFilter.filterQuestionsAnswered(post,request.params.idUser)
                     })
                     .catch((err) => {
                       response

@@ -133,5 +133,11 @@ export class Router {
      * @route /v1/ranking/...
      */
     this.route.use("/v1/ranking", require("./rankingRoute"));
+    /**
+     * Manejador de rutas para las preguntas de post y noticias
+     *
+     * @route /v1/question/...
+     */
+     this.route.use("/v1/question", require("./questionRoute"));
   }
 }
