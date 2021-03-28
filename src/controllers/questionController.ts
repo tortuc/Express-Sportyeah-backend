@@ -1,67 +1,56 @@
-import { BaseController } from './baseController';
-import { HttpResponse } from '../helpers/httpResponse';
-import { Request, Response } from 'express';
-import Question from '../models/question'
+import { BaseController } from "./baseController";
+import { HttpResponse } from "../helpers/httpResponse";
+import { Request, response, Response } from "express";
+import Question from "../models/question";
+import QuestionGroup from "../models/questionGroup";
+import Answer from "../models/answer";
+import { QuestionHelper } from "../helpers/question";
 /**
  * QuestionController
- * 
+ *
  * Explica el objeto de este controlador
- *  
+ *
  * @author Jogeiker L <jogeiker1999@gmail.com>
  * @copyright Sapviremoto
  */
- 
-export class QuestionController extends BaseController
-{
-    /**
-     * El constructor
-     */
-    public constructor()
-    {
-        // Llamamos al constructor padre
-        super();
-    }
 
-    /**
-     * crea un pregunta
-     * 
-     * @route /question/create
-     * @method get
-     */
-    public create(request:Request, response:Response)
-    {
-        Question.create(request.body)
-      .then((resp) => {
-        response.status(HttpResponse.Ok).json(resp);
-      })
-      .catch((err) => {
-        response.status(HttpResponse.BadRequest).json(err);
-      });
-    }
-
-     /**
-   * Encontrar Pregunta
-   *
-   * @route /v1/question
-   * @method question
+export class QuestionController extends BaseController {
+  /**
+   * El constructor
    */
-  public findQuestion(request: Request, response: Response) {
-    Question.findOneQuestion(request.params.id)    
+  public constructor() {
+    // Llamamos al constructor padre
+    super();
+  }
+
+  /**
+   * crea un pregunta
+   *
+   * @route /question/create
+   * @method get
+   */
+  public create(request: Request, response: Response) {
+
+    Question.create(request.body.user)
       .then((resp) => {
+        QuestionHelper.filterQuestion(request.body.questionGroup, resp._id);
+
         response.status(HttpResponse.Ok).json(resp);
       })
       .catch((err) => {
-        response.status(HttpResponse.BadRequest).send("cannot-find-Question");
+
+        response.status(HttpResponse.BadRequest).json(err);
       });
   }
 
-     /**
+  
+  /**
    * Encontrar Preguntas por post
    *
    * @route /v1/question
    * @method question
    */
-    /*   public findByPost(request: Request, response: Response) {
+  /*   public findByPost(request: Request, response: Response) {
         Question.findByPost(request.params.id)    
           .then((resp) => {
             response.status(HttpResponse.Ok).json(resp);
@@ -71,13 +60,13 @@ export class QuestionController extends BaseController
           });
       } */
 
-      /**
+  /**
    * Encontrar Preguntas por noticia
    *
    * @route /v1/question
    * @method question
    */
-       /* public findByNews(request: Request, response: Response) {
+  /* public findByNews(request: Request, response: Response) {
         Question.findByNews(request.params.id)    
           .then((resp) => {
             response.status(HttpResponse.Ok).json(resp);
@@ -88,8 +77,8 @@ export class QuestionController extends BaseController
       }
  */
 
-      /**
-   * Editar Questions 
+  /**
+   * Editar Questions
    *
    * @route /v1/question/edit
    * @method question
@@ -106,12 +95,12 @@ export class QuestionController extends BaseController
   }
 
   /**
-   * Eliminar una pregunta 
+   * Eliminar una pregunta
    *
    * @route /v1/question/delete
    * @method question
    */
-   public deleteOneById(request: Request, response: Response) {
+  public deleteOneById(request: Request, response: Response) {
     Question.deleteOneById(request.params.id)
       .then((resp) => {
         response.status(HttpResponse.Ok).json(resp);
@@ -121,4 +110,19 @@ export class QuestionController extends BaseController
       });
   }
 
+
+  /**
+   * Agregar un usuario a un answer (voto)
+   */
+
+  public voteAnwers(request:Request,response:Response){
+    let {id, user} = request.params;
+    Answer.newUser(id, user).then((resp)=>{
+      response.status(200).json(resp)
+    })
+    .catch((e)=>{
+      console.log(e);
+      
+    })
+  }
 }

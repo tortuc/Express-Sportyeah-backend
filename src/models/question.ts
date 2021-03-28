@@ -1,5 +1,5 @@
-import { type } from 'node:os';
 import { createSchema, Type, typedModel } from 'ts-mongoose';
+
 
 /**
  * Modelo de conexión
@@ -15,19 +15,16 @@ import { createSchema, Type, typedModel } from 'ts-mongoose';
  */
 const schema = createSchema({
     user    : Type.objectId({ref: 'User',required:true}),
-    questionGroup    : Type.array().of({
+   /*  questionGroup    : Type.array().of({
         questionHeadline: Type.string(),
         answer : Type.array().of({
             option    : Type.string({ required:true }),
             total    : Type.number({ required:false }),
             position : Type.number({ required:true }),
-        }),
-        users   : Type.array().of({
-            id  : Type.string()
+            users   :  [Type.objectId({ref: 'User',required:true})]
         }),
         total    : Type.number({ required:false }),
-    }),//grupo de preguntas es array
-    
+    }), */
     date    : Type.date({default:Date.now}),
     deleted : Type.boolean({default:false}),
     edited  : Type.date({defualt:null})
@@ -36,11 +33,11 @@ const schema = createSchema({
 const Question = typedModel('Question', schema, undefined, undefined, {
     /**
      * Crea un question
-     * @param {Question} question  
+     * @param {string} user  
      *  
      */
-    create(question){
-        return new Question(question).save()
+    create(user){
+        return new Question({user}).save()
     },
 
     findQuestion(){
@@ -112,6 +109,7 @@ const Question = typedModel('Question', schema, undefined, undefined, {
     deleteOneById(id){
         return Question.findByIdAndUpdate(id,{deleted:true})
     },
+
 
 
     /* getCountQuestionByUser(user){

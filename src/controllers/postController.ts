@@ -6,7 +6,7 @@ import Like from "../models/like";
 import Comment from "../models/comment";
 import User from "../models/user";
 import { Alert } from "../helpers/alert";
-import { PostFilter } from "../helpers/postFilter"
+import { PostFilter } from "../helpers/postFilter";
 /**
  * PostController
  *
@@ -54,11 +54,9 @@ export class PostController extends BaseController {
           .then((posts) => {
             let postsAndLikes = [];
             let j = 0;
-            if(posts.length===0){
-              response
-              .status(HttpResponse.Ok)
-              .json([]);
-            }else{
+            if (posts.length === 0) {
+              response.status(HttpResponse.Ok).json([]);
+            } else {
               posts.forEach((post, i, arr) => {
                 Like.getLikesByPost(post._id)
                   .then((likes) => {
@@ -84,7 +82,7 @@ export class PostController extends BaseController {
                                 .json(postsAndLikes);
                             }
                           })
-  
+
                           .catch((err) => {
                             response
                               .status(HttpResponse.InternalError)
@@ -178,11 +176,9 @@ export class PostController extends BaseController {
     });
   }
 
-  public findByUser(request: Request, response: Response){
-    
-    let user = request.params.id
-    Post.findByUser(user)
-    .then((posts) => {
+  public findByUser(request: Request, response: Response) {
+    let user = request.params.id;
+    Post.findByUser(user).then((posts) => {
       let postsAndLikes = [];
       let j = 0;
       if (posts.length == 0) {
@@ -224,7 +220,6 @@ export class PostController extends BaseController {
         });
       }
     });
-
   }
 
   public deleteOne(request: Request, response: Response) {
@@ -292,21 +287,26 @@ export class PostController extends BaseController {
   public getPost(request: Request, response: Response) {
     Post.findOnePost(request.params.id)
       .then((post) => {
-      // let ok = PostFilter.filterQuestionsAnswered(post)
+        // let ok = PostFilter.filterQuestionsAnswered(post)
         if (post) {
           Like.getLikesByPost(post._id)
             .then((likes) => {
               Comment.getCommentsByPost(post._id)
                 .then((comments) => {
                   Post.getSharedsByPost(post._id)
-                    .then((shareds) => {
+                    .then(async (shareds) => {
+                      let question =
+                        post.question != null
+                          ? await PostFilter.getDataQuestion(post.question)
+                          : null;
+
                       response.status(HttpResponse.Ok).json({
                         post,
                         likes,
                         comments,
                         shareds,
+                        question,
                       });
-                      PostFilter.filterQuestionsAnswered(post,request.params.idUser)
                     })
                     .catch((err) => {
                       response
@@ -368,10 +368,9 @@ export class PostController extends BaseController {
         .then((posts) => {
           let postsAndLikes = [];
           let j = 0;
-          if(posts.length === 0){
+          if (posts.length === 0) {
             response.status(HttpResponse.BadRequest).send("unknow error");
-          }else{
-            
+          } else {
             posts.forEach((post, i, arr) => {
               Like.getLikesByPost(post._id)
                 .then((likes) => {
@@ -392,10 +391,12 @@ export class PostController extends BaseController {
                                 b.post.date.getTime() - a.post.date.getTime()
                               );
                             });
-                            response.status(HttpResponse.Ok).json(postsAndLikes);
+                            response
+                              .status(HttpResponse.Ok)
+                              .json(postsAndLikes);
                           }
                         })
-  
+
                         .catch((err) => {
                           response
                             .status(HttpResponse.InternalError)
@@ -442,12 +443,10 @@ export class PostController extends BaseController {
       });
   }
 
-
-  public findAllPost(request: Request, response:Response){
-    Post.findAllPost()
-    .then((posts) => {
+  public findAllPost(request: Request, response: Response) {
+    Post.findAllPost().then((posts) => {
       //response.status(HttpResponse.Ok).json(posts)
-       let postsAndLikes = [];
+      let postsAndLikes = [];
       let j = 0;
       if (posts.length == 0) {
         response.status(HttpResponse.Ok).json(postsAndLikes);
@@ -472,7 +471,7 @@ export class PostController extends BaseController {
                       response.status(HttpResponse.Ok).json(postsAndLikes);
                     }
                   })
-  
+
                   .catch((err) => {
                     response
                       .status(HttpResponse.InternalError)
@@ -486,10 +485,7 @@ export class PostController extends BaseController {
               });
           });
         });
-      } 
+      }
     });
   }
-
-  
-
 }

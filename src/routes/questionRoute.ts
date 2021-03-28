@@ -36,7 +36,7 @@ QuestionRouter.post('/create', questionController.create);
  * @route /v1/question/:id
  * @method get
  */
-QuestionRouter.get('/:id', questionController.findQuestion);
+// QuestionRouter.get('/:id', questionController.findQuestion);
 
 /**
  * Obtiene las preguntas por post
@@ -73,6 +73,15 @@ QuestionRouter.put('/update/:id', questionController.updateQuestion);
  * @method delete
  */
 QuestionRouter.delete('/delete/:id', questionController.deleteOneById);
+
+/**
+ * Vote for answer
+ * 
+ * 
+ * @route /v1/question/answer/:id/:user
+ * @method get
+ */
+QuestionRouter.get('/answer/:id/:user', questionController.voteAnwers);
 
 
 
