@@ -55,7 +55,6 @@ export class App {
 
     // Usamos CORS
     this.app.use(cors({origin:['https://app.sportyeah.com','https://www.sportyeah.com','http://localhost:8100']}));
-    this.app.options("*", cors());
   }
 
   /**
