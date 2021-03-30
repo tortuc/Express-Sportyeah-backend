@@ -139,5 +139,5 @@ export class Router {
      * @route /v1/question/...
      */
      this.route.use("/v1/question", require("./questionRoute"));
-  }
+    }
 }

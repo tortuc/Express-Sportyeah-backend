@@ -6,6 +6,7 @@ import Like from "../models/like";
 import Comment from "../models/comment";
 import Post from "../models/post";
 import { Alert } from '../helpers/alert';
+import { PostFilter } from "../helpers/postFilter";
 
 /**
  * NewsController
@@ -76,12 +77,17 @@ export class NewsController extends BaseController
               Comment.getCommentsByNews(news._id)
                 .then((comments) => {
                   Post.getSharedsByNews(news._id)
-                    .then((shareds) => {
+                    .then(async(shareds) => {
+                      let question =
+                      news.question != null
+                        ? await PostFilter.getDataQuestion(news.question)
+                        : null;
                       response.status(HttpResponse.Ok).json({
                         news,
                         likes,
                         comments,
                         shareds,
+                        question
                       });
                     })
 

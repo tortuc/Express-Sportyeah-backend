@@ -125,4 +125,20 @@ export class QuestionController extends BaseController {
       
     })
   }
+
+
+  /**
+   * Busca que usuario ya haya votado
+   */
+
+   public userVoted(request:Request,response:Response){
+    let {id, user} = request.params;
+    Answer.userVoted(id, user).then((resp)=>{
+      response.status(200).json(resp)
+    })
+    .catch((e)=>{
+      console.log(e);
+      
+    })
+  }
 }

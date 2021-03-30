@@ -287,7 +287,6 @@ export class PostController extends BaseController {
   public getPost(request: Request, response: Response) {
     Post.findOnePost(request.params.id)
       .then((post) => {
-        // let ok = PostFilter.filterQuestionsAnswered(post)
         if (post) {
           Like.getLikesByPost(post._id)
             .then((likes) => {

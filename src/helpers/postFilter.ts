@@ -59,17 +59,18 @@ export class PostFilter {
         // recorremos los grupos
         questionGroups.forEach(async (group, i, arr) => {
           // buscamos los answers de cada grupo
-          let answers = await Answer.findByQuestionGroup(group._id);
+          let answers:any = await Answer.findByQuestionGroup(group._id);
           // total de usuarios que han votado
           let total = 0;
           // no necesitamos a los usuarios, solo la cantidad asi que en un map retornamos solo el length de los users
           let newAnswers = answers.map((answer) => {
-            let { users, _id, questionGroup, option } = answer;
+            let { users, _id, questionGroup, option,position } = answer;
             let newAnswer = {
               users: users.length,
               _id: _id,
               questionGroup: questionGroup,
               option: option,
+              position: position
             };
             total = total + users.length;
             return newAnswer;
@@ -81,6 +82,11 @@ export class PostFilter {
           // metemos en el array, el grupo, las answers y el total
           questionGroupAndAnswers.push({ group, newAnswers, total });
           j += 1;
+          //organiza para que se mantenga el orden de las preguntas
+          questionGroupAndAnswers.sort((a,b)=>{
+            return b.position - a.position
+          })  
+          console.log(questionGroupAndAnswers)
           if (j == arr.length) {
             // respondemos con toda la data
             resolve(questionGroupAndAnswers);

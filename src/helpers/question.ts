@@ -20,34 +20,25 @@ export class QuestionHelper
 
 
     public static filterQuestion(questionGroup:any[],questionId){
-      console.log('recibiendo el grupo',questionGroup);
       
-    questionGroup.forEach(question => {
-      QuestionGroup.create(questionId,question.questionHeadline)
-      .then((response:any)=>{
-        question.answer.forEach(answer => {
-          Answer.create(response._id,answer.option)
-          .then((answer)=>{
-            console.log(answer,'answer creadp');
-            
-          })
-          .catch((e)=>{
-            console.log('err',e);
-            
-          })
-        });
-        
-      })
-      .catch((err)=>{
-        // hendler error
-      })
-    });
-      
-    
-      
-
-      
-      
-      
+      questionGroup.forEach(question => {
+        QuestionGroup.create(questionId,question.questionHeadline)
+        .then((response:any)=>{
+          question.answer.forEach(answer => {
+            Answer.create(response._id,answer.option,answer.position)
+            .then((answer)=>{
+            })
+            .catch((e)=>{
+              console.log('err',e);
+            })
+          });
+          
+        })
+        .catch((err)=>{
+          // hendler error
+        })
+      });
     }
+
+
 }

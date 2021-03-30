@@ -83,6 +83,14 @@ QuestionRouter.delete('/delete/:id', questionController.deleteOneById);
  */
 QuestionRouter.get('/answer/:id/:user', questionController.voteAnwers);
 
+/**
+ * User check voted
+ * 
+ * 
+ * @route /v1/question/answer/:id/:user
+ * @method get
+ */
+ QuestionRouter.get('/answer/voted/:id/:user', questionController.userVoted);
 
 
 module.exports = QuestionRouter;

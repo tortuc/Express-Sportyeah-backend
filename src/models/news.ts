@@ -14,7 +14,7 @@ import { createSchema, Type, typedModel } from 'ts-mongoose';
  */
 const schema = createSchema({
     user    : Type.objectId({ref: 'User',required:true}),
-    //news    : Type.objectId({ref:'News', default:null}),
+    question: Type.objectId({ ref: 'Question', required: false }),
     headline: Type.string(),
     content : Type.array().of({
         subtitle    : Type.string({}),
@@ -59,7 +59,7 @@ const News = typedModel('News', schema, undefined, undefined, {
     },
 
     findOneNews(id){
-        return News.findById(id).populate('user')
+        return News.findById(id).populate('user question')
     },
 
 

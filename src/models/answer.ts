@@ -15,7 +15,8 @@ import { createSchema, Type, typedModel } from 'ts-mongoose';
 const schema = createSchema({
     questionGroup:Type.objectId({ref: 'QuestionGroup',required:true}),
     option    : Type.string({ required:true }),
-    users   :  [Type.objectId({ref: 'User',required:true})]
+    users   :  [Type.objectId({ref: 'User',required:true})],
+    position : Type.number({ required:true }),
 });
 
 const Answer = typedModel('Answer', schema, undefined, undefined, 
@@ -26,10 +27,19 @@ const Answer = typedModel('Answer', schema, undefined, undefined,
          * 
          * @param  answer   El nombre
          */
-        create(questionGroup,option) {
-            return new Answer({questionGroup,option}).save()
+        create(questionGroup,option,position) {
+            return new Answer({questionGroup,option,position}).save()
         },
 
+        /**
+         * Sa ber si alguin voto 
+         * 
+         * @param  id  id del answer
+         *  @param user  id del user
+         */
+        userVoted(id,user){
+            return Answer.findOne( { questionGroup:id, users: { $elemMatch: { $eq: user } } })
+        },
 
         /**
          * Elimina un answers 
