@@ -7,6 +7,8 @@ import Comment from "../models/comment";
 import Post from "../models/post";
 import { Alert } from '../helpers/alert';
 import { PostFilter } from "../helpers/postFilter";
+import { NewsFilter } from "../helpers/newsFilter";
+import { Net } from "../helpers/net";
 
 /**
  * NewsController
@@ -71,7 +73,6 @@ export class NewsController extends BaseController
     News.findOneNews(request.params.id)
     .then((news) => {
       if(news){
-          //console.log(post)
           Like.getLikesByNews(news._id)
             .then((likes) => {
               Comment.getCommentsByNews(news._id)
@@ -80,8 +81,10 @@ export class NewsController extends BaseController
                     .then(async(shareds) => {
                       let question =
                       news.question != null
-                        ? await PostFilter.getDataQuestion(news.question)
+                        ? await NewsFilter.getDataQuestion(news.question)
                         : null;
+                      let geo = Net.geoIp(Net.ip(request));
+                      await NewsFilter.findIpView(request.params.id,geo.ip)
                       response.status(HttpResponse.Ok).json({
                         news,
                         likes,

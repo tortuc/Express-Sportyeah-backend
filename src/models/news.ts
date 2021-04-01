@@ -36,7 +36,8 @@ const schema = createSchema({
     postStream : Type.string({required:false}),
     date    : Type.date({default:Date.now}),
     deleted : Type.boolean({default:false}),
-    edited  : Type.date({defualt:null})
+    edited  : Type.date({defualt:null}),
+    views  :[Type.string({default: 0})]
 });
 
 const News = typedModel('News', schema, undefined, undefined, {
@@ -109,6 +110,13 @@ const News = typedModel('News', schema, undefined, undefined, {
     getSharedsByNews(id){
         return News.find({news:id}).populate('user news').populate({path:'news',populate:{path:'user'}}).sort({date:-1})
     },
+
+    newView(id,ip){
+      return  News.findByIdAndUpdate(id,{$push:{views:ip}})
+    },
+    findViewIp(id,ip){
+        return News.findOne({_id:id,views:{$elemMatch:{$eq:ip}}})
+    }
 
 });
 

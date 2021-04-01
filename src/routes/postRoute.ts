@@ -98,7 +98,7 @@ PostRoute.put('/dislike/:id',Authentication.jwt,postController.dislikePost)
   * @param id id del post
   */
 
-PostRoute.get('/get/:id/:idUser',postController.getPost)
+PostRoute.get('/get/:id',postController.getPost)
 
 /**
   * Crea un nuevo comentario a un post

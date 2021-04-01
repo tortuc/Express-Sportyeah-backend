@@ -22,7 +22,8 @@ const schema = createSchema({
     video: Type.string({ default: null }),
     date: Type.date({ default: Date.now }),
     deleted: Type.boolean({ default: false }),
-    edited: Type.date({ defualt: null })
+    edited: Type.date({ defualt: null }),
+    views  :[Type.string({default: 0})]
 });
 
 const Post = typedModel('Post', schema, undefined, undefined, {
@@ -166,6 +167,12 @@ const Post = typedModel('Post', schema, undefined, undefined, {
           { $sort: { count: -1 } },
         ]);
       },
+      newView(id,ip){
+        return Post.findByIdAndUpdate(id,{$push:{views:ip}})//colocar en el controler el beta la ruta etc etc
+      },
+      findViewIp(id,ip){
+        return Post.findOne({_id:id,views:{$elemMatch:{$eq:ip}}})
+      }
 });
 
 /**

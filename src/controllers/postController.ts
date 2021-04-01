@@ -7,6 +7,8 @@ import Comment from "../models/comment";
 import User from "../models/user";
 import { Alert } from "../helpers/alert";
 import { PostFilter } from "../helpers/postFilter";
+import { Net } from "../helpers/net"
+
 /**
  * PostController
  *
@@ -298,7 +300,8 @@ export class PostController extends BaseController {
                         post.question != null
                           ? await PostFilter.getDataQuestion(post.question)
                           : null;
-
+                          let geo = Net.geoIp(Net.ip(request));
+                          await PostFilter.findIpView(request.params.id,geo.ip)  
                       response.status(HttpResponse.Ok).json({
                         post,
                         likes,

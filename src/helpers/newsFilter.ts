@@ -7,39 +7,22 @@
  * @copyright Sapviremoto
  *
  */
+ import QuestionGroup from "../models/questionGroup";
+ import Answer from "../models/answer";
+ import News from "../models/news";
+ export class NewsFilter {
+   private constructor() {
+     // Constructor Privado
+   }
+ 
+ 
 
-import Answer from "../models/answer";
-import Post from "../models/post";
-import QuestionGroup from "../models/questionGroup";
-import User from "../models/user";
-export class PostFilter {
-  private constructor() {
-    // Constructor Privado
-  }
-
-  public static filterQuestionsAnswered(post: any, idUser) {
-
-    post.question.questionGroup.forEach((element, i) => {
-      post.question.questionGroup[i].voted = false;
-      let voted = element.users.find((element2) => {
-        return idUser == element2.id;
-      });
-
-
-      if (voted) {
-        post.question.questionGroup[i].voted = true;
-      }
-    });
-
-    return post;
-  }
-
-  /**
+ /**
    * Retorna la data de un Question
    * @param question la question en si
    * @returns
    */
-   public static async getDataQuestion(question): Promise<any> {
+  public static async getDataQuestion(question): Promise<any> {
     // retornamos una promesa
     return new Promise(async (resolve) => {
       // buscamos los grupos de esa cuestion
@@ -95,22 +78,20 @@ export class PostFilter {
   }
 
 
-
-  public static async findIpView(id,ip){
-
-    await Post.findViewIp(id,ip).then((resp)=>{
-
-      
-     if(!resp){
-      Post.newView(id,ip).then((response)=>
-      console.log(response)
-      )
-     }
-       
-      return resp
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-  }
-}
+   public static async findIpView(id,ip){
+ 
+     await News.findViewIp(id,ip).then((resp)=>{
+      if(!resp){
+       News.newView(id,ip).then((response)=>
+       console.log('creamos una view',response)
+       )
+      }
+        
+       return resp
+     })
+     .catch((err)=>{
+       console.log(err)
+     })
+   }
+ }
+ 
