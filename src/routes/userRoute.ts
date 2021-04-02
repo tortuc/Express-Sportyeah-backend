@@ -148,7 +148,7 @@ UserRouter.get('/users',Authentication.jwt,userController.getUsers)
  * @method get
  */
 
-UserRouter.get('/username/:username',Authentication.jwt,userController.getUser)
+UserRouter.get('/username/:username',userController.getUser)
 
 /**
  * Modifica los datos de una marca Sponsor
