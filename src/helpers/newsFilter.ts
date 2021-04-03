@@ -56,13 +56,17 @@
             total = total + users.length;
             return newAnswer;
           });
+          //organiza para que se mantenga el orden de las respuestas
+          answer.sort((a,b)=>{
+            return a.position - b.position
+          })  
           // si el total es 0 entonces retornamos un 1 para que no de error, si no retornamos la cantidad que es
           total = total == 0 ? 1 : total;
           // metemos en el array, el grupo, las answers y el total
           questionGroupAndAnswers.push({ questionHeadline,questionGroup, answer, total });
           j += 1;
-          //organiza para que se mantenga el orden de las preguntas
           questionGroupAndAnswers.sort((a,b)=>{
+
             return b.position - a.position
           })  
           if (j == arr.length) {
