@@ -17,6 +17,7 @@ import User from "../models/user";
 import { Config } from "./config";
 import { Environment } from "./environment";
 import { Socket } from "./socket";
+import  Question from "../models/question"
 export class Alert
 {
     /**
@@ -202,6 +203,54 @@ export class Alert
     }
     public static commentNewsStream(comment,idNews){
         Socket.IO.in(`${idNews}`).emit('new-comment',{comment})
-            
-        }
+    }
+
+    /**
+   * Crea una notificacion del tipo question
+   * @param question cuerpo del question
+   */
+  public static questionVotedEndNotification(question,id_,type_,user_) {
+    Question.findOneQuestion(question._id).then((question) => {
+      // obtenemos el post donde se reacciono
+      let id: any = id_;
+      // obtenemos el usuario que reacciono
+      let user: any = question.user;
+      // obtenemos el tipo de reaccion
+      let type: any = type_;
+      if(type == 'post'){
+        Notification.newNotification({
+            user: user_,
+            post: id_,
+            question:question._id,
+            action:'questionEnd',
+            routerlink: `/post/${id_}`,
+          })
+            .then(() => {
+              // se creo y se notifica al creador del post
+              this.notification(user);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+      }else{
+        Notification.newNotification({
+            user: user_,
+            post: id_,
+            question:question._id,
+            action:'questionEnd',
+            routerlink: `/news/${id_}`,
+          })
+            .then(() => {
+              // se creo y se notifica al creador del news
+              this.notification(user);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+      }
+
+        
+      
+    });
+  }
 }

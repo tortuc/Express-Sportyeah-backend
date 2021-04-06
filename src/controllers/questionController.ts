@@ -31,8 +31,8 @@ export class QuestionController extends BaseController {
    */
   public create(request: Request, response: Response) {
 
-    Question.create(request.body.user)
-      .then((resp) => {
+    Question.create(request.body.user,request.body.finishVotes)
+      .then((resp:any) => {
         QuestionHelper.filterQuestion(request.body.questionGroup, resp._id);
 
         response.status(HttpResponse.Ok).json(resp);

@@ -25,6 +25,8 @@ const schema = createSchema({
         }),
         total    : Type.number({ required:false }),
     }), */
+    finishVotes: Type.date({default:undefined}),
+    notified : Type.boolean({default:false}),
     date    : Type.date({default:Date.now}),
     deleted : Type.boolean({default:false}),
     edited  : Type.date({defualt:null})
@@ -36,8 +38,8 @@ const Question = typedModel('Question', schema, undefined, undefined, {
      * @param {string} user  
      *  
      */
-    create(user){
-        return new Question({user}).save()
+    create(user,finishVotes){
+        return new Question({user,finishVotes}).save()
     },
 
     findQuestion(){
@@ -109,6 +111,10 @@ const Question = typedModel('Question', schema, undefined, undefined, {
     deleteOneById(id){
         return Question.findByIdAndUpdate(id,{deleted:true})
     },
+
+    notifiedTrue(question){
+       return Question.findByIdAndUpdate(question,{notified:true})
+    }
 
 
 
