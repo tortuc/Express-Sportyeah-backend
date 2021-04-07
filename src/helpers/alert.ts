@@ -213,44 +213,65 @@ export class Alert
     Question.findOneQuestion(question._id).then((question) => {
       // obtenemos el post donde se reacciono
       let id: any = id_;
-      // obtenemos el usuario que reacciono
+      // obtenemos el usuario que sera notificado
       let user: any = question.user;
-      // obtenemos el tipo de reaccion
+      // obtenemos el tipo de notificacion
       let type: any = type_;
-      if(type == 'post'){
-        Notification.newNotification({
-            user: user_,
-            post: id_,
-            question:question._id,
-            action:'questionEnd',
-            routerlink: `/post/${id_}`,
-          })
-            .then(() => {
-              // se creo y se notifica al creador del post
-              this.notification(user);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-      }else{
-        Notification.newNotification({
-            user: user_,
-            post: id_,
-            question:question._id,
-            action:'questionEnd',
-            routerlink: `/news/${id_}`,
-          })
-            .then(() => {
-              // se creo y se notifica al creador del news
-              this.notification(user);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-      }
-
-        
+     //Revisamos que tipo de notificacion sera 
+      switch (type) {
+          case 'post':
+            Notification.newNotification({
+                user: user_,
+                post: id_,
+                question:question._id,
+                action:'questionEnd',
+                routerlink: `/post/${id_}`,
+              })
+                .then(() => {
+                  // se creo y se notifica al creador del post
+                  this.notification(user);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              break;
       
+          case 'news':
+            Notification.newNotification({
+                user: user_,
+                post: id_,
+                question:question._id,
+                action:'questionEnd',
+                routerlink: `/news/${id_}`,
+              })
+                .then(() => {
+                  // se creo y se notifica al creador del news
+                  this.notification(user);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              break;
+
+          case 'comment':
+            Notification.newNotification({
+                user: user_,
+                post: id_,
+                question:question._id,
+                action:'questionEnd',
+                routerlink: `/news/${id_}`,
+              })
+                .then(() => {
+                  // se creo y se notifica al creador del news
+                  this.notification(user);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              break;
+          default:
+              break;
+      }
     });
   }
 }

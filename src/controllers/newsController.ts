@@ -245,6 +245,7 @@ public newComment(request: Request, response: Response) {
     news: request.body.news,
     message: request.body.message,
     image: request.body.image,
+    question: request.body.question,
   };
   Comment.newComment(comment)
     .then((comment) => {

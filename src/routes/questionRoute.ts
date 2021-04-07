@@ -18,6 +18,18 @@ const questionController = new QuestionController();
  */
 const QuestionRouter:any = questionController.router();
 
+
+/**
+ * Obtiene una pregunta
+ * 
+ * 
+ * @route /v1/question/create
+ * @method post
+ */
+ QuestionRouter.get('/:id', questionController.findOneQuestion);
+
+
+
 /**
  * Crear una pregunta
  * 

@@ -15,6 +15,7 @@ import { createSchema, Type, typedModel } from "ts-mongoose";
 const schema = createSchema({
   post: Type.objectId({ required: false, ref: "Post" }),
   news: Type.objectId({ default: null, required: false, ref: "News" }),
+  question: Type.objectId({ ref: 'Question', required: false }),
   user: Type.objectId({ required: true, ref: "User" }),
   message: Type.string({ default: null }),
   image: Type.string({ default: null }),
@@ -36,7 +37,7 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
    */
   getCommentsByPost(post) {
     return Comment.find({ post, deleted: false })
-      .populate("user")
+      .populate("user question")
       .sort({ date: -1 });
   },
   /**
@@ -59,7 +60,7 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
    * @param id `_id` del Comment
    */
   getOneComment(id) {
-    return Comment.findById(id).populate("user post");
+    return Comment.findById(id).populate("user post question");
   },
 
   /** PRUEBA NEWS con comentarios

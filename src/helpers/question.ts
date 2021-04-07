@@ -12,6 +12,7 @@
  import News from '../models/news'
  import Post from '../models/post'
  import Question from '../models/question'
+ import Comment from '../models/comment'
  import { Alert } from '../helpers/alert'
 export class QuestionHelper
 {
@@ -74,6 +75,17 @@ export class QuestionHelper
                     id = post[0]._id;
                     type = 'post'
                     user = post[0].user
+                  })
+                  .catch((err)=>{
+                    
+                  })
+                }
+                if(type == undefined){
+                  await Comment.find({question:question._id})
+                  .then((comment:any)=>{
+                    id = comment[0]._id;
+                    type = 'comment'
+                    user = comment[0].user
                   })
                   .catch((err)=>{
                     

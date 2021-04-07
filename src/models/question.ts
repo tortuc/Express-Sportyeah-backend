@@ -52,7 +52,7 @@ const Question = typedModel('Question', schema, undefined, undefined, {
     },
 
     findOneQuestion(id){
-        return Question.findById(id).populate('user ')
+        return Question.findById(id).populate('user')
     },
 
 

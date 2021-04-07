@@ -8,6 +8,7 @@ import User from "../models/user";
 import { Alert } from "../helpers/alert";
 import { PostFilter } from "../helpers/postFilter";
 import { Net } from "../helpers/net"
+import { CommentFilter } from "../helpers/comment"
 
 /**
  * PostController
@@ -298,13 +299,15 @@ export class PostController extends BaseController {
           Like.getLikesByPost(post._id)
             .then((likes) => {
               Comment.getCommentsByPost(post._id)
-                .then((comments) => {
+                .then((comments:any) => {
                   Post.getSharedsByPost(post._id)
                     .then(async (shareds) => {
                       let question =
                         post.question != null
                           ? await PostFilter.getDataQuestion(post.question)
                           : null;
+                         /*  let newCommnets = await CommentFilter.filterComments(comments)
+                          comments.question = newCommnets; */
                           let geo = Net.geoIp(Net.ip(request));
                           await PostFilter.findIpView(request.params.id,geo.ip)  
                       response.status(HttpResponse.Ok).json({
@@ -347,6 +350,7 @@ export class PostController extends BaseController {
       post: request.body.post,
       message: request.body.message,
       image: request.body.image,
+      question: request.body.question,
     };
     Comment.newComment(comment)
       .then((comment) => {

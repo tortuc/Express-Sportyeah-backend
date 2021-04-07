@@ -5,6 +5,8 @@ import Question from "../models/question";
 import QuestionGroup from "../models/questionGroup";
 import Answer from "../models/answer";
 import { QuestionHelper } from "../helpers/question";
+import { PostFilter } from "../helpers/postFilter"
+
 /**
  * QuestionController
  *
@@ -22,6 +24,24 @@ export class QuestionController extends BaseController {
     // Llamamos al constructor padre
     super();
   }
+
+
+/**
+   * obtiene un pregunta
+   *
+   * @route /question/create
+   * @method get
+   */
+ public findOneQuestion(request: Request, response: Response) {
+  Question.findOneQuestion(request.params.id)
+    .then(async(resp:any) => {
+      let questionGroup =  await PostFilter.getDataQuestion(resp);
+      response.status(HttpResponse.Ok).json({resp,questionGroup});
+    })
+    .catch((err) => {
+      response.status(HttpResponse.BadRequest).json(err);
+    });
+}
 
   /**
    * crea un pregunta
