@@ -10,6 +10,7 @@
  import { Config } from "./config";
  import { Environment } from "./environment";
  import { Admin } from "./admin";
+ import { QuestionHelper } from "./question"
  export class Mongoose {
    /**
     * Una instancia única del objeto
@@ -97,6 +98,7 @@
        })
          .then(() => {
            Admin.createAdmin();
+           QuestionHelper.Init();
            resolve(connectionString);
          })
          .catch((error) => {

@@ -9,8 +9,10 @@
  */
  import QuestionGroup from '../models/questionGroup'
  import Answer from '../models/answer'
-
-
+ import News from '../models/news'
+ import Post from '../models/post'
+ import Question from '../models/question'
+ import { Alert } from '../helpers/alert'
 export class QuestionHelper
 {
     private constructor()
@@ -38,6 +40,54 @@ export class QuestionHelper
           // hendler error
         })
       });
+    }
+
+
+    public static Init() {
+      // Busca todas los questions que esten en votacion y su tiempo limite haya expirado
+      setInterval(() => {
+        
+
+        Question.find({finishVotes: { $lt: new Date() }, notified:false }).then(
+          (questions) => {
+            if (questions.length > 0) {
+              questions.forEach(async(question:any) => {
+                //Colocamos que ya fue notificado
+                Question.notifiedTrue(question._id).then(()=>console.log("bien"))
+
+                // Buscamos el question si pertenece a una noticia o a una publicacion
+                let id //el id del post o de la noticia
+                let type // si es noticia o post
+                let user // el usuario que hizo el post o noticia
+               await News.find({question:question._id})
+                .then((news:any)=>{
+                  id = news[0]._id;
+                  type = 'news'
+                  user = news[0].user
+                })
+                .catch((err)=>{
+                  
+                })
+                if(id == undefined){
+                  await  Post.find({question:question._id})
+                  .then((post:any)=>{
+                    id = post[0]._id;
+                    type = 'post'
+                    user = post[0].user
+                  })
+                  .catch((err)=>{
+                    
+                  })
+                }
+                //Ahora enviamos la notificacion, con el id del post o noticia
+                Alert.questionVotedEndNotification(question,id,type,user)
+              });
+            } else {
+              // console.log("No hay resultados disponibles");
+            }
+          }
+        );
+      }, 10 * 60 * 15);//ponle el 00 que falta
     }
 
 

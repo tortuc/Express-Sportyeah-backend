@@ -14,7 +14,7 @@ import { createSchema, Type, typedModel } from 'ts-mongoose';
  */
 const schema = createSchema({
     user        : Type.objectId({required: true,ref:'User'}),
-    action      : Type.string({enum:["like","comment","shared","mention","mention_comment","follow","unfollow"]}),
+    action      : Type.string({enum:["like","comment","shared","mention","mention_comment","follow","unfollow","questionEnd"]}),
     friend      : Type.objectId({ref:'User',default:null}),
     post        : Type.objectId({ref:'Post',default:null}),
     comment     : Type.objectId({ref:'Comment',default:null}),
@@ -23,6 +23,8 @@ const schema = createSchema({
     deleted     : Type.boolean({default:false}),
     read        : Type.boolean({default:false}),
     like        : Type.number({ default: false }),
+    question    : Type.objectId({ref:'Question',default:null}),
+    news        : Type.objectId({ref:'News',default:null}),
 });
 
 const Notification = typedModel('Notification', schema, undefined, undefined, 

@@ -145,12 +145,17 @@ export class PostController extends BaseController {
             Comment.getCommentsByPost(post._id)
               .then((comments) => {
                 Post.getSharedsByPost(post._id)
-                  .then((shareds) => {
+                  .then(async(shareds) => {
+                    let question =
+                    post.question != null
+                      ? await PostFilter.getDataQuestion(post.question)
+                      : null;
                     postsAndLikes.push({
                       post,
                       likes,
                       comments,
                       shareds,
+                      question
                     });
                     j++;
                     if (j == arr.length) {
