@@ -68,7 +68,6 @@ const Like = typedModel("Like", schema, undefined, undefined, {
         $group: {
           _id: "$post",
           count: { $sum: 1 }
-          
         },
       },
       { $sort : { count : -1 } },

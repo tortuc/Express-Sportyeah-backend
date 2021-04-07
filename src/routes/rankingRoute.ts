@@ -76,5 +76,21 @@ RankingRoute.get('/comments/ever/:user/:country',rankingController.getCommentsPo
  RankingRoute.get('/shareds/day/:user/:country/:dateStart/:dateEnd',rankingController.getSharedPostRankigDays)
 
 
+   /**
+ * Obtiene el ranking de los views en los posts, desde la fecha que se le pase
+ * @method get 
+ * @route /v1/ranking/comments/day/:user/:dateStart/:dateEnd
+ */
+
+ RankingRoute.get('/views/day/:user/:country/:dateStart/:dateEnd',rankingController.getPostViewsByTime)
+
+   /**
+ * Obtiene el ranking de los views en los posts, desde siempre
+ * @method get 
+ * @route /v1/ranking/comments/day/:user/:dateStart/:dateEnd
+ */
+
+    RankingRoute.get('/views/day/:user/:country',rankingController.getViewsPostRankingSinceEver)
+
 
 module.exports = RankingRoute;

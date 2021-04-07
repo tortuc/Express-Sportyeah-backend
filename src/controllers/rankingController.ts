@@ -7,6 +7,7 @@ import Post from "../models/post";
 import Comment from "../models/comment";
 
 import * as moment from 'moment'
+import { randomBytes } from "node:crypto";
 
 /**
  * RankingController
@@ -128,7 +129,35 @@ export class RankingController extends BaseController {
       });
     });
   }
+ 
+  public getViewsPostRankingSinceEver(request: Request, response: Response) {
+    let user = request.params.user;
+    let country = request.params.country;
 
+    Post.getPostViewsAllTime().then(async (rankingPosts) => {
+      let ranking = await Post.populate(rankingPosts, "_id");
+      let rankingAndUsers = await User.populate(ranking, "_id.user");
+console.log(rankingPosts)
+      if (country != "null") {
+        rankingAndUsers = rankingAndUsers.filter((item) => {
+          return item._id.user.geo.country == country;
+        });
+      }
+      let total = rankingAndUsers.length;
+      let myPosition =
+        rankingAndUsers.findIndex((item) => {
+          return item._id.user._id == user;
+        }) + 1;
+      if (myPosition == 0) {
+        myPosition = total + 1;
+      }
+      response.status(200).json({
+        myPosition,
+        total,
+        ranking: rankingAndUsers.slice(0, 3),
+      });
+    });
+  }
   // Dates
   public getReactionsPostRankingDays(request: Request, response: Response) {
     let user = request.params.user;
@@ -219,5 +248,35 @@ export class RankingController extends BaseController {
         ranking: rankingAndUsers.slice(0, 3),
       });
     });
+  }
+
+  public getPostViewsByTime(request: Request, response: Response){
+    let { user, country, dateStart, dateEnd} = request.params
+    Post.getPostViewsByTime(dateStart,dateEnd)
+    .then(async(rankingPosts) => {
+      let ranking = await Post.populate(rankingPosts, "_id");
+      let rankingAndUsers = await User.populate(ranking, "_id.user");
+      if (country != "null") {
+        rankingAndUsers = rankingAndUsers.filter((item) => {
+          return item._id.user.geo.country == country;
+        });
+      }
+      let total = rankingAndUsers.length;
+      let myPosition =
+        rankingAndUsers.findIndex((item) => {
+          return item._id.user._id == user;
+        }) + 1;
+      if (myPosition == 0) {
+        myPosition = total + 1;
+      }
+      response.status(200).json({
+        myPosition,
+        total,
+        ranking: rankingAndUsers.slice(0, 3),
+      });
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
   }
 }

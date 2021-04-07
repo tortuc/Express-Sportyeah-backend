@@ -87,7 +87,7 @@
      await News.findViewIp(id,ip).then((resp)=>{
       if(!resp){
        News.newView(id,ip).then((response)=>
-       console.log('creamos una view',response)
+       console.log('creamos una view')
        )
       }
         

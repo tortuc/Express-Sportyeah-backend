@@ -167,6 +167,19 @@ const Post = typedModel('Post', schema, undefined, undefined, {
           { $sort: { count: -1 } },
         ]);
       },
+
+      getPostViewsByTime(start, end) {
+        let startTime = new Date(start);
+        let endTime = new Date(end);
+      return  Post.find(
+        {deleted:false, date: { $gte: startTime, $lte: endTime },$where: "this.views.length > 1" }
+        )
+        .sort({views:-1})
+      },
+      getPostViewsAllTime(){
+        return Post.find({deleted:false,$where: "this.views.length > 1"})
+        .sort({views:-1})
+      },
       newView(id,ip){
         return Post.findByIdAndUpdate(id,{$push:{views:ip}})//colocar en el controler el beta la ruta etc etc
       },
