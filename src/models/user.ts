@@ -83,7 +83,8 @@ const schema = createSchema({
   geo:Type.object({ default: null }).of({
     ip : Type.string(),
     country : Type.string(),
-    city : Type.string()
+    city : Type.string(),
+    flag: Type.string({default: null})
   }) 
 });
 
