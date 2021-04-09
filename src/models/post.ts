@@ -172,12 +172,12 @@ const Post = typedModel('Post', schema, undefined, undefined, {
         let startTime = new Date(start);
         let endTime = new Date(end);
       return  Post.find(
-        {deleted:false, date: { $gte: startTime, $lte: endTime },$where: "this.views.length > 1" }
+        {deleted:false, date: { $gte: startTime, $lte: endTime },$where: "this.views.length >= 1" }
         )
         .sort({views:-1})
       },
       getPostViewsAllTime(){
-        return Post.find({deleted:false,$where: "this.views.length > 1"})
+        return Post.find({deleted:false,$where: "this.views.length >= 1"})
         .sort({views:-1})
       },
       newView(id,ip){
@@ -187,7 +187,6 @@ const Post = typedModel('Post', schema, undefined, undefined, {
         return Post.findOne({_id:id,views:{$elemMatch:{$eq:ip}}})
       }
 });
-
 /**
  * Exporta el modelo
  */

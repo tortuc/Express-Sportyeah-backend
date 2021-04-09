@@ -69,8 +69,44 @@ const Friend = typedModel('Friend', schema, undefined, undefined,
             let followers = await Friend.countDocuments({deleted:false,user})
             let followings = await Friend.countDocuments({deleted:false,follower:user})
             return {followers,followings}
-        }
-    }
+        },
+        
+        getfollowersByTime(start, end) {
+            let startTime = new Date(start);
+            let endTime = new Date(end);
+            return Friend.aggregate([
+                { $match: { deleted: false,  date: { $gte: startTime, $lte: endTime }}  },
+                {
+                  $group: {
+                    _id:{user:"$user"},
+                    followers: { $sum: 1 },
+                  },
+                },
+                { $sort: { followers: -1 } },
+                { $limit: 5 },
+              ]);
+          },
+/**
+   * Busca a los usuarios mas populares
+   * 
+   */
+    getfollowersAllTime() {
+
+    return Friend.aggregate([
+        { $match: { deleted: false} },
+        {
+          $group: {
+            _id:{user:"$user"},
+            followers: { $sum: 1 },
+          },
+        },
+        { $sort: { followers: -1 } },
+        { $limit: 5 },
+      ]);
+  },
+          },
+
+        
 );
 
 /**
