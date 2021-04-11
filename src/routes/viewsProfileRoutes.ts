@@ -18,6 +18,16 @@ const viewsProfileController = new ViewsProfileController();
 const viewsProfileRouter:any = viewsProfileController.router();
 
 
+/**
+ * Esta introduce a un usuario que miro un perfil
+ * 
+ * Ruta por defecto
+ * 
+ * @route /v1/viewsProfile/create
+ * @method post
+ */
+ viewsProfileRouter.post('/create', viewsProfileController.createProfileView);
+
 
 /**
  * Esta trae las vista al perfil de un usuario

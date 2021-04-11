@@ -6,10 +6,10 @@ import User from "../models/user";
 import Post from "../models/post";
 import Comment from "../models/comment";
 import Friend from '../models/friend';
-
+import ViewsProfile from '../models/viewsProfile';
 import * as moment from 'moment'
 import { randomBytes } from "node:crypto";
-
+import { ViewsProfileFilter } from '../helpers/viewsProfileFilter'
 /**
  * RankingController
  *
@@ -170,6 +170,46 @@ export class RankingController extends BaseController {
     });
   }
 
+  public getviewsProfileAllSearchRankingSinceEver(request: Request, response: Response) {
+    let user = request.params.user;
+    let country = request.params.country;
+
+    ViewsProfile.getViewsProfileAllSearchTime().then(async (rankingPosts:any) => {
+      // console.log(rankingPosts);
+   
+   await  rankingPosts.map(async(x) => {
+    await ViewsProfileFilter.getViewsCountSearch(x)
+   });
+    //organiza de mayor a menor las vistas 
+   await rankingPosts.sort((a,b)=>{
+      return b.count - a.count
+    })  
+      if(rankingPosts.length >= 0){
+        let ranking:any = await User.populate(rankingPosts, "_id.user");
+        if (country != "null") {
+          ranking = ranking.filter((item) => {
+            return item._id.user.geo.country == country;
+          });
+        }
+        let total = ranking.length;
+      let myPosition =
+        ranking.findIndex((item) => {
+          
+          return item._id.user._id == user;
+        }) + 1;
+        if (myPosition == 0) {
+          myPosition = total + 1;
+        }
+        response.status(200).json({
+          myPosition,
+          total,
+          ranking: ranking.slice(0, 3),
+        });
+ 
+    }
+    });
+  }
+
   public getFollowersPostRankingSinceEver(request:Request, response:Response){
     let userReq = request.params.user;
     let country = request.params.country;
@@ -202,51 +242,7 @@ export class RankingController extends BaseController {
 }
 
 
-/**
-   * Obtiene a los 5 usuarios mas populares de kecuki
-   * @param user id del usuario
-   */
- /* public static async fivePopulateUsers(user) {
-  // Primero obtenemos a los amigos del usuario (siguiendo)
-  let myFollowings = (
-    await Friend.find({ follower: user, deleted: false }).select("user _id")
-  ).map((item) => {
-    // Luego hacemos un map para solo devolver el ObjectId de cada siguiendo
-    return item.user;
-  });
-  // Agregamos nuestro id al array
-  myFollowings.push(Types.ObjectId(user));
-  // Buscamos los usuarios mas populares que no se encuentren entre mi lista de amigos (o sea mi mismo usuario)
-  let mostPopulars = await Friend.getfollowersAllTime(){
-    (myFollowings);
-  return (await User.populate(mostPopulars, { path: "_id" })).map((item) => {
-    return item._id;
-  });
-} */
-
-/**
-   * Obtiene a los 5 usuarios mas populares de kecuki
-   * @param user id del usuario
-   */
-//  public static async getFollowersPostRankingSinceEver() {
-//   // Primero obtenemos a los amigos del usuario (siguiendo)
-//   let myFollowings = (
-//     await Friend.find({ deleted: false }).select("user _id")
-//   ).map((item) => {
-//     // Luego hacemos un map para solo devolver el ObjectId de cada siguiendo
-//     return item.user;
-//   });
-//   // Agregamos nuestro id al array
-//   myFollowings.push(Types.ObjectId(user));
-//   // Buscamos los usuarios mas populares que no se encuentren entre mi lista de amigos (o sea mi mismo usuario)
-//   let mostPopulars = await Friend.getfollowersAllTime();
-//   return (await User.populate(mostPopulars, { path: "_id" })).map((item) => {
-//     return item._id;
-//   });
-// }
-
-
-  // Dates
+  //// Dates
   public getReactionsPostRankingDays(request: Request, response: Response) {
     let user = request.params.user;
     let country = request.params.country;
@@ -406,5 +402,44 @@ export class RankingController extends BaseController {
     .catch((err)=>{
       console.log(err)
     })
+  }
+
+  public getViewsProfileSearchByTime(request: Request, response: Response) {
+    let { user, country, dateStart, dateEnd} = request.params
+    ViewsProfile.getViewsProfileSearchByTime(dateStart,dateEnd).then(async (rankingPosts:any) => {
+      // console.log(rankingPosts);
+   
+   await  rankingPosts.map(async(x) => {
+    await ViewsProfileFilter.getViewsCountSearch(x)
+   });
+    //organiza de mayor a menor las vistas 
+   await rankingPosts.sort((a,b)=>{
+      return b.count - a.count
+    })  
+      if(rankingPosts.length >= 0){
+        let ranking:any = await User.populate(rankingPosts, "_id.user");
+        if (country != "null") {
+          ranking = ranking.filter((item) => {
+            return item._id.user.geo.country == country;
+          });
+        }
+        let total = ranking.length;
+      let myPosition =
+        ranking.findIndex((item) => {
+          console.log(item);
+          
+          return item._id.user._id == user;
+        }) + 1;
+        if (myPosition == 0) {
+          myPosition = total + 1;
+        }
+        response.status(200).json({
+          myPosition,
+          total,
+          ranking: ranking.slice(0, 3),
+        });
+ 
+    }
+    });
   }
 }

@@ -20,6 +20,26 @@ export class ViewsProfileController extends BaseController {
     super();
   }
 
+/**
+   * Cuando el usuario entre en su pefil privado
+   *
+   * @param request
+   * @param response
+   */
+ public createProfileView(request: Request, response: Response) {
+  console.log('Estoy en el create');
+  console.log(request.body);
+  
+  // verifica si existe un ViewsProfile para este usuario
+  ViewsProfile.createProfileView(request.body.view)
+    .then((views) => {
+      response.status(HttpResponse.Ok).json(views);
+    })
+    .catch((err) => {
+      response.status(HttpResponse.BadRequest).json(err);
+    });
+}
+
   /**
    * Cuando el usuario entre en su pefil privado
    *

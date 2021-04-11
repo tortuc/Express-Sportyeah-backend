@@ -69,7 +69,7 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
    */
   getCommentsByNews(news) {
     return Comment.find({ news, deleted: false })
-      .populate("user")
+      .populate("user question")
       .sort({ date: -1 });
   },
   getCommentAllTime() {

@@ -156,7 +156,6 @@ const Post = typedModel('Post', schema, undefined, undefined, {
         return Post.aggregate([
           {
             $match: { post: { $ne: null }, deleted: { $eq: false }, date: { $gte: startTime, $lte: endTime } },
-           
           },
           {
             $group: {

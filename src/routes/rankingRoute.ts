@@ -66,7 +66,16 @@ RankingRoute.get('/comments/ever/:user/:country',rankingController.getCommentsPo
 
     RankingRoute.get('/followers/ever/:user/:country',rankingController.getFollowersPostRankingSinceEver)
 
+   /**
+ * Obtiene el ranking de los followers en los posts, desde siempre
+ * @method get 
+ * @route /v1/ranking/comments/day/:user/:dateStart/:dateEnd
+ */
 
+    RankingRoute.get('/viewsSearch/ever/:user/:country',rankingController.getviewsProfileAllSearchRankingSinceEver)
+
+
+////////////////  Fechas //////////////////
 
 /**
  * Obtiene el ranking de las reacciones en los posts, desde la fecha que se le pase
@@ -111,6 +120,13 @@ RankingRoute.get('/comments/ever/:user/:country',rankingController.getCommentsPo
 
 RankingRoute.get('/followers/day/:user/:country/:dateStart/:dateEnd',rankingController.getfollowersByTime)
 
+    /**
+ * Obtiene el ranking obtine las vistas por busqueda a un perfil por fechas
+ * @method get 
+ * @route /v1/followers/day/:user/:dateStart/:dateEnd
+ */
+
+     RankingRoute.get('/viewsSearch/day/:user/:country/:dateStart/:dateEnd',rankingController.getViewsProfileSearchByTime)
 
 
 module.exports = RankingRoute;
