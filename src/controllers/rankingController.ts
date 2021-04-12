@@ -401,15 +401,9 @@ export class RankingController extends BaseController {
   public getViewsProfileSearchByTime(request: Request, response: Response) {
     let { user, country, dateStart, dateEnd} = request.params
     ViewsProfile.getViewsProfileSearchByTime(dateStart,dateEnd).then(async (rankingPosts:any) => {
-      // console.log(rankingPosts);
+      console.log(rankingPosts);
    
-  //  await  rankingPosts.map(async(x) => {
-  //   await ViewsProfileFilter.getViewsCountSearch(x)
-  //  });
-  //   //organiza de mayor a menor las vistas 
-  //  await rankingPosts.sort((a,b)=>{
-  //     return b.count - a.count
-  //   })  
+
       if(rankingPosts.length >= 0){
         let ranking:any = await User.populate(rankingPosts, "_id.user");
         if (country != "null") {
