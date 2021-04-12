@@ -7,9 +7,7 @@ import Post from "../models/post";
 import Comment from "../models/comment";
 import Friend from '../models/friend';
 import ViewsProfile from '../models/viewsProfile';
-import * as moment from 'moment'
-import { randomBytes } from "node:crypto";
-import { ViewsProfileFilter } from '../helpers/viewsProfileFilter'
+
 /**
  * RankingController
  *
@@ -175,17 +173,15 @@ export class RankingController extends BaseController {
     let country = request.params.country;
 
     ViewsProfile.getViewsProfileAllSearchTime().then(async (rankingPosts:any) => {
-      // console.log(rankingPosts);
-   
-   await  rankingPosts.map(async(x) => {
-    await ViewsProfileFilter.getViewsCountSearch(x)
-   });
+      let ranking:any = await User.populate(rankingPosts, "_id.user");
+  //  await  rankingPosts.map(async(x) => {
+  //   await ViewsProfileFilter.getViewsCountSearch(x)
+  //  });
     //organiza de mayor a menor las vistas 
-   await rankingPosts.sort((a,b)=>{
-      return b.count - a.count
-    })  
+  //  await rankingPosts.sort((a,b)=>{
+  //     return b.count - a.count
+  //   })  
       if(rankingPosts.length >= 0){
-        let ranking:any = await User.populate(rankingPosts, "_id.user");
         if (country != "null") {
           ranking = ranking.filter((item) => {
             return item._id.user.geo.country == country;
@@ -194,7 +190,6 @@ export class RankingController extends BaseController {
         let total = ranking.length;
       let myPosition =
         ranking.findIndex((item) => {
-          
           return item._id.user._id == user;
         }) + 1;
         if (myPosition == 0) {
@@ -205,7 +200,6 @@ export class RankingController extends BaseController {
           total,
           ranking: ranking.slice(0, 3),
         });
- 
     }
     });
   }
@@ -409,13 +403,13 @@ export class RankingController extends BaseController {
     ViewsProfile.getViewsProfileSearchByTime(dateStart,dateEnd).then(async (rankingPosts:any) => {
       // console.log(rankingPosts);
    
-   await  rankingPosts.map(async(x) => {
-    await ViewsProfileFilter.getViewsCountSearch(x)
-   });
-    //organiza de mayor a menor las vistas 
-   await rankingPosts.sort((a,b)=>{
-      return b.count - a.count
-    })  
+  //  await  rankingPosts.map(async(x) => {
+  //   await ViewsProfileFilter.getViewsCountSearch(x)
+  //  });
+  //   //organiza de mayor a menor las vistas 
+  //  await rankingPosts.sort((a,b)=>{
+  //     return b.count - a.count
+  //   })  
       if(rankingPosts.length >= 0){
         let ranking:any = await User.populate(rankingPosts, "_id.user");
         if (country != "null") {

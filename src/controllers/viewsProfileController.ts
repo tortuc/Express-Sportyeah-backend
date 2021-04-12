@@ -27,11 +27,8 @@ export class ViewsProfileController extends BaseController {
    * @param response
    */
  public createProfileView(request: Request, response: Response) {
-  console.log('Estoy en el create');
-  console.log(request.body);
-  
   // verifica si existe un ViewsProfile para este usuario
-  ViewsProfile.createProfileView(request.body.view)
+  ViewsProfile.createProfileView(request.body)
     .then((views) => {
       response.status(HttpResponse.Ok).json(views);
     })

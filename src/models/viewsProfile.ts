@@ -47,10 +47,10 @@ const schema = createSchema({
    */
    getViewsProfileAllSearchTime() {
     return ViewsProfile.aggregate([
-        { $match: { visits:{$elemMatch:{from:"search"}} } },
+        { $match: { from:"search" } },
         {
           $group: {
-            _id:{user:"$user",visits:"$visits"},
+            _id:{user:"$user"},
             count: { $sum: 1 },
           },
         },
@@ -66,10 +66,10 @@ const schema = createSchema({
       let startTime = new Date(start);
       let endTime = new Date(end);
       return ViewsProfile.aggregate([
-          { $match: { visits:{$elemMatch:{from:"search",date: { $gte: startTime, $lte: endTime }}} } },
+          { $match: { from:"search", date: { $gte: startTime, $lte: endTime }}  },
           {
             $group: {
-              _id:{user:"$user",visits:"$visits"},
+              _id:{user:"$user"},
               count: { $sum: 1 },
             },
           },
@@ -77,7 +77,6 @@ const schema = createSchema({
           { $limit: 5 },
         ]);
     },
-
   })
 
   
