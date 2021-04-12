@@ -1,4 +1,6 @@
 import { createSchema, Type, typedModel } from 'ts-mongoose';
+import Comment from './comment';
+import Like from './like';
 
 /**
  * Modelo de conexión
@@ -107,8 +109,10 @@ const Post = typedModel('Post', schema, undefined, undefined, {
      * Elimina un post 
      * @param id ID del post a eliminar
      */
-    deleteOneById(id) {
-        return Post.findByIdAndUpdate(id, { deleted: true })
+    async deleteOneById(id) {
+      await Like.find({post:id}).remove()
+      await Comment.find({post:id}).remove()
+      return Post.findByIdAndUpdate(id, { deleted: true })
     },
 
     updatePost(id, newValues) {
