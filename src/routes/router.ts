@@ -139,5 +139,11 @@ export class Router {
      * @route /v1/question/...
      */
      this.route.use("/v1/question", require("./questionRoute"));
+
+    /**
+     * Iniciao de rutas para creación del torneo
+     * @route /v1/tournament/
+    */ 
+     this.route.use("/v1/tournament", require("./tournamentRoute"));
     }
 }
