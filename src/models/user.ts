@@ -12,6 +12,7 @@ const schema = createSchema({
   lastConection: Type.date({ default: null }),
   connected: Type.boolean({ default: false }),
   password: Type.string(),
+  lang: Type.string({default:'es'}),
   create: Type.date({ default: Date.now }),
   role: Type.string({ enum: ["user", "admin"], default: "user" }),
   verified: Type.boolean({ default: false }),
