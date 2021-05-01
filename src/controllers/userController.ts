@@ -31,6 +31,7 @@ import { Authentication } from "../routes/middleware/authentication";
 import { MailController as Mailer } from "./mailController";
 import Post from "../models/post";
 import Friend from "../models/friend";
+import { userHelper } from "../helpers/userHelper";
 
 export class UserController extends BaseController {
   /**
@@ -442,6 +443,19 @@ export class UserController extends BaseController {
       .catch((err) => {
         res.status(HttpResponse.InternalError).send("unknow error");
       });
+  }
+
+  /**
+   * Obtiene los usuarios mas populares en sportyeah, que el usuario que hace la peticion no esta siguiendo, para que los pueda seguir
+   * @param request
+   * @param response
+   */
+
+   public async mostPopulateUsersToAdd(request: Request, response: Response) {
+    // buscamos los 5 usuarios mas populares
+    let users = await userHelper.fivePopulateUsers(request.body.decoded.id);
+    // respondemos con los 5 usuarios
+    response.status(HttpResponse.Ok).json(users);
   }
 }
 

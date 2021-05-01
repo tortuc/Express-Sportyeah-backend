@@ -158,5 +158,11 @@ UserRouter.get('/username/:username',userController.getUser)
 
 UserRouter.post('/sponsors',Authentication.jwt,userController.updateSponsors)
 
+/**
+ * Los 5 usuarios mas seguidos, para agregar
+ */
+
+ UserRouter.get('/fivepopular',Authentication.jwt,userController.mostPopulateUsersToAdd)
+
 
 module.exports = UserRouter;

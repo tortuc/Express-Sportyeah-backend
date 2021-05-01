@@ -169,7 +169,7 @@ const Post = typedModel('Post', schema, undefined, undefined, {
           },
           { $sort: { count: -1 } },
         ]);
-      },
+      }, 
 
       getPostViewsByTime(start, end) {
         let startTime = new Date(start);

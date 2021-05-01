@@ -139,5 +139,13 @@ export class Router {
      * @route /v1/question/...
      */
      this.route.use("/v1/question", require("./questionRoute"));
+    
+     /**
+     * Manejador de rutas de las Vistas a los Sponsor
+     *
+     * @route /v1/viewsSponsor/...
+     */
+      this.route.use("/v1/viewsSponsor", require("./viewsSponsorRoutes"));
+   
     }
 }

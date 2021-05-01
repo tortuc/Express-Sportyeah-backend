@@ -291,6 +291,21 @@ const User = typedModel("User", schema, undefined, undefined, {
   upadateSponsors(id: number, sponsors: any) {
     return User.findByIdAndUpdate(id, { sponsors });
   },
+
+  searchQueryUsers(query:string, limit = 5, skip = 0) {
+  
+    let regex = new RegExp(query.replace(/ /g,''),'i') ;
+    
+    return User.aggregate([
+      {
+        $project: { search: { $concat: ["$name", "$last_name", "$username"] } },
+      },
+      { $match: { search: { $regex: regex } }},
+      { $sort: { search: 1 } },
+      { $skip: skip },
+      { $limit: limit },
+    ]);
+  },
 });
 
 /**
