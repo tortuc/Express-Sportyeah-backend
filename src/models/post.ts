@@ -94,14 +94,15 @@ const Post = typedModel("Post", schema, undefined, undefined, {
    * @param {objectId[]}  friends Array de objectId de los usuarios amigos
    */
 
-  findByFriends(friends: string[], skip) {
-    return Post.find({ user: { $in: friends }, deleted: false })
+  findByFriends(friends: string[], skip,limitDate) {
+    return Post.find({ user: { $in: friends }, deleted: false , date: { $gte: limitDate },})
       .populate("user post news")
       .populate({ path: "post", populate: { path: "user news" } })
       .sort({ date: -1 })
       .skip(skip)
       .limit(10);
   },
+
 
   /**
    * Obtiene los Posts de un usuario

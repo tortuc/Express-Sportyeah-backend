@@ -9,6 +9,9 @@ import { Alert } from "../helpers/alert";
 import { PostFilter } from "../helpers/postFilter";
 import { Net } from "../helpers/net";
 import Question from "../models/question";
+import { userHelper } from "../helpers/userHelper";
+
+import * as moment from 'moment'
 
 /**
  * PostController
@@ -105,72 +108,40 @@ export class PostController extends BaseController {
       });
   }
 
+
   /**
    * Obtiene las publicaciones de los amigos (siguiendo) del usuario
    */
-  public async friendsPosts(request: Request, response: Response) {
+   public async friendsPosts(request: Request, response: Response) {
     let skip = request.body.skip;
-    // los id vienen en el body friends_id
-    let ids: any[] = request.body.friends_id;
+    let days = request.body.days;
+    let limitDate = moment().subtract(days, "days");
+
     /**
      *  Se hace un map para poder obtener solo los id de los usuarios, ya que este llega como un objeto
-     *  donde viene el _id del registro de Friend y el _id del User
+     *  donde viene el _id del registro de Friend y el User
      */
-
-    ids = await ids.map((id) => {
-      return (id = id.user);
+    let ids: any[] = await request.body.friends_id.map((id) => {
+      return (id = id.user._id);
     });
+
+    if (ids.length == 0) {
+      ids = await userHelper.newUserPosts(request.body.decoded.id);
+    }
+
     /**
      * una vez formateado los id de los usuarios, le agregamos el id del usuario que esta haciendo la peticion
      * para tambien obtener sus post
      */
     ids.push(request.body.decoded.id);
-    Post.findByFriends(ids, skip).then((posts) => {
-      let postsAndLikes = [];
-      let j = 0;
-      if (posts.length == 0) {
-        response.status(HttpResponse.Ok).json(postsAndLikes);
-      } else {
-        posts.forEach((post, i, arr) => {
-          Comment.getCommentsByPost(post._id)
-            .then((comments) => {
-              Post.getSharedsByPost(post._id)
-                .then(async (shareds) => {
-                  let question =
-                    post.question != null
-                      ? await PostFilter.getDataQuestion(post.question)
-                      : null;
-                  postsAndLikes.push({
-                    post,
-                    comments,
-                    shareds,
-                    question,
-                  });
-                  j++;
-                  if (j == arr.length) {
-                    postsAndLikes.sort((a, b) => {
-                      return b.post.date.getTime() - a.post.date.getTime();
-                    });
-                    response.status(HttpResponse.Ok).json(postsAndLikes);
-                  }
-                })
-
-                .catch((err) => {
-                  response
-                    .status(HttpResponse.InternalError)
-                    .send("cannot get shareds");
-                });
-            })
-            .catch((err) => {
-              response
-                .status(HttpResponse.InternalError)
-                .send("cannot get comments");
-            });
-        });
-      }
-    });
+    Post.findByFriends(ids, skip, limitDate)
+      .then((posts) => {
+        response.status(HttpResponse.Ok).json(posts);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send("cannot get posts");
+      });
   }
-
   public findByUser(request: Request, response: Response) {
     let user = request.params.id;
     Post.findByUser(user).then((posts) => {
