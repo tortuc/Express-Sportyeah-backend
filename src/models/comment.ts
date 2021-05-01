@@ -8,18 +8,44 @@ import { createSchema, Type, typedModel } from "ts-mongoose";
  *
  * @link https://www.npmjs.com/package/ts-mongoose
  */
-
 /**
- * Define el esquema del modelo
+ * Define el esquema del modelo para los comentarios
  */
 const schema = createSchema({
+  /**
+   * _id de el post
+   */
   post: Type.objectId({ required: false, ref: "Post" }),
+  /**
+   * _id de la noticia
+   */
   news: Type.objectId({ default: null, required: false, ref: "News" }),
-  question: Type.objectId({ ref: 'Question', required: false }),
+  /**
+   * _id del cuestionaro
+   */
+  question: Type.objectId({ ref: "Question", required: false }),
+  /**
+   * _id del usuario que comento
+   */
   user: Type.objectId({ required: true, ref: "User" }),
+   /**
+   * mensaje que comento
+   */
   message: Type.string({ default: null }),
-  image: Type.string({ default: null }),
+  /**
+   * archivos que compartio, imagenes o videos
+   */
+  files: Type.array({ default: [] }).of({
+    fileType: Type.string({ required: true }),
+    url: Type.string({ required: true }),
+  }),
+   /**
+   * fecha del comentario
+   */
   date: Type.date({ default: Date.now }),
+  /**
+   * si el comentario fue eliminado
+   */
   deleted: Type.boolean({ default: false }),
 });
 
@@ -35,9 +61,20 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
    * Obtiene todos los comentarios de un post
    * @param post id del post
    */
-  getCommentsByPost(post) {
+  getCommentsByPost(post, skip = 0) {
     return Comment.find({ post, deleted: false })
-      .populate("user question")
+      .populate("user")
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(15)
+  },
+  /**
+   * Obtiene la cantidad de comentarios en un post
+   * @param post id del post
+   */
+   getCountOfCommentsByPost(post) {
+    return Comment.countDocuments({ post, deleted: false })
+      .populate("user")
       .sort({ date: -1 });
   },
   /**
@@ -63,6 +100,9 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
     return Comment.findById(id).populate("user post question");
   },
 
+  userCommentPost(user,post){
+    return Comment.findOne({user,post})
+  },
   /** PRUEBA NEWS con comentarios
    * Obtiene todos los comentarios de un news
    * @param news id del news
@@ -89,8 +129,11 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
     let endTime = new Date(end);
     return Comment.aggregate([
       {
-        $match: { post: { $ne: null }, deleted: { $eq: false },date: { $gte: startTime, $lte: endTime } },
-        
+        $match: {
+          post: { $ne: null },
+          deleted: { $eq: false },
+          date: { $gte: startTime, $lte: endTime },
+        },
       },
       {
         $group: {

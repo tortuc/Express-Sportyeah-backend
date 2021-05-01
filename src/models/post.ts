@@ -79,6 +79,14 @@ const Post = typedModel("Post", schema, undefined, undefined, {
       .populate({ path: "post", populate: { path: "user news" } })
       .sort({ date: -1 });
   },
+  /**
+   * Retorna la cantidad de compartiones de una publicacion
+   * @param id
+   * @returns
+   */
+   getTotalSharedsByPost(id) {
+    return Post.countDocuments({ post: id, deleted: false }).sort({ date: -1 });
+  },
 
   /**
    * Obtiene los post de los amigos
@@ -155,7 +163,7 @@ const Post = typedModel("Post", schema, undefined, undefined, {
    */
   findOnePost(id) {
     return Post.findById(id)
-      .populate("user post news question")
+      .populate("user post news")
       .populate({ path: "post", populate: { path: "user news" } })
       .populate({ path: "news", populate: { path: "user" } });
   },
