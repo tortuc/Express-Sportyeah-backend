@@ -27,23 +27,7 @@ const friendRoute:any = friendController.router();
  * @method get
  */
 friendRoute.get('/followers',Authentication.jwt, friendController.followers);
-/**
- * 
- * 
- * Obtiene a los siguiendo
- * 
- * @route /v1/friend/followings
- * @method get
- */
-/**
- * 
- * 
- * Obtiene a los seguidores por id de usuario
- * 
- * @route /v1/friend/followers/:id
- * @method get
- */
-friendRoute.get('/followers/:id',Authentication.jwt, friendController.followersById);
+
 /**
  * 
  * 
@@ -53,15 +37,6 @@ friendRoute.get('/followers/:id',Authentication.jwt, friendController.followersB
  * @method get
  */
 friendRoute.get('/followings',Authentication.jwt, friendController.following);
-/**
- * 
- * 
- * Obtiene a los siguiendo por id de usuario
- * 
- * @route /v1/friend/followings/:id
- * @method get
- */
-friendRoute.get('/followings/:id',Authentication.jwt, friendController.followingById);
 /**
  * 
  * 
@@ -78,5 +53,26 @@ friendRoute.post('/follow',Authentication.jwt, friendController.newFollower);
  * @method delete
  */
 friendRoute.delete('/unfollow/:id',Authentication.jwt, friendController.unFollow);
+
+/**
+ * Buscar usuarios query
+ *
+ * @route /v1/friend/query/:query
+ * @method get
+ */
+ friendRoute.get(
+    "/query/:query",
+    friendController.searchUserQuery
+  );
+  /**
+   * Buscar usuarios por nombre... con skip
+   *
+   * @route /v1/friend/query/:query
+   * @method get
+   */
+  friendRoute.get(
+    "/query/:query/:skip",
+    friendController.searchUserQuerySkip
+  );
 
 module.exports = friendRoute;

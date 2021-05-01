@@ -9,7 +9,7 @@ import { createSchema, Type, typedModel } from 'ts-mongoose';
 const schema = createSchema({
     user     : Type.objectId({ required:true, ref: "User" }),
     visitor  : Type.objectId({required:true, ref:"User"}),
-    Date     : Type.date({ default: Date.now }),
+    date     : Type.date({ default: Date.now }),
     from     : Type.string({required:true,enum:['post', 'chat','search','profile','reaction','comment','ranking']}),
     link     : Type.string({})
   });
@@ -29,9 +29,9 @@ const schema = createSchema({
    * @param id 
    */
   getProfileView(id) {
-    return ViewsProfile.findOne({user:id})
+    return ViewsProfile.find({user:id})
     .populate("user")
-    .populate({path:'visits',populate:'user'})
+    // .populate({path:'visits',populate:'user'})
 
   },
 
@@ -65,6 +65,7 @@ const schema = createSchema({
     getViewsProfileSearchByTime(start, end) {
       let startTime = new Date(start);
       let endTime = new Date(end);
+
       return ViewsProfile.aggregate([
           { $match: { from:"search", date: { $gte: startTime, $lte: endTime }}  },
           {
@@ -77,9 +78,68 @@ const schema = createSchema({
           { $limit: 5 },
         ]);
     },
+
+
+    /**
+   * Busca a las vistas  por rebote  usuario
+   * 
+   */
+ getViewsProfileReboundAllTime() {
+  return ViewsProfile.aggregate([
+      { $match: { from:{$ne:"search"} } },
+      {
+        $group: {
+          _id:{user:"$user"},
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { count: -1 } },
+      { $limit: 5 },
+    ]);
+},
+ /**
+ * Busca a las vistas por rebote de fecha useario 
+ * 
+ */
+  getViewsProfileReboundByTime(start, end) {
+    let startTime = new Date(start);
+    let endTime = new Date(end);
+
+    return ViewsProfile.aggregate([
+        { $match: {from:{$ne:"search"} , date: { $gte: startTime, $lte: endTime }}  },
+        {
+          $group: {
+            _id:{user:"$user"},
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { count: -1 } },
+        { $limit: 5 },
+      ]);
+  },
+
+  /**
+     * Retorna un conteo de las visitas que han hecho a un usuario, por dia indicado
+     * @param user _id del perfil
+     * @param date fecha de inicio de la busqueda, se agregara un dia mas para completar el rango de 24 horas
+     * @returns 
+     */
+   async getVisitsByDate(user,date,from){
+    // dia donde empieza la busqueda
+    let day = new Date(date)
+    // dia final
+    let dayAfter = new Date(date)
+    // se agrega un dia para completar el rango de 24 horas
+    dayAfter.setDate(day.getDate() + 1)
+    
+    return ViewsProfile.countDocuments({user,from,date:{$gte:day,$lte:dayAfter}})
+  },
   })
 
   
+
+
+
   /**
  * Exporta el modelo
  */

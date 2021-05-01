@@ -7,6 +7,8 @@
  * @copyright Sapviremoto
  *
  */
+ import * as moment from 'moment';
+ import ViewsProfile from "../models/viewsProfile";
 
 
  export class ViewsProfileFilter {
@@ -36,5 +38,26 @@
     resolve(view.count);
      });
    }
+
+    /**
+   * Cantidad de visitas a un perfil, por semana
+   * @param day
+   * @param user _id del perfil (usuario)
+   * @returns
+   */
+  public static async getUserViewsCount(day, user,from) {
+    
+    
+    let days = [];
+    for (let index = 0; index < 7; index++) {
+      let start = moment(day).startOf("week");
+
+      days.push(
+        await ViewsProfile.getVisitsByDate(user, start.add(index, "days"),from)
+      );
+      
+    }
+    return days;
+  }
  }
  

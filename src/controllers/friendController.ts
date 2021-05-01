@@ -6,6 +6,7 @@ import { NotificationController } from './notificationControlller';
 import Notification from '../models/notification';
 import { Socket } from '../helpers/socket';
 import { Alert } from '../helpers/alert';
+import User from "../models/user";
 
 /**
  * FriendController
@@ -37,18 +38,7 @@ export class FriendController extends BaseController
     {
         Friend.findFollowers(request.body.decoded.id)
         .then((followers)=>{
-                
-            Friend.findFollowersOnlyId(request.body.decoded.id)
-                .then((ids)=>{
-                    response.status(HttpResponse.Ok).json({
-                        followers,
-                        ids
-                    })
-                })
-                .catch((err)=>{
-
-                    response.status(HttpResponse.BadRequest).send("cannot get followers")
-                })
+            response.status(HttpResponse.Ok).json(followers)
         })
         .catch((err)=>{
             response.status(HttpResponse.BadRequest).send("cannot get followers")
@@ -61,33 +51,7 @@ export class FriendController extends BaseController
      * @route /friend/followings
      * @method get
      */
-    /**
-     * Obtiene a los seguidores por id
-     * 
-     * @route /friend/followers/:id
-     * @method get
-     */
-    public followersById(request:Request, response:Response)
-    {
-        Friend.findFollowers(request.params.id)
-        .then((followers)=>{
-                
-            Friend.findFollowersOnlyId(request.params.id)
-                .then((ids)=>{
-                    response.status(HttpResponse.Ok).json({
-                        followers,
-                        ids
-                    })
-                })
-                .catch((err)=>{
-
-                    response.status(HttpResponse.BadRequest).send("cannot get followers")
-                })
-        })
-        .catch((err)=>{
-            response.status(HttpResponse.BadRequest).send("cannot get followers")
-
-        })    }
+   
 
      /**
      * Obtiene a los suguiendo 
@@ -98,54 +62,15 @@ export class FriendController extends BaseController
     public following(request:Request, response:Response)
     {
         Friend.findFollowing(request.body.decoded.id)
-            .then((followings)=>{
-                
-                Friend.findFollowingOnlyId(request.body.decoded.id)
-                    .then((ids)=>{
-                        response.status(HttpResponse.Ok).json({
-                            followings,
-                            ids
-                        })
-                    })
-                    .catch((err)=>{
-
-                        response.status(HttpResponse.BadRequest).send("cannot get followings")
-                    })
-            })
-            .catch((err)=>{
-                response.status(HttpResponse.BadRequest).send("cannot get followings")
-
-            })
+        .then((followings) => {
+          response.status(HttpResponse.Ok).json(followings);
+        })
+        .catch((err) => {
+          response.status(HttpResponse.BadRequest).send("cannot get followings");
+        });
     }
 
-     /**
-     * Obtiene a los suguiendo por id de usuario
-     * 
-     * @route /friend/followings/:id
-     * @method get
-     */
-    public followingById(request:Request, response:Response)
-    {
-        Friend.findFollowing(request.params.id)
-            .then((followings)=>{
-                
-                Friend.findFollowingOnlyId(request.params.id)
-                    .then((ids)=>{
-                        response.status(HttpResponse.Ok).json({
-                            followings,
-                            ids
-                        })
-                    })
-                    .catch((err)=>{
-
-                        response.status(HttpResponse.BadRequest).send("cannot get followings")
-                    })
-            })
-            .catch((err)=>{
-                response.status(HttpResponse.BadRequest).send("cannot get followings")
-
-            })
-    }
+  
 
 
   
@@ -157,51 +82,103 @@ export class FriendController extends BaseController
      *  
      */
     public newFollower(request:Request, response:Response){
-        let friend = { 
-            follower:request.body.decoded.id,
-            user:request.body.user
-        }
-        Friend.newFollower(friend)
-            .then((following)=>{
-        
-                Notification.newNotification({
-                    user:following.user,
-                    friend:following.follower,
-                    action:'follow'
-                }).then(()=>{
-                    Alert.notification(friend.user)
-
-                })
-
-                response.status(HttpResponse.Ok).json(following)
+        let friend = {
+            follower: request.body.decoded.id,
+            user: request.body.user,
+          };
+          Friend.newFollower(friend)
+            .then((following) => {
+              Notification.newNotification({
+                user: following.user,
+                friend: following.follower,
+                action: "follow",
+              }).then(() => {
+                Alert.notification(friend.user);
+              });
+              User.populate([following], { path: "user" }, (err, data) => {
+                if (err) {
+                  response
+                    .status(HttpResponse.BadRequest)
+                    .send("Cannot get new friend");
+                } else {
+                  response.status(HttpResponse.Ok).json(data[0]);
+                }
+              });
             })
-            .catch((err)=>{
-                response.status(HttpResponse.BadRequest).send("Cannot follow new friend")
-            })
+            .catch((err) => {
+              console.log(err);
+      
+              response
+                .status(HttpResponse.BadRequest)
+                .send("Cannot follow new friend");
+            });
     }
 
     public unFollow(request:Request, response:Response){
-        Friend.unFollow(request.params.id)
-            .then((friend)=>{
-                
-                Notification.newNotification({
-                    user:friend.user,
-                    friend:friend.follower,
-                    action:'unfollow'
-                }).then(()=>{
-                    Alert.notification(friend.user)
-                   
-                })
+       // obtenemos el id de FRIEND para marcarlo como falso
+        let id = request.params.id;
+        Friend.unFollow(id)
+      .then((friend) => {
+        // notificamos al usuario que lo dejaron de seguir
+        Notification.newNotification({
+          user: friend.user,
+          friend: friend.follower,
+          action: "unfollow",
+        }).then(() => {
+          Alert.notification(friend.user);
+        });
 
-
-                response.status(HttpResponse.Ok).json(friend)
-            })
-            .catch((err)=>{
-                response.status(HttpResponse.BadRequest).send("cannot unfollow user")
-            })
+        response.status(HttpResponse.Ok).json(friend);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send("cannot unfollow user");
+      });
     }
 
  
+ /**
+   * Buscar usuarios por una consulta
+   * @param request
+   * @param response
+   */
+  public searchUserQuery(request: Request, response: Response) {
+    // obtenemos la query
+    let query = request.params.query;
+    // busca a los usuarios por la query
+    User.searchQueryUsers(query)
+      .then((users) => {
+        User.populate(users, { path: "_id" }).then((users) => {
+          users = users.map((user) => {
+            return user._id;
+          });
+          response.status(HttpResponse.Ok).json(users);
+        });
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send(err);
+      });
+  }
 
-  
+  /**
+   * busca a usuarios de kecuki, por una cadena de texto
+   */
+  public searchUserQuerySkip(request: Request, response: Response) {
+    let query = request.params.query; // obtenemos la busqueda o el texto que ingreso el usuario
+    let skip = Number(request.params.skip); // obtenemos la paginacion y la convertimos a numero
+    // buscamos a los usuarios que coincidan con la busqueda
+    User.searchQueryUsers(query, 15, skip)
+      .then((users) => {
+        // hacemos el populate de los usuarios para obtener su data
+        User.populate(users, { path: "_id" }).then((users) => {
+          users = users.map((user) => {
+            return user._id;
+          });
+          response.status(HttpResponse.Ok).json(users);
+        });
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send(err);
+      });
+  }
+
 }

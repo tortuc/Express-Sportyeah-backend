@@ -48,10 +48,8 @@ export class RankingController extends BaseController {
 
     Like.getLikesAllTime().then(async (rankingPosts) => {
       if(rankingPosts.length >= 0 ){
-      
-      
-      let ranking = await Post.populate(rankingPosts, "_id");
-      let rankingAndUsers = await User.populate(ranking, "_id.user");
+      let ranking = await Post.populate(rankingPosts, {path:"_id"});
+      let rankingAndUsers = await User.populate(ranking, {path:"_id.user"});
 
       if (country != "null") {
         rankingAndUsers = rankingAndUsers.filter((item) => {
@@ -80,8 +78,8 @@ export class RankingController extends BaseController {
     let country = request.params.country;
     Post.getPostAllTime().then(async (rankingPosts) => {
       if(rankingPosts.length >= 0 ){
-      let ranking = await Post.populate(rankingPosts, "_id");
-      let rankingAndUsers = await User.populate(ranking, "_id.user");
+      let ranking = await Post.populate(rankingPosts, {path:"_id"});
+      let rankingAndUsers = await User.populate(ranking, {path:"_id.user"});
 
       if (country != "null") {
         rankingAndUsers = rankingAndUsers.filter((item) => {
@@ -113,8 +111,8 @@ export class RankingController extends BaseController {
     Comment.getCommentAllTime().then(async (rankingPosts) => {
       if(rankingPosts.length >= 0){
 
-      let ranking = await Post.populate(rankingPosts, "_id");
-      let rankingAndUsers = await User.populate(ranking, "_id.user");
+      let ranking = await Post.populate(rankingPosts, {path:"_id"});
+      let rankingAndUsers = await User.populate(ranking, {path:"_id.user"});
 
       if (country != "null") {
         rankingAndUsers = rankingAndUsers.filter((item) => {
@@ -144,8 +142,8 @@ export class RankingController extends BaseController {
 
     Post.getPostViewsAllTime().then(async (rankingPosts) => {
       if(rankingPosts.length >= 0){
-      let ranking = await Post.populate(rankingPosts, "_id");
-      let rankingAndUsers = await User.populate(ranking, "_id.user");
+      let ranking = await Post.populate(rankingPosts, {path:"_id"});
+      let rankingAndUsers = await User.populate(ranking, {path:"_id.user"});
       if (country != "null") {
         rankingAndUsers = rankingAndUsers.filter((item) => {
           return item._id.user.geo.country == country;
@@ -173,7 +171,7 @@ export class RankingController extends BaseController {
     let country = request.params.country;
 
     ViewsProfile.getViewsProfileAllSearchTime().then(async (rankingPosts:any) => {
-      let ranking:any = await User.populate(rankingPosts, "_id.user");
+      let ranking:any = await User.populate(rankingPosts, {path:"_id.user"});
   //  await  rankingPosts.map(async(x) => {
   //   await ViewsProfileFilter.getViewsCountSearch(x)
   //  });
@@ -209,7 +207,7 @@ export class RankingController extends BaseController {
     let country = request.params.country;
     Friend.getfollowersAllTime().then(async(rankingFollowers)=>{
       if(rankingFollowers.length >= 0){
-      let ranking:any = await User.populate(rankingFollowers, "_id.user");
+      let ranking:any = await User.populate(rankingFollowers, {path:"_id.user"});
       if (country != "null") {
         ranking = ranking.filter((item) => {
           return item._id.user.geo.country == country;
@@ -235,6 +233,35 @@ export class RankingController extends BaseController {
     })
 }
 
+public getViewsProfileReboundAllTime(request: Request, response: Response) {
+  let user = request.params.user;
+  let country = request.params.country;
+
+  ViewsProfile.getViewsProfileReboundAllTime().then(async (rankingPosts:any) => {
+    let ranking:any = await User.populate(rankingPosts, {path:"_id.user"});
+ 
+    if(rankingPosts.length >= 0){
+      if (country != "null") {
+        ranking = ranking.filter((item) => {
+          return item._id.user.geo.country == country;
+        });
+      }
+      let total = ranking.length;
+    let myPosition =
+      ranking.findIndex((item) => {
+        return item._id.user._id == user;
+      }) + 1;
+      if (myPosition == 0) {
+        myPosition = total + 1;
+      }
+      response.status(200).json({
+        myPosition,
+        total,
+        ranking: ranking.slice(0, 3),
+      });
+  }
+  });
+}
 
   //// Dates
   public getReactionsPostRankingDays(request: Request, response: Response) {
@@ -245,8 +272,8 @@ export class RankingController extends BaseController {
     Like.getLikesByTime(dateStart,dateEnd).then(async (rankingPosts) => {
       if(rankingPosts.length >= 0){
 
-      let ranking = await Post.populate(rankingPosts, "_id");
-      let rankingAndUsers = await User.populate(ranking, "_id.user");
+      let ranking = await Post.populate(rankingPosts, {path:"_id"});
+      let rankingAndUsers = await User.populate(ranking, {path:"_id.user"});
 
       if (country != "null") {
         rankingAndUsers = rankingAndUsers.filter((item) => {
@@ -277,9 +304,9 @@ export class RankingController extends BaseController {
 
     Comment.getCommentByTime(dateStart,dateEnd).then(async (rankingPosts) => {
       if(rankingPosts.length >= 0){
-      let ranking = await Post.populate(rankingPosts, "_id");
-      let rankingAndUsers = await User.populate(ranking, "_id.user");
-
+        let ranking = await Post.populate(rankingPosts, {path:"_id"});
+        let rankingAndUsers = await User.populate(ranking, {path:"_id.user"});
+        
       if (country != "null") {
         rankingAndUsers = rankingAndUsers.filter((item) => {
           return item._id.user.geo.country == country;
@@ -310,8 +337,8 @@ export class RankingController extends BaseController {
 
     Post.getPostByTime(dateStart,dateEnd).then(async (rankingPosts) => {
       if(rankingPosts.length >= 0){
-      let ranking = await Post.populate(rankingPosts, "_id");
-      let rankingAndUsers = await User.populate(ranking, "_id.user");
+      let ranking = await Post.populate(rankingPosts, {path:"_id"});
+      let rankingAndUsers = await User.populate(ranking, {path:"_id.user"});
 
       if (country != "null") {
         rankingAndUsers = rankingAndUsers.filter((item) => {
@@ -340,8 +367,8 @@ export class RankingController extends BaseController {
     Post.getPostViewsByTime(dateStart,dateEnd)
     .then(async(rankingPosts) => {
       if(rankingPosts.length >= 0){
-      let ranking = await Post.populate(rankingPosts, "_id");
-      let rankingAndUsers = await User.populate(ranking, "_id.user");
+      let ranking = await Post.populate(rankingPosts, {path:"_id"});
+      let rankingAndUsers = await User.populate(ranking, {path:"_id.user"});
       if (country != "null") {
         rankingAndUsers = rankingAndUsers.filter((item) => {
           return item._id.user.geo.country == country;
@@ -372,7 +399,7 @@ export class RankingController extends BaseController {
     Friend.getfollowersByTime(dateStart,dateEnd)
     .then(async(rankingFollowers) => {
       if(rankingFollowers.length >= 0){
-        let ranking:any = await User.populate(rankingFollowers, "_id.user");
+        let ranking:any = await User.populate(rankingFollowers, {path:"_id.user"});
       if (country != "null") {
         ranking = ranking.filter((item) => {
           return item._id.user.geo.country == country;
@@ -401,17 +428,10 @@ export class RankingController extends BaseController {
   public getViewsProfileSearchByTime(request: Request, response: Response) {
     let { user, country, dateStart, dateEnd} = request.params
     ViewsProfile.getViewsProfileSearchByTime(dateStart,dateEnd).then(async (rankingPosts:any) => {
-      // console.log(rankingPosts);
    
-  //  await  rankingPosts.map(async(x) => {
-  //   await ViewsProfileFilter.getViewsCountSearch(x)
-  //  });
-  //   //organiza de mayor a menor las vistas 
-  //  await rankingPosts.sort((a,b)=>{
-  //     return b.count - a.count
-  //   })  
+
       if(rankingPosts.length >= 0){
-        let ranking:any = await User.populate(rankingPosts, "_id.user");
+        let ranking:any = await User.populate(rankingPosts, {path:"_id.user"});
         if (country != "null") {
           ranking = ranking.filter((item) => {
             return item._id.user.geo.country == country;
@@ -420,8 +440,36 @@ export class RankingController extends BaseController {
         let total = ranking.length;
       let myPosition =
         ranking.findIndex((item) => {
-          console.log(item);
-          
+          return item._id.user._id == user;
+        }) + 1;
+        if (myPosition == 0) {
+          myPosition = total + 1;
+        }
+        response.status(200).json({
+          myPosition,
+          total,
+          ranking: ranking.slice(0, 3),
+        });
+ 
+    }
+    });
+  }
+
+  public getViewsProfileReboundByTime(request: Request, response: Response) {
+    let { user, country, dateStart, dateEnd} = request.params
+    ViewsProfile.getViewsProfileReboundByTime(dateStart,dateEnd).then(async (rankingPosts:any) => {
+   
+
+      if(rankingPosts.length >= 0){
+        let ranking:any = await User.populate(rankingPosts, {path:"_id.user"});
+        if (country != "null") {
+          ranking = ranking.filter((item) => {
+            return item._id.user.geo.country == country;
+          });
+        }
+        let total = ranking.length;
+      let myPosition =
+        ranking.findIndex((item) => {
           return item._id.user._id == user;
         }) + 1;
         if (myPosition == 0) {
