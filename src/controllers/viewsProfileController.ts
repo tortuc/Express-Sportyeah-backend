@@ -2,7 +2,7 @@ import { BaseController } from "./baseController";
 import { HttpResponse } from "../helpers/httpResponse";
 import { Request, Response } from "express";
 import ViewsProfile from "../models/viewsProfile";
-import { ViewsProfileFilter } from "../helpers/viewsProfileFilter"
+import { ViewsProfileFilter } from "../helpers/viewsProfileFilter";
 /**
  * ViewsProfileController
  *
@@ -21,22 +21,24 @@ export class ViewsProfileController extends BaseController {
     super();
   }
 
-/**
+  /**
    * Cuando el usuario entre en su pefil privado
    *
    * @param request
    * @param response
    */
- public createProfileView(request: Request, response: Response) {
-  // verifica si existe un ViewsProfile para este usuario
-  ViewsProfile.createProfileView(request.body)
-    .then((views) => {
-      response.status(HttpResponse.Ok).json(views);
-    })
-    .catch((err) => {
-      response.status(HttpResponse.BadRequest).json(err);
-    });
-}
+  public createProfileView(request: Request, response: Response) {
+    // verifica si existe un ViewsProfile para este usuario
+    ViewsProfile.createProfileView(request.body)
+      .then((views) => {
+        response.status(HttpResponse.Ok).json(views);
+      })
+      .catch((err) => {
+        console.log(err);
+
+        response.status(HttpResponse.BadRequest).json(err);
+      });
+  }
 
   /**
    * Cuando el usuario entre en su pefil privado
@@ -61,50 +63,16 @@ export class ViewsProfileController extends BaseController {
    * @param request
    * @param response
    */
-   public async getVisitsByWeek(request: Request, response: Response) {
-    let {date,id,from } = request.params
-   
-   try {
-     let events = await ViewsProfileFilter.getUserViewsCount(date, id,from);
-     response.status(HttpResponse.Ok).json(events);
-   } catch (error) {
-     console.log(error);
-     
-     response.status(HttpResponse.BadRequest).send(error);
-   }
- }
+  public async getVisitsByWeek(request: Request, response: Response) {
+    let { date, id, from } = request.params;
 
-  // public updateProfileView(request: Request, res: Response) {
-  //   let userVisitor = request.body.visitor;
-  //   let userVisited = request.body.visited;
-  //   let from = request.body.from
-  //   let link = request.body.link
-  //   ViewsProfile.getProfileView(request.body.visited)
-  //     .then((exist) => {
-  //       if (!exist) {
-  //         //Si no existe lo crea
-  //         ViewsProfile.createProfileView({
-  //           user: userVisited,
-  //           visits: [{ 
-  //             user: userVisitor,
-  //             from:from,
-  //             link:link
-  //            }],
-  //         });
-  //         res.status(HttpResponse.Ok).json("true");
-  //       } else {
-  //         //Si existe lo actualiza
-  //         ViewsProfile.updateProfileView(exist._id, userVisitor,from,link)
-  //           .then((response) => {
-  //             res.status(HttpResponse.Ok).json("true");
-  //           })
-  //           .catch((err) => {
-  //             res.status(HttpResponse.BadRequest).json(err);
-  //           });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       res.status(HttpResponse.BadRequest).json(err);
-  //     });
-  // }
+    try {
+      let events = await ViewsProfileFilter.getUserViewsCount(date, id, from);
+      response.status(HttpResponse.Ok).json(events);
+    } catch (error) {
+      console.log(error);
+
+      response.status(HttpResponse.BadRequest).send(error);
+    }
+  }
 }

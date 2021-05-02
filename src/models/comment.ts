@@ -36,7 +36,7 @@ const schema = createSchema({
    * archivos que compartio, imagenes o videos
    */
   files: Type.array({ default: [] }).of({
-    fileType: Type.string({ required: true }),
+    format: Type.string({ required: true }),
     url: Type.string({ required: true }),
   }),
    /**
