@@ -307,6 +307,33 @@ const User = typedModel("User", schema, undefined, undefined, {
       { $limit: limit },
     ]);
   },
+  /**
+   * Retorna un conteo de la cantidad de usuarios registrados/creados en un intervalo de tiempo
+   *
+   * @param date Fecha desde cual consultar
+   */
+   getUsersByDate(date) {
+    // se crea la fecha como Date
+    let day = new Date(date);
+    // se crea otra fecha
+    let dayAfter = new Date(day);
+    // se le suma un dia, para poder tener un rango de 24 horas
+    dayAfter.setDate(day.getDate() + 1);
+
+    return User.countDocuments({ create: { $gte: day, $lte: dayAfter } });
+  },
+   /**
+   * Devuelve la cantidad de usuarios registrados o creados
+   */
+    countOfUsers() {
+      return User.countDocuments();
+    },
+    /**
+     * Devuelve la cantidad de usuarios conectados
+     */
+    countOfUsersOnlines(){
+      return User.countDocuments({ connected: true });
+    },
 });
 
 /**

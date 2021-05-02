@@ -83,6 +83,14 @@ const Like = typedModel("Like", schema, undefined, undefined, {
     reactionsByTypePostUsers(post,type,skip){
       return Like.find({post,deleted:false,type}).populate('user').skip(skip).limit(10).sort({date:-1})
     },
+       /**
+   * Retorna la cantidad de likes que ha recibido un usuario
+   * @param user _id del usuario
+   * @returns
+   */
+        getCountLikeByUserPost(post:string[]) {
+          return Like.countDocuments({ deleted: false, post:{$in:post} });
+        },
 
   getLikesAllTime() {
     return Like.aggregate([

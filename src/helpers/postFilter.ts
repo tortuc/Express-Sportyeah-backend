@@ -13,6 +13,7 @@ import Answer from "../models/answer";
 import Post from "../models/post";
 import QuestionGroup from "../models/questionGroup";
 import User from "../models/user";
+import Like from "../models/like"
 export class PostFilter {
   private constructor() {
     // Constructor Privado
@@ -103,5 +104,25 @@ export class PostFilter {
     .catch((err)=>{
       console.log(err)
     })
+  }
+
+
+  /**
+   * Esta funcion es para traer los id del post de un usuario
+   * @param id
+   * @returns
+   */
+   public static async getCountPostReaction(user){
+    let idPost = (
+      await Post.find({user,deleted:false}).select(" _id")
+    ).map((item) => {
+      // Luego hacemos un map para solo devolver el ObjectId de cada post      
+      return item._id;
+    });
+
+   let totalReactions = Like.getCountLikeByUserPost(idPost).then((response)=>{
+      return response
+    })
+    return totalReactions
   }
 }
