@@ -120,14 +120,16 @@ PostRoute.get('/get/:id',postController.getPost)
 PostRoute.get("/comments/:id/:skip", postController.getCommentsInPost);
 
 /**
-  * Obtiene los compartidos de un post
-  * 
-  * @route /v1/post/shareds/:id
-  * @method get
-  */
+ * Obtiene los compartidos de un post
+ *
+ * @route /v1/post/shareds/:id/:skip
+ * @method get
+ */
 
- PostRoute.get('/shareds/:id',Authentication.jwt,postController.getSharedsByPost)
-
+ PostRoute.get(
+  "/shareds/:id/:skip",
+  postController.getSharedsByPost
+);
 /**
   * Obtiene la cantidad de post por usuario
   * 

@@ -8,10 +8,9 @@ import User from "../models/user";
 import { Alert } from "../helpers/alert";
 import { PostFilter } from "../helpers/postFilter";
 import { Net } from "../helpers/net";
-import Question from "../models/question";
 import { userHelper } from "../helpers/userHelper";
 
-import * as moment from 'moment'
+import * as moment from "moment";
 
 /**
  * PostController
@@ -51,53 +50,20 @@ export class PostController extends BaseController {
       });
   }
 
+  /**
+   * Retorna las publicaciones que ha hecho el usuario que consulta
+   */
+
   public getMyPosts(request: Request, response: Response) {
     User.findById(request.body.decoded.id)
       .then((user) => {
+        // una REGEX para saber si hay post donde lo hayan mencionado
         let regex = `/user/${user.username}`;
+        // paginacion
         let skip = Number(request.params.skip);
         Post.findMyPosts(request.body.decoded.id, regex, skip)
           .then((posts) => {
-            let postsAndLikes = [];
-            let j = 0;
-            if (posts.length === 0) {
-              response.status(HttpResponse.Ok).json([]);
-            } else {
-              posts.forEach((post, i, arr) => {
-                Comment.getCommentsByPost(post._id)
-                  .then((comments) => {
-                    Post.getSharedsByPost(post._id)
-                      .then((shareds) => {
-                        postsAndLikes.push({
-                          post,
-
-                          comments,
-                          shareds,
-                        });
-                        j++;
-                        if (j == arr.length) {
-                          postsAndLikes.sort((a, b) => {
-                            return (
-                              b.post.date.getTime() - a.post.date.getTime()
-                            );
-                          });
-                          response.status(HttpResponse.Ok).json(postsAndLikes);
-                        }
-                      })
-
-                      .catch((err) => {
-                        response
-                          .status(HttpResponse.InternalError)
-                          .send("cannot get shareds");
-                      });
-                  })
-                  .catch((err) => {
-                    response
-                      .status(HttpResponse.InternalError)
-                      .send("cannot get comments");
-                  });
-              });
-            }
+            response.status(HttpResponse.Ok).json(posts);
           })
           .catch((err) => {
             response.status(HttpResponse.BadRequest).send("unknow error");
@@ -108,11 +74,10 @@ export class PostController extends BaseController {
       });
   }
 
-
   /**
    * Obtiene las publicaciones de los amigos (siguiendo) del usuario
    */
-   public async friendsPosts(request: Request, response: Response) {
+  public async friendsPosts(request: Request, response: Response) {
     let skip = request.body.skip;
     let days = request.body.days;
     let limitDate = moment().subtract(days, "days");
@@ -142,6 +107,7 @@ export class PostController extends BaseController {
         response.status(HttpResponse.BadRequest).send("cannot get posts");
       });
   }
+
   public findByUser(request: Request, response: Response) {
     let user = request.params.id;
     Post.findByUser(user).then((posts) => {
@@ -153,27 +119,17 @@ export class PostController extends BaseController {
         posts.forEach((post, i, arr) => {
           Comment.getCommentsByPost(post._id)
             .then((comments) => {
-              Post.getSharedsByPost(post._id)
-                .then((shareds) => {
-                  postsAndLikes.push({
-                    post,
-                    comments,
-                    shareds,
-                  });
-                  j++;
-                  if (j == arr.length) {
-                    postsAndLikes.sort((a, b) => {
-                      return b.post.date.getTime() - a.post.date.getTime();
-                    });
-                    response.status(HttpResponse.Ok).json(postsAndLikes);
-                  }
-                })
-
-                .catch((err) => {
-                  response
-                    .status(HttpResponse.InternalError)
-                    .send("cannot get shareds");
+              postsAndLikes.push({
+                post,
+                comments,
+              });
+              j++;
+              if (j == arr.length) {
+                postsAndLikes.sort((a, b) => {
+                  return b.post.date.getTime() - a.post.date.getTime();
                 });
+                response.status(HttpResponse.Ok).json(postsAndLikes);
+              }
             })
             .catch((err) => {
               response
@@ -233,7 +189,7 @@ export class PostController extends BaseController {
   /**
    * Quitar reaccion de una publicacion
    */
-   public dislikePost(request: Request, response: Response) {
+  public dislikePost(request: Request, response: Response) {
     Like.dislike(request.params.id)
       .then(async (like) => {
         // luego que eliminemos la reaccion buscamos todas las reacciones de ese post, para actualizar las demas reacciones al usuario
@@ -248,36 +204,18 @@ export class PostController extends BaseController {
       });
   }
 
+  /**
+   * Obtiene la informacion de una publicacion
+   * (Reacciones, comentarios y comparticiones)
+   */
 
   public getPost(request: Request, response: Response) {
     Post.findOnePost(request.params.id)
-      .then((post) => {
+      .then(async (post) => {
         if (post) {
-        
-              Comment.getCommentsByPost(post._id)
-                .then((comments: any) => {
-                  Post.getSharedsByPost(post._id)
-                    .then(async (shareds) => {
-                      let geo = Net.geoIp(Net.ip(request));
-                      await PostFilter.findIpView(request.params.id, geo.ip);
-                      response.status(HttpResponse.Ok).json({
-                        post,
-                        comments,
-                        shareds,
-                      });
-                    })
-                    .catch((err) => {
-                      response
-                        .status(HttpResponse.InternalError)
-                        .send("cannot get shareds");
-                    });
-                })
-                .catch((err) => {
-                  response
-                    .status(HttpResponse.InternalError)
-                    .send("cannot get likes");
-                });
-           
+          let geo = Net.geoIp(Net.ip(request));
+          await PostFilter.findIpView(request.params.id, geo.ip);
+          response.status(HttpResponse.Ok).json(post);
         } else {
           response.status(HttpResponse.InternalError).send("cannot get post");
         }
@@ -304,55 +242,19 @@ export class PostController extends BaseController {
       });
   }
 
+  /**
+   * Obtiene las publicaciones de un usuario en especifico
+   */
+
   public getPostsByUserId(request: Request, response: Response) {
     User.findById(request.params.id).then((user) => {
+      // obtenemos la REGEX para saber si hay publicaciones donde hayan mnencionado a ese usuario
       let regex = `/user/${user.username}`;
+      // para hacer la paginacion
       let skip = Number(request.params.skip);
       Post.findMyPosts(request.params.id, regex, skip)
         .then((posts) => {
-          let postsAndLikes = [];
-          let j = 0;
-          if (posts.length === 0) {
-            response.status(HttpResponse.BadRequest).send("unknow error");
-          } else {
-            posts.forEach((post, i, arr) => {
-             
-                  Comment.getCommentsByPost(post._id)
-                    .then((comments) => {
-                      Post.getSharedsByPost(post._id)
-                        .then((shareds) => {
-                          postsAndLikes.push({
-                            post,
-                            comments,
-                            shareds,
-                          });
-                          j++;
-                          if (j == arr.length) {
-                            postsAndLikes.sort((a, b) => {
-                              return (
-                                b.post.date.getTime() - a.post.date.getTime()
-                              );
-                            });
-                            response
-                              .status(HttpResponse.Ok)
-                              .json(postsAndLikes);
-                          }
-                        })
-
-                        .catch((err) => {
-                          response
-                            .status(HttpResponse.InternalError)
-                            .send("cannot get shareds");
-                        });
-                    })
-                    .catch((err) => {
-                      response
-                        .status(HttpResponse.InternalError)
-                        .send("cannot get comments");
-                    });
-               
-            });
-          }
+          response.status(HttpResponse.Ok).json(posts);
         })
         .catch((err) => {
           response.status(HttpResponse.BadRequest).send("unknow error");
@@ -360,8 +262,12 @@ export class PostController extends BaseController {
     });
   }
 
+  /**
+   * Obtiene las comparticiones de una publicacion por cantidades de 10
+   */
   public getSharedsByPost(request: Request, response: Response) {
-    Post.getSharedsByPost(request.params.id)
+    let skip = Number(request.params.skip);
+    Post.getSharedsByPost(request.params.id, skip)
       .then((posts) => {
         response.status(HttpResponse.Ok).json(posts);
       })
@@ -389,36 +295,25 @@ export class PostController extends BaseController {
         response.status(HttpResponse.Ok).json(postsAndLikes);
       } else {
         posts.forEach((post, i, arr) => {
-            Comment.getCommentsByPost(post._id)
-              .then((comments) => {
-                Post.getSharedsByPost(post._id)
-                  .then((shareds) => {
-                    postsAndLikes.push({
-                      post,
-                      comments,
-                      shareds,
-                    });
-                    j++;
-                    if (j == arr.length) {
-                      postsAndLikes.sort((a, b) => {
-                        return b.post.date.getTime() - a.post.date.getTime();
-                      });
-                      response.status(HttpResponse.Ok).json(postsAndLikes);
-                    }
-                  })
-
-                  .catch((err) => {
-                    response
-                      .status(HttpResponse.InternalError)
-                      .send("cannot get shareds");
-                  });
-              })
-              .catch((err) => {
-                response
-                  .status(HttpResponse.InternalError)
-                  .send("cannot get comments");
+          Comment.getCommentsByPost(post._id)
+            .then((comments) => {
+              postsAndLikes.push({
+                post,
+                comments,
               });
-        
+              j++;
+              if (j == arr.length) {
+                postsAndLikes.sort((a, b) => {
+                  return b.post.date.getTime() - a.post.date.getTime();
+                });
+                response.status(HttpResponse.Ok).json(postsAndLikes);
+              }
+            })
+            .catch((err) => {
+              response
+                .status(HttpResponse.InternalError)
+                .send("cannot get comments");
+            });
         });
       }
     });
@@ -566,7 +461,7 @@ export class PostController extends BaseController {
    * Obtiene la cantidad de comentarios en un post
    */
 
-   public async countCommentsInPost(request: Request, response: Response) {
+  public async countCommentsInPost(request: Request, response: Response) {
     try {
       // obtenemos el id del post
       let id = request.params.id;
@@ -585,7 +480,7 @@ export class PostController extends BaseController {
   /**
    * Saber si un un usuario ha comentado una publiacion
    */
-   public async userCommentPost(request: Request, response: Response) {
+  public async userCommentPost(request: Request, response: Response) {
     try {
       // obtenemos el _id del post y el _id del usuario
       let { id, user } = request.params;
@@ -597,12 +492,10 @@ export class PostController extends BaseController {
     }
   }
 
-
-  
   /**
    * Retorna la cantidad de comparticiones en un post
    */
-   public async totalShared(request: Request, response: Response) {
+  public async totalShared(request: Request, response: Response) {
     // obtenemos el id del post
     let id = request.params.id;
     // obtenemos la cantidad total de veces que se compartio
@@ -614,5 +507,4 @@ export class PostController extends BaseController {
       response.status(HttpResponse.BadRequest).send(error);
     }
   }
-
 }

@@ -39,7 +39,7 @@ const schema = createSchema({
    * Archivos del post (imagenes y videos)
    */
   files: Type.array({ default: [] }).of({
-    fileType: Type.string({ required: true }),
+    format: Type.string({ required: true }),
     url: Type.string({ required: true }),
   }),
   /**
@@ -173,11 +173,13 @@ const Post = typedModel("Post", schema, undefined, undefined, {
    * @param id 
    * @returns 
    */
-  getSharedsByPost(id) {
+  getSharedsByPost(id,skip) {
     return Post.find({ post: id })
       .populate("user post news")
       .populate({ path: "post", populate: { path: "user news" } })
-      .sort({ date: -1 });
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(10)
   }, //esto metelo en el newsCOntroller
   /**
    * Retorna la cantidad de veces qeu se compartio una noticia
