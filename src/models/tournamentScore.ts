@@ -15,6 +15,7 @@ import { createSchema, Type, typedModel } from "ts-mongoose";
  */
 
  const schema = createSchema({
+    tournament: Type.objectId({required: true,ref:"Tournament"}),
     resultGame: Type.number({ default: 0 }),   
     bestPlayer: Type.number({ default: 0 }), 
     hitPostion: Type.number({ default: 0 }), 
