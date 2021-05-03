@@ -24,8 +24,7 @@ const schema = createSchema({
   end_date: Type.date({ default: Date.now }),
   participation_date: Type.date({ default: Date.now }),    
   deleted : Type.boolean({default:false}),
-  status: Type.number({ default: 0 }),
-  tournamentScore    : Type.objectId({ref: 'TournamentScore',required:true}),
+  status: Type.number({ default: 0 })
 });
 
 const Tournament = typedModel("Tournament", schema, undefined, undefined, {
@@ -35,7 +34,7 @@ const Tournament = typedModel("Tournament", schema, undefined, undefined, {
    * @param {string} id   El id del torneo
    */
   async findByUserId(id: string) {
-    return await Tournament.findById(id).populate('tournamentScore');
+    return await Tournament.findById(id);
   },
 
   /**
@@ -61,7 +60,7 @@ const Tournament = typedModel("Tournament", schema, undefined, undefined, {
    * * @param {string} id
    */
    async getAll() {
-    return await Tournament.find({deleted:false}).populate('tournamentScore');
+    return await Tournament.find({deleted:false});
   },
 
 });
