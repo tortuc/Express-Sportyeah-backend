@@ -29,7 +29,7 @@ import { CategorytournamentController } from "../controllers/categorytournamentC
   CategoryTournamenRoute.get("/",categorytournamentController.getAll);
   CategoryTournamenRoute.post('/create', categorytournamentController.create);
   CategoryTournamenRoute.get("/:id",categorytournamentController.getAllById);
-  CategoryTournamenRoute.get("/update/:id",categorytournamentController.edit);
+  CategoryTournamenRoute.put("/update/:id",categorytournamentController.edit);
   CategoryTournamenRoute.get("/delete/:id",categorytournamentController.delete);
 
   

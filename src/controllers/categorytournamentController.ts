@@ -99,7 +99,7 @@ export class CategorytournamentController extends BaseController {
   public edit(request: Request, response: Response) {
     let id = request.params.id;
     let newValues = request.body;
-    delete newValues.decoded;
+ 
     Categorytournament.updateCategorytournament(id, newValues)
       .then((data) => {
         response.status(HttpResponse.Ok).json(data);
