@@ -34,7 +34,7 @@ const schema = createSchema({
   /**
    * Mensaje o texto de la publicacion
    */
-  message: Type.string(),
+  message: Type.string({default:''}),
   /**
    * Archivos del post (imagenes y videos)
    */

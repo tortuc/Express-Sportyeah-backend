@@ -39,13 +39,15 @@ export class PostController extends BaseController {
   public create(request: Request, response: Response) {
     Post.create(request.body)
       .then((resp) => {
-        response.status(HttpResponse.Ok).json(resp);
         if (resp.post != null) {
           Alert.sharedNotification(resp);
         }
         Alert.mentionsPost(resp);
+        response.status(HttpResponse.Ok).json(resp);
       })
       .catch((err) => {
+        console.log(err);
+        
         response.status(HttpResponse.BadRequest).send("cannot-create");
       });
   }
@@ -470,7 +472,6 @@ export class PostController extends BaseController {
       // retornamos la cantidad de comentarios
       response.status(HttpResponse.Ok).json(comments);
     } catch (error) {
-      console.log(error);
 
       // hubo un error
       response.status(HttpResponse.BadRequest).send("something went wrong");
