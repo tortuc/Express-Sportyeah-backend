@@ -72,6 +72,8 @@ export class UserController extends BaseController {
   public async create(request: Request, response: Response) {
     // Crea el usuario
 
+    console.log(request.body);
+    
     let newUser = new User(request.body);
 
     // Codifica la contraseña
