@@ -139,6 +139,16 @@ export class Router {
      * @route /v1/question/...
      */
      this.route.use("/v1/question", require("./questionRoute"));
+
+    /**
+     * Iniciao de rutas para creación del torneo
+     * @route /v1/tournament/
+    */ 
+     this.route.use("/v1/tournament", require("./tournamentRoute"));
+
+     this.route.use("/v1/category/tournament", require("./categorytournamentRoute"));
+
+     
     
      /**
      * Manejador de rutas de las Vistas a los Sponsor
