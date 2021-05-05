@@ -86,7 +86,12 @@ const schema = createSchema({
     country : Type.string(),
     city : Type.string(),
     flag: Type.string({default: null})
-  }) 
+  }) ,
+   /**
+   * Token del FCM para las Push Notifications
+   */
+    fcmtoken: Type.string({default:null}),
+    
 });
 
 const User = typedModel("User", schema, undefined, undefined, {
@@ -334,6 +339,9 @@ const User = typedModel("User", schema, undefined, undefined, {
     countOfUsersOnlines(){
       return User.countDocuments({ connected: true });
     },
+    setFCMTOken(user,fcmtoken){
+      return User.findByIdAndUpdate(user,{fcmtoken},{new:true})
+    }
 });
 
 /**

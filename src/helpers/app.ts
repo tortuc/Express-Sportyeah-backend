@@ -6,15 +6,13 @@
  */
 
 import * as express from "express";
-import * as body_parser from "body-parser";
 import * as cors from "cors";
 
 import { Environment } from "./environment";
 import { Config } from "./config";
 import { Router } from "../routes/router";
-import { Mongoose } from "./mongoose";
 import { Socket } from "./socket";
-import { UserController } from "../controllers/userController";
+import { Mongoose } from "./mongoose";
 
 export class App {
   /**

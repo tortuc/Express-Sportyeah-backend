@@ -17,7 +17,6 @@ export interface NewsSocket{
 }
 import * as socketIO from 'socket.io'
 import User from '../models/user'
-import News from '../models/news';
 
 export class Socket
 {
