@@ -161,7 +161,7 @@ export class ViewsSponsorController extends BaseController {
       let {date,id,from } = request.params
      
      try {
-       let events = await SponsorFilter.getSponsorViewsCountYear(date, id,from);
+       let events = await SponsorFilter.getSponsorViewsCountHours(date, id,from);
        response.status(HttpResponse.Ok).json(events);
      } catch (error) {
        console.log(error);
