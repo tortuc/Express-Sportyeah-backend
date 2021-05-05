@@ -22,12 +22,11 @@ export class QuestionHelper
     }
 
 
-    public static filterQuestion(questionGroup:any[],questionId){
+    public static filterQuestion(questionGroup:any,questionId){
       
-      questionGroup.forEach(question => {
-        QuestionGroup.create(questionId,question.questionHeadline)
+      QuestionGroup.create(questionId,questionGroup.questionHeadline)
         .then((response:any)=>{
-          question.answer.forEach(answer => {
+          questionGroup.answer.forEach(answer => {
             Answer.create(response._id,answer.option,answer.position)
             .then((answer)=>{
             })
@@ -40,7 +39,6 @@ export class QuestionHelper
         .catch((err)=>{
           // hendler error
         })
-      });
     }
 
 

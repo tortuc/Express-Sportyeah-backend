@@ -1,8 +1,7 @@
 import { BaseController } from "./baseController";
 import { HttpResponse } from "../helpers/httpResponse";
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import Question from "../models/question";
-import QuestionGroup from "../models/questionGroup";
 import Answer from "../models/answer";
 import { QuestionHelper } from "../helpers/question";
 import { PostFilter } from "../helpers/postFilter"
