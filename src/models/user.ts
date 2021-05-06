@@ -12,6 +12,7 @@ const schema = createSchema({
   lastConection: Type.date({ default: null }),
   connected: Type.boolean({ default: false }),
   password: Type.string(),
+  lang: Type.string({default:'es'}),
   create: Type.date({ default: Date.now }),
   role: Type.string({ enum: ["user", "admin"], default: "user" }),
   verified: Type.boolean({ default: false }),
@@ -291,6 +292,48 @@ const User = typedModel("User", schema, undefined, undefined, {
   upadateSponsors(id: number, sponsors: any) {
     return User.findByIdAndUpdate(id, { sponsors });
   },
+
+  searchQueryUsers(query:string, limit = 5, skip = 0) {
+  
+    let regex = new RegExp(query.replace(/ /g,''),'i') ;
+    
+    return User.aggregate([
+      {
+        $project: { search: { $concat: ["$name", "$last_name", "$username"] } },
+      },
+      { $match: { search: { $regex: regex } }},
+      { $sort: { search: 1 } },
+      { $skip: skip },
+      { $limit: limit },
+    ]);
+  },
+  /**
+   * Retorna un conteo de la cantidad de usuarios registrados/creados en un intervalo de tiempo
+   *
+   * @param date Fecha desde cual consultar
+   */
+   getUsersByDate(date) {
+    // se crea la fecha como Date
+    let day = new Date(date);
+    // se crea otra fecha
+    let dayAfter = new Date(day);
+    // se le suma un dia, para poder tener un rango de 24 horas
+    dayAfter.setDate(day.getDate() + 1);
+
+    return User.countDocuments({ create: { $gte: day, $lte: dayAfter } });
+  },
+   /**
+   * Devuelve la cantidad de usuarios registrados o creados
+   */
+    countOfUsers() {
+      return User.countDocuments();
+    },
+    /**
+     * Devuelve la cantidad de usuarios conectados
+     */
+    countOfUsersOnlines(){
+      return User.countDocuments({ connected: true });
+    },
 });
 
 /**

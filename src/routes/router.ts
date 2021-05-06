@@ -149,5 +149,14 @@ export class Router {
      this.route.use("/v1/category/tournament", require("./categorytournamentRoute"));
 
      this.route.use("/v1/porra/tournament", require("./porraRoute"));   
+     
+    
+     /**
+     * Manejador de rutas de las Vistas a los Sponsor
+     *
+     * @route /v1/viewsSponsor/...
+     */
+      this.route.use("/v1/viewsSponsor", require("./viewsSponsorRoutes"));
+   
     }
 }

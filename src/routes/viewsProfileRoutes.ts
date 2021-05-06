@@ -41,13 +41,16 @@ viewsProfileRouter.get('/:id', viewsProfileController.getProfileView);
 
 
 /**
- * Esta introduce a un usuario que miro un perfil
+ * Esta trae las vista al los sponsor de semana
  * 
  * Ruta por defecto
  * 
- * @route /v1/viewsProfile/update
- * @method post
+ * @route /v1/viewsSponsor/week/:id/:dateStart
+ * @method get
  */
-viewsProfileRouter.post('/update', viewsProfileController.updateProfileView);
+ viewsProfileRouter.get('/week/:id/:date/:from', viewsProfileController.getVisitsByWeek);
+
+
+
 
 module.exports = viewsProfileRouter;

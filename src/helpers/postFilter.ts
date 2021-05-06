@@ -8,10 +8,12 @@
  *
  */
 
+import { rejects } from "assert";
 import Answer from "../models/answer";
 import Post from "../models/post";
 import QuestionGroup from "../models/questionGroup";
 import User from "../models/user";
+import Like from "../models/like"
 export class PostFilter {
   private constructor() {
     // Constructor Privado
@@ -41,19 +43,15 @@ export class PostFilter {
    */
    public static async getDataQuestion(question): Promise<any> {
     // retornamos una promesa
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve,reject) => {
       // buscamos los grupos de esa cuestion
       let questionGroup = await QuestionGroup.findByQuestion(question._id);
 
-      // creamos un array donde iran los grupos y sus respectivas answers
-
-      let questionGroupAndAnswers = [];
-      // iterador de control
-      let j = 0;
+     
       // si hay grupos entonces buscamos los answers
-      if (questionGroup.length >= 1) {
+      if (questionGroup) {
         // recorremos los grupos
-        questionGroup.forEach(async (questionGroup, i, arr) => {
+      
             let questionHeadline = questionGroup.questionHeadline
 
           // buscamos los answers de cada grupo
@@ -79,19 +77,11 @@ export class PostFilter {
           })  
           // si el total es 0 entonces retornamos un 1 para que no de error, si no retornamos la cantidad que es
           total = total == 0 ? 1 : total;
-          // metemos en el array, el grupo, las answers y el total
-          questionGroupAndAnswers.push({ questionHeadline,questionGroup, answer, total });
-          j += 1;
-          //organiza para que se mantenga el orden de las preguntas
-         
-          if (j == arr.length) {
-            // respondemos con toda la data
-
-            resolve(questionGroupAndAnswers);
-          }
-        });
+       
+          resolve({ questionHeadline,questionGroup, answer, total });
+     
       } else {
-        resolve(questionGroupAndAnswers);
+        reject(null);
       }
     });
   }
@@ -114,5 +104,25 @@ export class PostFilter {
     .catch((err)=>{
       console.log(err)
     })
+  }
+
+
+  /**
+   * Esta funcion es para traer los id del post de un usuario
+   * @param id
+   * @returns
+   */
+   public static async getCountPostReaction(user){
+    let idPost = (
+      await Post.find({user,deleted:false}).select(" _id")
+    ).map((item) => {
+      // Luego hacemos un map para solo devolver el ObjectId de cada post      
+      return item._id;
+    });
+
+   let totalReactions = Like.getCountLikeByUserPost(idPost).then((response)=>{
+      return response
+    })
+    return totalReactions
   }
 }

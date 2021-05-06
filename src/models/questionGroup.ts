@@ -40,7 +40,7 @@ const QuestionGroup = typedModel('QuestionGroup', schema, undefined, undefined,
         },
 
         findByQuestion(id){
-            return QuestionGroup.find({question:id})
+            return QuestionGroup.findOne({question:id})
         }
         },
     

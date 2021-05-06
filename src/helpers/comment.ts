@@ -102,7 +102,7 @@
        
       if(!resp){
        Post.newView(id,ip).then((response)=>
-       console.log(response)
+       console.log('ok')
        )
       }
         
