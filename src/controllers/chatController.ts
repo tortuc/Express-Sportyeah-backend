@@ -12,7 +12,7 @@ import Message from "../models/message";
  * Explica el objeto de este controlador
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  */
 
 export class ChatController extends BaseController {

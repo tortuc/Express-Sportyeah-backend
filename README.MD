@@ -4,7 +4,7 @@ Este documento refleja como trabajar el backend de la aplicación.
 
 version 2.0
 Jogeiker L <jogeiker1999@gmail.com>
-(c) Sapviremoto
+(c) Retail Servicios Externos SL
 
 # Conexión a la instancia AWS
 
@@ -171,7 +171,7 @@ y reemplazar example por user:
     * userRoute
     * 
     * @author Jogeiker L <jogeiker1999@gmail.com>
-    * @copyright Sapviremoto
+    * @copyright Retail Servicios Externos SL
     */
 
     /**
@@ -218,7 +218,7 @@ y susituimos example por user:
     * Explica el objeto de este controlador
     *  
     * @author Jogeiker L <jogeiker1999@gmail.com>
-    * @copyright Sapviremoto
+    * @copyright Retail Servicios Externos SL
     */
     
     export class UserController extends BaseController

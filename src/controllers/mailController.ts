@@ -7,7 +7,7 @@ import { Config } from '../helpers/config';
  * Envía mensajes de correo
  *  
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
  
 export class MailController

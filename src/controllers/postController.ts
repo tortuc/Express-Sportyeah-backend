@@ -18,7 +18,7 @@ import * as moment from "moment";
  * Explica el objeto de este controlador
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 export class PostController extends BaseController {

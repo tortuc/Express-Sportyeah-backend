@@ -4,7 +4,7 @@ import { Authentication } from "./middleware/authentication";
  * Landing Route
  *
  * @author David V <davidvalorwork@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 /**

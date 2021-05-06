@@ -10,7 +10,7 @@ import { Crypto } from "./crypto";
  * Contiene métodos útiles, para la creacion o datos de usuarios
  *
  * @author David V <davidvalorwork@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  *
  */
 

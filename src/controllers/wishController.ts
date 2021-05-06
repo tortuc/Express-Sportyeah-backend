@@ -11,7 +11,7 @@ import { BaseController } from './baseController';
  * Explica el objeto de este controlador
  *  
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
  
 export class WishController extends BaseController

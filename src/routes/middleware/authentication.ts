@@ -7,7 +7,7 @@ import { Config } from '../../helpers/config';
  * Middlware de autenticación
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 export class Authentication
 {

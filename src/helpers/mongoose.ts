@@ -3,7 +3,7 @@
  * Conexión a la base de datos de Mongo
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  */
 
  import { connect } from "mongoose";

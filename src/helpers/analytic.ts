@@ -5,7 +5,7 @@
  * analiticas
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  *
  */
 

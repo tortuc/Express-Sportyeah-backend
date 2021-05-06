@@ -5,7 +5,7 @@ import { createSchema, Type, typedModel } from "ts-mongoose";
  * Modelo de Like
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  *
  * @link https://www.npmjs.com/package/ts-mongoose
  */

@@ -16,7 +16,7 @@ import { Net } from "../helpers/net";
  * Explica el objeto de este controlador
  *  
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
  
 export class NewsController extends BaseController

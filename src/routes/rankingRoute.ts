@@ -4,7 +4,7 @@ import { RankingController } from '../controllers/rankingController';
  * exampleRoute
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 /**

@@ -4,7 +4,7 @@
  * Contiene todas las funciones de Socket.io
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  * 
  */
 export interface UserSocket{

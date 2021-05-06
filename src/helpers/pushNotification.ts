@@ -4,7 +4,7 @@
  * Push notifications para la app
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  *
  * para mas informacion acerca de FCM visitar
  * https://firebase.google.com/docs/cloud-messaging/send-message

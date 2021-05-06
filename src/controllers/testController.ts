@@ -12,7 +12,7 @@ import { Environment } from '../helpers/environment';
  * Controlador para testing
  *  
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
  
 export class TestController extends BaseController

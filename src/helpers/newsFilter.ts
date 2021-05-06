@@ -4,7 +4,7 @@
  * Se usa para filtrar los comenterios, publicaciones, likes
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  *
  */
 import QuestionGroup from "../models/questionGroup";

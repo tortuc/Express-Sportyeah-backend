@@ -5,7 +5,7 @@ import { Authentication } from './middleware/authentication';
  * MessageRoute
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  */
 
 /**

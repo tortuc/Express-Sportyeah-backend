@@ -5,7 +5,7 @@
  * Es un singleton
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
  import * as path from 'path'

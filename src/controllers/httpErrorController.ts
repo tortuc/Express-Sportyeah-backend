@@ -7,7 +7,7 @@ import { Config } from '../helpers/config';
  * Controlador para errores HTTP
  *  
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
  
 export class HttpErrorController extends BaseController

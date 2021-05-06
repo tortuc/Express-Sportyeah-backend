@@ -4,7 +4,7 @@
  * Contiene funciones para mejorar el sistema de mensajes
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  *
  * @link https://www.npmjs.com/package/bcrypt
  */

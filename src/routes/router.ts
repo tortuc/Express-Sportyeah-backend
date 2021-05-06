@@ -6,7 +6,7 @@ import * as express from "express";
  * Maneja las rutas de la aplicación
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 export class Router {

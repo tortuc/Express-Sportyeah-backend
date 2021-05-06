@@ -4,7 +4,7 @@
  * Controlador de usuarios
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 import { BaseController } from "./baseController";
