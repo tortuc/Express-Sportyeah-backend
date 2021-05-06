@@ -25,5 +25,8 @@ import { TournamentController } from "../controllers/tournamentController";
  */
 
   TournamentRouter.get("/",tournamentController.getIndex);
+  TournamentRouter.post("/create",tournamentController.create);  
+  TournamentRouter.get("/:id",tournamentController.getById);
+  TournamentRouter.put("/update/:id",tournamentController.update);
   
   module.exports = TournamentRouter;
