@@ -5,7 +5,7 @@ import { Authentication } from './middleware/authentication';
  * MessageRoute
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright JDV
  */
 
 /**
@@ -29,11 +29,11 @@ const MessageRouter:any = messageController.router();
 MessageRouter.post('/save',Authentication.jwt, messageController.saveMessage);
 
 /**
- * Obtiene todos los mensajes de un chat
- * @route /v1/message/chat/:id
+ * Obtiene una cantidad de mensajes de un chat
+ * @route /v1/message/chat/:id/:skip
  * @method get
  */
-MessageRouter.get('/chat/:id',Authentication.jwt,messageController.getMessagesByChat)
+MessageRouter.get('/chat/:id/:skip',Authentication.jwt,messageController.getMessagesByChat)
 
 /**
  * Elimina un mensaje
@@ -50,6 +50,14 @@ MessageRouter.delete('/:id',Authentication.jwt,messageController.deleteOne)
  */
 MessageRouter.put('/read',Authentication.jwt,messageController.readMessages)
 
+
+/**
+ * Vacia un chat para un usuario en especifico
+ * @route /v1/message/clear/:id
+ * @method delete
+ */
+
+ MessageRouter.delete('/clear/:id',Authentication.jwt,messageController.clearChat)
 
 
 module.exports = MessageRouter;

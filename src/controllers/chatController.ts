@@ -89,8 +89,8 @@ export class ChatController extends BaseController {
     // creamos el chat
     Chat.createGroup(group)
       .then((newGroup) => {
-        User.populate([newGroup], { path: "users admins" }, (err, chat) => {
-          response.status(HttpResponse.Ok).json(chat[0]);
+        User.populate(newGroup, { path: "users" }, (err, chat) => {
+          response.status(HttpResponse.Ok).json(chat);
         });
       })
       .catch((err) => {
@@ -286,70 +286,70 @@ export class ChatController extends BaseController {
       });
   }
 
-   /**
+  /**
    * Obtiene los ultimos mensajes de cada chat
    * @param chats array de chats
    * @param user usuario que hace la peticion
    * @returns
    */
-    public static async chatsAndLastMessages(chats, user) {
-        return new Promise((resolve, reject) => {
-          // creamos un array donde ira la informacion de los chats
-          let chatsLastMessage = [];
-          // iterador de control
-          let j = 0;
-    
-          // si no hay chats entonces devolvemos el array vacio
-          if (chats.length == 0) {
-            resolve(chatsLastMessage);
-          } else {
-            // si hay chats, los recorremos
-            chats.forEach(async (chat, i, arr) => {
-              // obtenemos el ultimo mensaje del chat
-              let last = await Message.findLastByChat(chat._id, user);
-              // obtenemos la cantidad de mensajes no leidos
-              let unreads = await Message.countUnReads(chat._id, user);
-    
-              chatsLastMessage.push({
-                chat,
-                lastMessage: last,
-                unreads,
-              });
-    
-              j += 1; // este iterador se suma soloo despues que se pusheo el chat
-              if (j == arr.length) {
-                // si un chat no tiene ultimo mensaje, porque se borraron todos o por cualquier razon
-                // estos se pondran aparte
-                let noLastM = chatsLastMessage.filter((chat) => {
-                  return chat.lastMessage == null;
-                });
-    
-                // los que si tienen un ultimo mensaje se quedan solos y se sortean
-    
-                chatsLastMessage = chatsLastMessage.filter((chat) => {
-                  return chat.lastMessage != null;
-                });
-    
-                // aqui lo sorteamos
-                chatsLastMessage.sort((a, b) => {
-                  if (a.lastMessage != null && b.lastMessage != null) {
-                    return (
-                      b.lastMessage?.date.getTime() - a.lastMessage?.date.getTime()
-                    );
-                  } else {
-                    return a - b;
-                  }
-                });
-    
-                // luego de que esten sorteados, los chats sin mensajes se uniran al final
-    
-                chatsLastMessage = chatsLastMessage.concat(noLastM);
-    
-                // retornamos los chats
-                resolve(chatsLastMessage);
+  public static async chatsAndLastMessages(chats, user) {
+    return new Promise((resolve, reject) => {
+      // creamos un array donde ira la informacion de los chats
+      let chatsLastMessage = [];
+      // iterador de control
+      let j = 0;
+
+      // si no hay chats entonces devolvemos el array vacio
+      if (chats.length == 0) {
+        resolve(chatsLastMessage);
+      } else {
+        // si hay chats, los recorremos
+        chats.forEach(async (chat, i, arr) => {
+          // obtenemos el ultimo mensaje del chat
+          let last = await Message.findLastByChat(chat._id, user);
+          // obtenemos la cantidad de mensajes no leidos
+          let unreads = await Message.countUnReads(chat._id, user);
+
+          chatsLastMessage.push({
+            chat,
+            lastMessage: last,
+            unreads,
+          });
+
+          j += 1; // este iterador se suma soloo despues que se pusheo el chat
+          if (j == arr.length) {
+            // si un chat no tiene ultimo mensaje, porque se borraron todos o por cualquier razon
+            // estos se pondran aparte
+            let noLastM = chatsLastMessage.filter((chat) => {
+              return chat.lastMessage == null;
+            });
+
+            // los que si tienen un ultimo mensaje se quedan solos y se sortean
+
+            chatsLastMessage = chatsLastMessage.filter((chat) => {
+              return chat.lastMessage != null;
+            });
+
+            // aqui lo sorteamos
+            chatsLastMessage.sort((a, b) => {
+              if (a.lastMessage != null && b.lastMessage != null) {
+                return (
+                  b.lastMessage?.date.getTime() - a.lastMessage?.date.getTime()
+                );
+              } else {
+                return a - b;
               }
             });
+
+            // luego de que esten sorteados, los chats sin mensajes se uniran al final
+
+            chatsLastMessage = chatsLastMessage.concat(noLastM);
+
+            // retornamos los chats
+            resolve(chatsLastMessage);
           }
         });
       }
+    });
+  }
 }
