@@ -49,6 +49,8 @@ export class UserController extends BaseController {
    * @method get
    */
   public user(request: Request, respose: Response) {
+    console.log(request.body.decoded);
+    
     // Obtiene el usuario
     User.findByUserId(request.body.decoded.id)
       .then((user) => {

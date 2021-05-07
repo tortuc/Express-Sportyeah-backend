@@ -262,6 +262,9 @@ const Chat = typedModel("Chat", schema, undefined, undefined, {
       },
     });
   },
+  verifyUserinChat(id,user){
+      return Chat.findOne({_id:id,users:{$elemMatch:{$eq:user}}})
+  }
 });
 
 /**

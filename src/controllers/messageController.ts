@@ -123,7 +123,9 @@ export class MessageController extends BaseController {
       return (message = message._id);
     });
     
+    
     Message.readMessages(ids).then((messages) => {
+        
       // retornamos los ids de los mensajes leidos
       Socket.IO.to(request.body.chat).emit("reads", { messages: ids });
     });

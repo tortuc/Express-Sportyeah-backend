@@ -5,6 +5,7 @@ import Chat from "../models/chat";
 import User from "../models/user";
 import { userHelper } from "../helpers/userHelper";
 import Message from "../models/message";
+import { mongo } from "mongoose";
 
 /**
  * ChatController
@@ -351,5 +352,28 @@ export class ChatController extends BaseController {
         });
       }
     });
+  }
+
+  getLastMessageBychat(request: Request, response: Response) {
+    let { chat, user } = request.params;
+    Message.findLastByChat(chat, user)
+      .then((message) => {
+        response.status(HttpResponse.Ok).json(message);
+      })
+      .catch((e) => {
+        response.status(HttpResponse.BadRequest).send(e);
+      });
+  }
+
+  public usersInChat(request: Request, response: Response) {
+    let { user, chat } = request.params;
+    Chat.verifyUserinChat(chat, user)
+      .then((user) => {
+        let resp = user ? true : false;
+        response.status(HttpResponse.Ok).json(resp);
+      })
+      .catch((e) => {
+        response.status(HttpResponse.BadRequest).send(e);
+      });
   }
 }

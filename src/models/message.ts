@@ -122,7 +122,7 @@ const Message = typedModel("Message", schema, undefined, undefined, {
    * @returns
    */
   countUnReads(chat, user) {
-    return Message.countDocuments({ chat, read: false, user: { $ne: user } });
+    return Message.countDocuments({ chat, read: false, user: { $ne: user },deleted:false,deleteds: { $ne: user } });
   },
   /**
    * Marcar un mensaje como leido
