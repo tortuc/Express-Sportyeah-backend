@@ -102,6 +102,17 @@ viewsSponsorRouter.get('/:id', viewsSponsorController.getSponsorView);
   viewsSponsorRouter.get('/hour/:id/:date/:from', viewsSponsorController.getVisitsByHour);
 
 
+  /**
+ * Esta trae los datos necesarios para el pdf , datos por mes de cada sponsor
+ * 
+ * Ruta por defecto
+ * 
+ * @route /v1/viewsSponsor/year/pdf/:id/:dateStart
+ * @method get
+ */
+   viewsSponsorRouter.get('/year/pdf/:id/:date/:name', viewsSponsorController.getVisitsByYearPdf);
+
+  
 
 /**
  * Esta introduce a un usuario que miro un perfil

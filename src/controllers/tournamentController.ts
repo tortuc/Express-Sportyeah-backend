@@ -43,4 +43,47 @@ import Tournament from '../models/tournament';
       });
   }
   
+   
+  public create(request: Request, response: Response) {
+    let data = request.body;
+    Tournament.create(data)
+      .then((datos) => {
+        response.status(HttpResponse.Ok).json(datos);
+      })
+      .catch((err) => {
+        console.log(err);
+        response
+          .status(HttpResponse.BadRequest)
+          .send("cannot create Tournament");
+      });
+  }
+  
+  public getById(request: Request, response: Response) {
+    Tournament.findById(request.params.id)
+      .then((tournamentData) => {
+        response.status(HttpResponse.Ok).json(tournamentData);
+      })
+      .catch((err) => {
+        response
+          .status(HttpResponse.BadRequest)
+          .send("cannot get tournament Data");
+      });
+  }
+
+
+  public update(request: Request, response: Response) {
+    let id = request.params.id;
+    let newValues = request.body;
+ 
+    Tournament.update(id, newValues)
+      .then((data) => {
+        response.status(HttpResponse.Ok).json(data);
+      })
+      .catch((err) => {
+        console.log(err);
+        response.status(HttpResponse.BadRequest).send("cannot edit tournament");
+      });
+  } 
+
+  
  } 

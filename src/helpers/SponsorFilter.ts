@@ -90,5 +90,31 @@
       
       return days;
     }
+
+
+      /**
+   * Cantidad de visitas a un perfil, por anio
+   * @param day
+   * @param user _id del perfil (usuario)
+   * @returns
+   */
+       public static async getSponsorYearPdf(day, user,name) {
+        let fromArray = ['post', 'chat','search','profile','reaction','comment','ranking','news']
+        let totalDates = []
+        let days
+        for(let element of fromArray){
+           days = {total:0,year:[]};
+          for (let index = 0; index < 12; index++) {
+            let start = moment(day).startOf("year");
+          let count = await Sponsor.getVisitsByYear(user, start.add(index, "month"),element,name)
+            days.year.push(
+              count
+            );
+              days.total += count;
+          }
+          totalDates.push({dataYear:days,from:element})
+        }
+        return totalDates;
+      }
   }
   

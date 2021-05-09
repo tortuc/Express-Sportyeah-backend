@@ -148,6 +148,7 @@ export class Router {
 
      this.route.use("/v1/category/tournament", require("./categorytournamentRoute"));
 
+     this.route.use("/v1/porra/tournament", require("./porraRoute"));   
      
     
      /**
