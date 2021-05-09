@@ -167,15 +167,5 @@ ChatRouter.post(
   chatController.handleGroupJoinRequest
 );
 
-/**
- * Obtiene el ultimo mensaje de un chat
- * @route /v1/chat/handle/group-join-request/:id/:action
- * @method post
- */
-ChatRouter.post(
-  "/handle/group-join-request/:id/:action",
-  Authentication.jwt,
-  chatController.handleGroupJoinRequest
-);
 
 module.exports = ChatRouter;

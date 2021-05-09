@@ -31,35 +31,32 @@ export class MessageController extends BaseController {
    * @method post
    */
   public saveMessage(request: Request, response: Response) {
-
     let user = request.body.decoded.id;
     // obtenemos el cuerpo del mensaje
     let message = request.body;
     // el creador del mensaje, es el usuario que hace la peticion, por lo tanto se asigna el decoded.id al message.user
-    message.user = user
+    message.user = user;
     // eliminamos el decoded, porque no lo necesitamos
     delete message.decoded;
     // creamos el mensaje
     Message.createMessage(message)
       .then(async (msg: any) => {
         // recuperamos el chat
-        let chat = await Chat.findById(msg.chat)
+        let chat = await Chat.findById(msg.chat);
         // declaramos un array para los id del los usuarios
         let users = [];
         // si el chat es grupal, se avisa a todos los participantes
-        if(chat.group){
+        if (chat.group) {
           users = chat.users;
-        }else{
-          // si es chat privado, verificamos quien envio el mensaje, y a quien debe llegarle la notificacion 
-          if(chat.sender == user){
-            users.push(chat.receiver)
-          }else{
-            users.push(chat.sender)
+        } else {
+          // si es chat privado, verificamos quien envio el mensaje, y a quien debe llegarle la notificacion
+          if (chat.sender == user) {
+            users.push(chat.receiver);
+          } else {
+            users.push(chat.sender);
           }
         }
 
-        
-        
         // enviamos la notificacion
         MessageHelper.sendNotificationTo(users, msg);
         // respondemos con el mensaje creado
@@ -67,7 +64,7 @@ export class MessageController extends BaseController {
       })
       .catch((err) => {
         console.log(err);
-        
+
         response.status(HttpResponse.InternalError).send("cannot save message");
       });
   }
@@ -77,15 +74,15 @@ export class MessageController extends BaseController {
    */
   public getMessagesByChat(request: Request, response: Response) {
     // obtenemos el id del usuario que hace la peticion
-    let user = request.body.decoded.id; 
+    let user = request.body.decoded.id;
     // obtenemos el id del chat
     let { id } = request.params;
     // obtenemos los mensajes del chat
-     // para hacer la paginacion
-     let skip = Number(request.params.skip);
-    Message.getMessagesFromChat(id, user,skip)
+    // para hacer la paginacion
+    let skip = Number(request.params.skip);
+    Message.getMessagesFromChat(id, user, skip)
       .then((messages) => {
-        messages = messages.reverse()
+        messages = messages.reverse();
         // retornamos todos los mensajes
         response.status(HttpResponse.Ok).json(messages);
       })
@@ -122,17 +119,14 @@ export class MessageController extends BaseController {
     let ids = request.body.messages.map((message) => {
       return (message = message._id);
     });
-    
-    
+
     Message.readMessages(ids).then((messages) => {
-        
       // retornamos los ids de los mensajes leidos
       Socket.IO.to(request.body.chat).emit("reads", { messages: ids });
     });
 
     response.status(200).send({ msg: "read" });
   }
-
 
   /**
    * Vaciar un chat de mensajes (solo para el usuario que los vacio)
