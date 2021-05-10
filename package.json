@@ -13,8 +13,7 @@
     "build": "mkdir -p build && cp package.json build/ && cd build && npm install && cd .. && cp ./src/app.config ./build && cp ./src/serviceAccountKey.json ./build && mkdir -p ./build/views && cp -rf ./src/views/* ./build/views && tsc",
     "test": "echo \"Error: no hay tests para ejecutar\" && exit 1",
     "dev": "nodemon src/sportyeah.ts",
-    "test-server":"sudo NODE_ENV=production node build/sportyeah.js"
-
+    "test-server": "sudo NODE_ENV=production node build/sportyeah.js"
   },
   "keywords": [],
   "author": "Retail Servicios Externos SL",
