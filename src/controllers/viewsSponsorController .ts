@@ -169,6 +169,23 @@ export class ViewsSponsorController extends BaseController {
        response.status(HttpResponse.BadRequest).send(error);
      }
    }
+
+   /**
+   * Retorna la cantidad de visitas al perfil en una anio Para el PDF
+   * @param request
+   * @param response
+   */
+    public async getVisitsByYearPdf(request: Request, response: Response) {
+      let {date,id,name} = request.params
+     try {
+       let events = await SponsorFilter.getSponsorYearPdf(date, id,name);
+       response.status(HttpResponse.Ok).json(events);
+     } catch (error) {
+       console.log(error);
+       
+       response.status(HttpResponse.BadRequest).send(error);
+     }
+   }
   
    
 }

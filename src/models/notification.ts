@@ -40,11 +40,13 @@ const Notification = typedModel('Notification', schema, undefined, undefined,
          * Obtiene todas las notificaciones de un usuario
          * @param user _id del usuario
          */
-        notificationsByUser(user){
+        notificationsByUser(user,skip){
             return Notification.find({deleted:false,user})
             .populate('user friend post comment')
             .populate({path:'comment',populate:{path:'user'}})
             .sort({date:-1})
+            .skip(skip)
+            .limit(15);
         },
 
         /**

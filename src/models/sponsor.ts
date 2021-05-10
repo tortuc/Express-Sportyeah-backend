@@ -12,7 +12,7 @@ const schema = createSchema({
     date        : Type.date({ default: Date.now }),
     from        : Type.string({required:true,enum:['post', 'chat','search','profile','reaction','comment','ranking','news']}),
     link        : Type.string({}),
-    urlSponsor  : Type.string({})
+    nameSponsor : Type.string({})
   });
 
 
@@ -199,6 +199,23 @@ const schema = createSchema({
     return ViewsSponsor.countDocuments({user,from,date:{$gte:hour,$lte:hoursAfter}})
   },
 
+   /**
+     * Retorna un conteo de las visitas que han hecho al sponsor, por dia indicado
+     * @param user _id del perfil
+     * @param date fecha de inicio de la busqueda
+     * @returns 
+     */
+    async getVisitsByYear(user,date,from,nameSponsor){
+      // dia donde empieza la busqueda
+      let startDay = new Date(date)
+      
+      // dia final
+      let endDate = new Date(startDay)
+      // se agrega un dia para completar el rango de 24 horas
+      endDate.setMonth(startDay.getMonth() + 1)
+  
+      return ViewsSponsor.countDocuments({user,nameSponsor,from,date:{$gte:startDay,$lte:endDate}})
+    },
   })
 
   /**

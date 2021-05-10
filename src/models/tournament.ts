@@ -16,7 +16,8 @@ import { createSchema, Type, typedModel } from "ts-mongoose";
 
 const schema = createSchema({
   name: Type.string({ required: true }),
-  logo: Type.string(),
+  logo: Type.string(),  
+  category_id: Type.objectId({ref: 'Categorytournament',required:true}),
   group: Type.number({ default: 0 }),
   team_group: Type.number({ default: 0 }),
   description: Type.string({ required: true }),
@@ -33,8 +34,8 @@ const Tournament = typedModel("Tournament", schema, undefined, undefined, {
    *
    * @param {string} id   El id del torneo
    */
-  async findByUserId(id: string) {
-    return await Tournament.findById(id);
+  async findId(id: string) {
+    return await Tournament.findById(id);//.populate("Categorytournament");
   },
 
   /**
@@ -50,7 +51,7 @@ const Tournament = typedModel("Tournament", schema, undefined, undefined, {
    * @param {Tournament} tournamentData
    * * @param {string} id
    */
-  async updateTournament(id, tournamentData) {
+  async update(id, tournamentData) {
     return await Tournament.findByIdAndUpdate(id, tournamentData);
   },
 
@@ -60,7 +61,7 @@ const Tournament = typedModel("Tournament", schema, undefined, undefined, {
    * * @param {string} id
    */
    async getAll() {
-    return await Tournament.find({deleted:false});
+    return await Tournament.find({deleted:false}).populate("category_id");
   },
 
 });

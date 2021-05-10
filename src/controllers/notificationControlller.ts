@@ -25,8 +25,10 @@ export class NotificationController extends BaseController
 
   
     getNotifications(request:Request, response:Response){
-
-        Notification.notificationsByUser(request.body.decoded.id)
+   // cantidad de notificaciones a saltar, para hacer la paginacion
+    let skip = Number(request.params.skip);
+    // busca las notificaciones de ese usuario
+        Notification.notificationsByUser(request.body.decoded.id, skip)
             .then((notifications)=>{
                 response.status(HttpResponse.Ok).json(notifications)
             })
@@ -35,6 +37,11 @@ export class NotificationController extends BaseController
             })
     }
 
+    /**
+   * Retorna la cantidad de notifcaciones que el usuario no ha leido o visto
+   * @param request
+   * @param response
+   */
 
     notificationsUnread(request:Request,response:Response){
         Notification.countNotifications(request.body.decoded.id)
@@ -46,7 +53,11 @@ export class NotificationController extends BaseController
             })
     }
 
-
+    /**
+   * Marcar una notificacion como leida
+   * @param request
+   * @param response
+   */
     read(request:Request, response:Response){
         Notification.readNotification(request.params.id)
             .then(()=>{
@@ -57,6 +68,12 @@ export class NotificationController extends BaseController
 
             })
     }
+
+    /**
+   * Marcar todas las notifiaciones como leidas
+   * @param request
+   * @param response
+   */
     readAll(request:Request, response:Response){
         Notification.readAllNotification(request.body.decoded.id)
             .then(()=>{

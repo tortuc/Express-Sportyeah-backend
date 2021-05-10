@@ -26,7 +26,7 @@ const NotificationRouter:any = notificationController.router();
  * @route /v1/notification/getall
  * @method get
  */
-NotificationRouter.get('/getall',Authentication.jwt, notificationController.getNotifications);
+NotificationRouter.get('/getall/:skip',Authentication.jwt, notificationController.getNotifications);
 /**
  * 
  * 
