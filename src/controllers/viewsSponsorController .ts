@@ -161,11 +161,10 @@ export class ViewsSponsorController extends BaseController {
       let {date,id,from } = request.params
      
      try {
-       let events = await SponsorFilter.getSponsorViewsCountYear(date, id,from);
-       response.status(HttpResponse.Ok).json(events);
+       let events = await SponsorFilter.getSponsorViewsCountHours(date, id,from);
+       response.status(HttpResponse.Ok).json(events)
      } catch (error) {
        console.log(error);
-       
        response.status(HttpResponse.BadRequest).send(error);
      }
    }
@@ -178,14 +177,16 @@ export class ViewsSponsorController extends BaseController {
     public async getVisitsByYearPdf(request: Request, response: Response) {
       let {date,id,name} = request.params
      try {
-       let events = await SponsorFilter.getSponsorYearPdf(date, id,name);
-       response.status(HttpResponse.Ok).json(events);
+      let events = await SponsorFilter.getSponsorYearPdf(date, id,name);
+      let total = 0;
+      for(let element of events.year){
+        total += element.total;
+      }
+      events.total = total;
+      response.status(HttpResponse.Ok).json(events);
      } catch (error) {
        console.log(error);
-       
        response.status(HttpResponse.BadRequest).send(error);
      }
    }
-  
-   
 }

@@ -191,11 +191,11 @@ const schema = createSchema({
     // dia donde empieza la busqueda
     let hour = new Date(date)
     
+
     // dia final
     let hoursAfter = new Date(hour)
     // se agrega un dia para completar el rango de 24 horas
-    hoursAfter.setMonth(hour.getHours() + 1)
-
+    hoursAfter.setHours(hour.getHours() + 1)
     return ViewsSponsor.countDocuments({user,from,date:{$gte:hour,$lte:hoursAfter}})
   },
 

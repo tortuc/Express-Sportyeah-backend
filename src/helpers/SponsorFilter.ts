@@ -80,14 +80,12 @@
    */
      public static async getSponsorViewsCountHours(day, user,from) {
       let days = [];
-      let dayBeging = moment(day).startOf("year");
       for (let index = 0; index < 24; index++) {
         let start = moment(day).startOf("day");
         days.push(
           await Sponsor.getVisitsByHour(user, start.add(index, "hour"),from)
         );
       }
-      
       return days;
     }
 
@@ -100,19 +98,22 @@
    */
        public static async getSponsorYearPdf(day, user,name) {
         let fromArray = ['post', 'chat','search','profile','reaction','comment','ranking','news']
-        let totalDates = []
-        let days
+        let totalDates = {year:[],total:0}
+        let totalYear = 0; 
+        let month
         for(let element of fromArray){
-           days = {total:0,year:[]};
+           month = [];
+           totalYear = 0;
           for (let index = 0; index < 12; index++) {
             let start = moment(day).startOf("year");
           let count = await Sponsor.getVisitsByYear(user, start.add(index, "month"),element,name)
-            days.year.push(
+          month.push(
               count
             );
-              days.total += count;
+              // days.total += count;
+              totalYear += count; 
           }
-          totalDates.push({dataYear:days,from:element})
+          totalDates.year.push({dataYear:month,from:element,total:totalYear})
         }
         return totalDates;
       }
