@@ -44,6 +44,10 @@ const schema = createSchema({
    * Si envio un audio
    */
   audio: Type.string({ default: null }),
+  /**
+   * Si la publicacion tiene un cuestionario
+   */
+   question: Type.objectId({ ref: "Question", required: false }),
 
   /**
    * Fecha del mensaje
