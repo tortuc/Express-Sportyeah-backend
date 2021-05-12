@@ -21,13 +21,11 @@ const schema = createSchema({
     default: "https://files.sportyeah.com/v1/image/get/1616530480396",
   }),
   photoBanner: Type.string({
-    default:
-      "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
+    default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
   }),
   slider: [
     Type.string({
-      default:
-        "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
+      default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
     }),
   ],
   experiences: [Type.objectId({ ref: Experience, default: null })],
@@ -80,12 +78,14 @@ const schema = createSchema({
   authorize: Type.boolean({ default: true }),
   sponsors: [Type.mixed()],
   structure: Type.mixed(),
-  geo: Type.object({ default: null }).of({
-    ip: Type.string(),
-    country: Type.string(),
-    city: Type.string(),
-    flag: Type.string({ default: null }),
-  }),
+  /**
+   * Pais del usuario (countryCode)
+   */
+  country: Type.string({ default: null }),
+  /**
+   * Bandera del pais, aplica para usuarios espanioles que quieran cambiar entre sus 3 banderas
+   */
+  flag: Type.string({ default: null,enum:["catalunya","euskal",null] }),
   /**
    * Token del FCM para las Push Notifications
    */
