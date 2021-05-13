@@ -85,7 +85,7 @@ const schema = createSchema({
   /**
    * Bandera del pais, aplica para usuarios espanioles que quieran cambiar entre sus 3 banderas
    */
-  flag: Type.string({ default: null,enum:["catalunya","euskal",null] }),
+  flag: Type.string({ default: null,enum:["catalunya","euskal","andalucia",null] }),
   /**
    * Token del FCM para las Push Notifications
    */
