@@ -18,11 +18,12 @@ const schema = createSchema({
     headline: Type.string(),
     content : Type.array().of({
         subtitle    : Type.string({}),
-        parrafo     : Type.string({required:true}),
-        position    : Type.number({ required:true }),
+        parrafo     : Type.string({default:null}),
+        position    : Type.number({required:true }),
         image       : Type.string({required:false}),
         video       : Type.string({default:null}),
-        originMedia : Type.string({default:null})
+        originMedia : Type.string({default:null}),
+        url         : Type.string({ required: false })
         //streaming:
     }),
     principalSubtitle:Type.string(),
@@ -34,7 +35,8 @@ const schema = createSchema({
     'baseball','golf','running','volleyball','swimming','boxing','table tennis','rugby','football','esport','various']})  ,   
     stream  : Type.boolean({default:false}),
     postStream : Type.string({required:false}),
-    date    : Type.date({default:Date.now}),
+    date        : Type.date({default:Date.now}),
+    pusblishDate    : Type.date({default:Date.now}),
     deleted : Type.boolean({default:false}),
     edited  : Type.date({defualt:null}),
     views  :[Type.string({default: 0})]

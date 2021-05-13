@@ -151,7 +151,7 @@ const schema = createSchema({
      * @param date fecha de inicio de la busqueda, se agregara un dia mas para completar el rango de 24 horas
      * @returns 
      */
-  async getVisitsByDate(user,date,from){
+  async getVisitsByDate(user,date,from,name){
     // dia donde empieza la busqueda
     let day = new Date(date)
     // dia final
@@ -159,7 +159,7 @@ const schema = createSchema({
     // se agrega un dia para completar el rango de 24 horas
     dayAfter.setDate(day.getDate() + 1)
     
-    return ViewsSponsor.countDocuments({user,from,date:{$gte:day,$lte:dayAfter}})
+    return ViewsSponsor.countDocuments({user,from,nameSponsor:name,date:{$gte:day,$lte:dayAfter}})
   },
 
   
@@ -169,7 +169,7 @@ const schema = createSchema({
      * @param date fecha de inicio de la busqueda, se agregara un dia mas para completar el rango de 24 horas
      * @returns 
      */
-  async getVisitsByMonth(user,date,from){
+  async getVisitsByMonth(user,date,from,name){
     // dia donde empieza la busqueda
     let month = new Date(date)
     
@@ -178,7 +178,7 @@ const schema = createSchema({
     // se agrega un dia para completar el rango de 24 horas
     monthAfter.setMonth(month.getMonth() + 1)
 
-    return ViewsSponsor.countDocuments({user,from,date:{$gte:month,$lte:monthAfter}})
+    return ViewsSponsor.countDocuments({user,from,nameSponsor:name,date:{$gte:month,$lte:monthAfter}})
   },
 
    /**
@@ -187,7 +187,7 @@ const schema = createSchema({
      * @param date fecha de inicio de la busqueda, se agregara un dia mas para completar el rango de 24 horas
      * @returns 
      */
-  async getVisitsByHour(user,date,from){
+  async getVisitsByHour(user,date,from,name){
     // dia donde empieza la busqueda
     let hour = new Date(date)
     
@@ -196,7 +196,7 @@ const schema = createSchema({
     let hoursAfter = new Date(hour)
     // se agrega un dia para completar el rango de 24 horas
     hoursAfter.setHours(hour.getHours() + 1)
-    return ViewsSponsor.countDocuments({user,from,date:{$gte:hour,$lte:hoursAfter}})
+    return ViewsSponsor.countDocuments({user,from,nameSponsor:name,date:{$gte:hour,$lte:hoursAfter}})
   },
 
    /**

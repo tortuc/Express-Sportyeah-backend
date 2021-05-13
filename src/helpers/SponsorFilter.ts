@@ -20,14 +20,14 @@
    * @param user _id del perfil (usuario)
    * @returns
    */
-  public static async getSponsorViewsCountWeek(day, user,from) {
+  public static async getSponsorViewsCountWeek(day, user,from,name) {
     
     
     let days = [];
     for (let index = 0; index < 7; index++) {
       let start = moment(day).startOf("week");
       days.push(
-        await Sponsor.getVisitsByDate(user, start.add(index, "days"),from)
+        await Sponsor.getVisitsByDate(user, start.add(index, "days"),from,name)
       );
     }
     return days;
@@ -40,14 +40,14 @@
    * @param user _id del perfil (usuario)
    * @returns
    */
-   public static async getSponsorViewsCountMonth(day, user,from) {
+   public static async getSponsorViewsCountMonth(day, user,from,name) {
     
     
     let days = [];
     for (let index = 0; index < moment(day).daysInMonth(); index++) {
       let start = moment(day).startOf("month");
       days.push(
-        await Sponsor.getVisitsByDate(user, start.add(index, "days"),from)
+        await Sponsor.getVisitsByDate(user, start.add(index, "days"),from,name)
       );
     }
     return days;
@@ -59,13 +59,13 @@
    * @param user _id del perfil (usuario)
    * @returns
    */
-    public static async getSponsorViewsCountYear(day, user,from) {
+    public static async getSponsorViewsCountYear(day, user,from,name) {
       let days = [];
       let dayBeging = moment(day).startOf("year");
       for (let index = 0; index < 12; index++) {
         let start = moment(day).startOf("year");
         days.push(
-          await Sponsor.getVisitsByMonth(user, start.add(index, "month"),from)
+          await Sponsor.getVisitsByMonth(user, start.add(index, "month"),from,name)
         );
       }
       
@@ -78,12 +78,12 @@
    * @param user _id del perfil (usuario)
    * @returns
    */
-     public static async getSponsorViewsCountHours(day, user,from) {
+     public static async getSponsorViewsCountHours(day, user,from,name) {
       let days = [];
       for (let index = 0; index < 24; index++) {
         let start = moment(day).startOf("day");
         days.push(
-          await Sponsor.getVisitsByHour(user, start.add(index, "hour"),from)
+          await Sponsor.getVisitsByHour(user, start.add(index, "hour"),from,name)
         );
       }
       return days;

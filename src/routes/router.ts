@@ -158,5 +158,13 @@ export class Router {
      */
       this.route.use("/v1/viewsSponsor", require("./viewsSponsorRoutes"));
    
+
+      /**
+     * Manejador de rutas de las analiticas
+     *
+     * @route /v1/analytics/...
+     */
+       this.route.use("/v1/analytics", require("./analyticsRoute"));
+   
     }
 }

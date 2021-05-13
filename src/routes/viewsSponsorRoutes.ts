@@ -69,7 +69,7 @@ viewsSponsorRouter.get('/:id', viewsSponsorController.getSponsorView);
  * @route /v1/viewsSponsor/week/:id/:dateStart
  * @method get
  */
- viewsSponsorRouter.get('/week/:id/:date/:from', viewsSponsorController.getVisitsByWeek);
+ viewsSponsorRouter.get('/week/:id/:date/:from/:name', viewsSponsorController.getVisitsByWeek);
 
  /**
  * Esta trae las vista al los sponsor de semana
@@ -79,7 +79,7 @@ viewsSponsorRouter.get('/:id', viewsSponsorController.getSponsorView);
  * @route /v1/viewsSponsor/month/:id/:dateStart
  * @method get
  */
-  viewsSponsorRouter.get('/month/:id/:date/:from', viewsSponsorController.getVisitsByMonth);
+  viewsSponsorRouter.get('/month/:id/:date/:from/:name', viewsSponsorController.getVisitsByMonth);
 
  /**
  * Esta trae las vista al los sponsor de semana
@@ -89,7 +89,7 @@ viewsSponsorRouter.get('/:id', viewsSponsorController.getSponsorView);
  * @route /v1/viewsSponsor/year/:id/:dateStart
  * @method get
  */
-  viewsSponsorRouter.get('/year/:id/:date/:from', viewsSponsorController.getVisitsByYear);
+  viewsSponsorRouter.get('/year/:id/:date/:from/:name', viewsSponsorController.getVisitsByYear);
 
  /**
  * Esta trae las vista al los sponsor de semana
@@ -99,7 +99,7 @@ viewsSponsorRouter.get('/:id', viewsSponsorController.getSponsorView);
  * @route /v1/viewsSponsor/year/:id/:dateStart
  * @method get
  */
-  viewsSponsorRouter.get('/hour/:id/:date/:from', viewsSponsorController.getVisitsByHour);
+  viewsSponsorRouter.get('/hour/:id/:date/:from/:name', viewsSponsorController.getVisitsByHour);
 
 
   /**
@@ -107,10 +107,10 @@ viewsSponsorRouter.get('/:id', viewsSponsorController.getSponsorView);
  * 
  * Ruta por defecto
  * 
- * @route /v1/viewsSponsor/year/pdf/:id/:dateStart
+ * @route /v1/viewsSponsor/pdfyear/:id/:date/:name
  * @method get
  */
-   viewsSponsorRouter.get('/year/pdf/:id/:date/:name', viewsSponsorController.getVisitsByYearPdf);
+   viewsSponsorRouter.get('/pdfyear/:id/:date/:name', viewsSponsorController.getVisitsByYearPdf);
 
   
 

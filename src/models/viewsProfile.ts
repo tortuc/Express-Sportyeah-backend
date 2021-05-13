@@ -10,7 +10,7 @@ const schema = createSchema({
     user     : Type.objectId({ required:true, ref: "User" }),
     visitor  : Type.objectId({required:true, ref:"User"}),
     date     : Type.date({ default: Date.now }),
-    from     : Type.string({required:true,enum:['post', 'chat','search','profile','reaction','comment','ranking']}),
+    from     : Type.string({required:true,enum:['post', 'chat','search','profile','reaction','comment','ranking','news']}),
     link     : Type.string({})
   });
 

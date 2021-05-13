@@ -102,10 +102,10 @@ export class ViewsSponsorController extends BaseController {
    * @param response
    */
    public async getVisitsByWeek(request: Request, response: Response) {
-     let {date,id,from } = request.params
+     let {date,id,from,name } = request.params
     
     try {
-      let events = await SponsorFilter.getSponsorViewsCountWeek(date, id,from);
+      let events = await SponsorFilter.getSponsorViewsCountWeek(date, id,from,name);
       response.status(HttpResponse.Ok).json(events);
     } catch (error) {
       console.log(error);
@@ -121,10 +121,10 @@ export class ViewsSponsorController extends BaseController {
    * @param response
    */
     public async getVisitsByMonth(request: Request, response: Response) {
-      let {date,id,from } = request.params
+      let {date,id,from,name } = request.params
      
      try {
-       let events = await SponsorFilter.getSponsorViewsCountMonth(date, id,from);
+       let events = await SponsorFilter.getSponsorViewsCountMonth(date, id,from,name);
        response.status(HttpResponse.Ok).json(events);
      } catch (error) {
        console.log(error);
@@ -139,10 +139,10 @@ export class ViewsSponsorController extends BaseController {
    * @param response
    */
      public async getVisitsByYear(request: Request, response: Response) {
-      let {date,id,from } = request.params
+      let {date,id,from,name } = request.params
      
      try {
-       let events = await SponsorFilter.getSponsorViewsCountYear(date, id,from);
+       let events = await SponsorFilter.getSponsorViewsCountYear(date, id,from,name);
        response.status(HttpResponse.Ok).json(events);
      } catch (error) {
        console.log(error);
@@ -158,10 +158,10 @@ export class ViewsSponsorController extends BaseController {
    * @param response
    */
      public async getVisitsByHour(request: Request, response: Response) {
-      let {date,id,from } = request.params
+      let {date,id,from,name } = request.params
      
      try {
-       let events = await SponsorFilter.getSponsorViewsCountHours(date, id,from);
+       let events = await SponsorFilter.getSponsorViewsCountHours(date, id,from,name);
        response.status(HttpResponse.Ok).json(events)
      } catch (error) {
        console.log(error);
@@ -176,7 +176,7 @@ export class ViewsSponsorController extends BaseController {
    */
     public async getVisitsByYearPdf(request: Request, response: Response) {
       let {date,id,name} = request.params
-     try {
+      try {
       let events = await SponsorFilter.getSponsorYearPdf(date, id,name);
       let total = 0;
       for(let element of events.year){
@@ -184,6 +184,7 @@ export class ViewsSponsorController extends BaseController {
       }
       events.total = total;
       response.status(HttpResponse.Ok).json(events);
+      
      } catch (error) {
        console.log(error);
        response.status(HttpResponse.BadRequest).send(error);
