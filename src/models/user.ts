@@ -1,4 +1,5 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
+import { userHelper } from "../helpers/userHelper";
 import Experience from "./experience";
 /**
  * Esquema de Usuario
@@ -343,6 +344,53 @@ const User = typedModel("User", schema, undefined, undefined, {
   setFCMTOken(user, fcmtoken) {
     return User.findByIdAndUpdate(user, { fcmtoken }, { new: true });
   },
+  /**
+   * Crea un nuevo usuario
+   *
+   * @param  {User}    user   El usuario a crear
+   *
+   * @return {User}           El usuario guardado
+   * @throws {Error}          El usuario ya está registrado
+   */
+   async createAdmin(user: any, password) {
+    // le generamos un nombre de usuario
+    user.username = await userHelper.generateUsername(user);
+    // le generamos un password
+    user.password = password;
+    // Indicamos que es un usuario tipo admin
+    user.role = "admin";
+    // indicamos que ya este usuario se encuentra verificado
+    user.verified = true;
+
+    user.sport = "football"
+    user.profile_user = "administration"
+    // Comprueba si la dirección de correo suministrada ya está registrada
+    let emailExist = await User.findByEmail(user.email);
+    let userExist = await User.findByUsername(user.username);
+
+    if (emailExist) {
+      // El usuario ya existe
+      console.warn(
+        `[WARN] El usuario con el email ${user.email} ya está registrado. No se creará una nueva cuenta`
+      );
+      throw "email-already-exists";
+    } else if (userExist) {
+      console.warn(
+        `[WARN] El usuario con el username ${user.username} ya está registrado. No se creará una nueva cuenta`
+      );
+      throw "user-already-exists";
+    } else {
+      // Guarda el nuevo usuario
+      return new User(user).save();
+    }
+  },
+  /**
+   * Obtiene todos los administradores
+   */
+   getAdmins() {
+    return User.find({ role: "admin" });
+  },
+
 });
 
 /**

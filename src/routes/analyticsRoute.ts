@@ -115,14 +115,14 @@ AnalyticsRouter.get(
   analyticsController.getAnaliticProfile
 );
 
-// /**
-//  * Otener las analiticas los clicks a las stores de apps
-//  * @route /v1/analytics/stores
-//  * @method get
-//  *
-//  */
+/**
+ * Otener las analiticas los clicks a las stores de apps
+ * @route /v1/analytics/stores
+ * @method get
+ *
+ */
 
-// AnalyticsRouter.get("/stores", analyticsController.getStoreClics);
+AnalyticsRouter.get("/stores", analyticsController.getStoreClics);
 
 // /**
 //  * obtiene la cantidad de vistas o clics en un regalo o actividad en la lista de regalos compartida al exterior

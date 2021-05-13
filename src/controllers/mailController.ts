@@ -240,4 +240,41 @@ export class MailController
             console.error(`[ERROR] ${error}`);
         });
     }
+
+
+     /**
+   * Correo que se envía cuando se crea un nuevo administrador
+   *
+   * @param {User}   user             El administrador
+   *
+   * @return {void}
+   */
+  public static newAdmin(
+    user: any,
+    password: number,
+    link_app: string,
+    link: string
+  ): void {
+    Mail.send({
+      to: user.email,
+      subject: "Sportyeah",
+      template: "welcomeAdmin",
+      context: {
+        name: user.name,
+        last_name: user.last_name || "",
+        email: user.email,
+        link,
+        link_app,
+        password,
+      },
+    })
+      .then((result) => {
+        console.info(
+          `[OK] Mensaje ${result} enviado con éxito a ${user.email}`
+        );
+      })
+      .catch((error) => {
+        console.error(`[ERROR] ${error}`);
+      });
+  }
 }
