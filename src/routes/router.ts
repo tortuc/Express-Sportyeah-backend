@@ -176,5 +176,12 @@ export class Router {
      * @route /v1/roles/...
      */
     this.route.use("/v1/roles", require("./rolesRoute"));
+
+    /**
+     * Manejador de rutas de livescore
+     *
+     * @route /v1/livescore/...
+     */
+    this.route.use('/v1/livescore', require('./livescoreRoute'));
   }
 }
