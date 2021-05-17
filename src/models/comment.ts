@@ -78,6 +78,15 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
       .sort({ date: -1 });
   },
   /**
+   * Obtiene la cantidad de comentarios en un news
+   * @param news id del news
+   */
+   getCountOfCommentsByNews(news) {
+    return Comment.countDocuments({ news, deleted: false })
+      .populate("user")
+      .sort({ date: -1 });
+  },
+  /**
    * Borrar un comentario
    * @param id  id del comentario
    */
@@ -103,6 +112,11 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
   userCommentPost(user,post){
     return Comment.findOne({user,post})
   },
+
+  userCommentNews(user,news){
+    return Comment.findOne({user,news})
+  },
+
   /** PRUEBA NEWS con comentarios
    * Obtiene todos los comentarios de un news
    * @param news id del news

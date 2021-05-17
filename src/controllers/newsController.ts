@@ -193,7 +193,7 @@ export class NewsController extends BaseController
       response.status(HttpResponse.BadRequest).json(err);
     });
 }
-
+ 
 ///////////Prueba de likes en noticias
 public likeNews(request: Request, response: Response) {
   let like = {
@@ -202,40 +202,71 @@ public likeNews(request: Request, response: Response) {
     type: request.body.id_reaction,
   };
   Like.addLike(like)
-    .then((like) => {
-      Like.getLikesByNews(like.news)
-        .then((likes) => {
-          Alert.likeNewsStream(like,like.news);
-          response.status(HttpResponse.Ok).json(likes);
-        })
-        .catch((err) => {
-          response
-            .status(HttpResponse.InternalError)
-            .send("cannot get likes");
-        });
+  .then(async (like) => {
+    // una vez reaccione, entonces se obtienen la cantidad de reacciones a este news
+    let likes = await Like.getLikesByNews(like.news);
+    // se notifica al creador del news, que reaccionaron
+    Alert.likeNotification(like);
+    // respondemos con la nueva reaccion y la cantidad de reacciones
+    response.status(HttpResponse.Ok).json({ like, likes });
+  })
+  .catch((err) => {
+    response.status(HttpResponse.InternalError).send("cannot liked");
+  });
+}
+
+public changeReact(request: Request, response: Response) {
+  // obtenemos el id de la reaccion y el nuevo tipo de reaccion
+  let { id, type } = request.params;
+
+  Like.changeReaction(id, type)
+    .then(async (like) => {
+      // una vez reaccione, entonces se obtienen la cantidad de reacciones a este news
+      let likes = await Like.getLikesByNews(like.news);
+      // se notifica al creador del news, que reaccionaron
+      Alert.likeNotification(like);
+      // respondemos con la nueva reaccion y la cantidad de reacciones
+      response.status(HttpResponse.Ok).json({ like, likes });
     })
     .catch((err) => {
       response.status(HttpResponse.InternalError).send("cannot liked");
     });
 }
 
+
+  /**
+   * Retorna la cantidad de reacciones en una noticia
+   *
+   */
+
+   public async countReactionsNews(request: Request, response: Response) {
+    // obtenemos el id del news
+    let id = request.params.id;
+    try {
+      // obtenemos la cantidad de reacciones de la noticia
+      let count = await Like.getLikesByNews(id);
+
+      // la retornamos
+      response.status(HttpResponse.Ok).json(count);
+    } catch (error) {
+      response.status(HttpResponse.BadRequest).send(error);
+    }
+  }
+
 //dislikes
 public dislikeNews(request: Request, response: Response) {
   Like.dislike(request.params.id)
-    .then((like) => {
-      Like.getLikesByNews(like.news)
-        .then((news) => {
-          response.status(HttpResponse.Ok).json(news);
-        })
-        .catch((err) => {
-          response
-            .status(HttpResponse.InternalError)
-            .send("cannot get likes");
-        });
-    })
-    .catch((err) => {
-      response.status(HttpResponse.InternalError).send("cannot disliked");
-    });
+  .then(async (like) => {
+    // luego que eliminemos la reaccion buscamos todas las reacciones de ese post, para actualizar las demas reacciones al usuario
+    let likes = await Like.getLikesByNews(like.news);
+
+    // respondemos con la cantidad reacciones
+
+    response.status(HttpResponse.Ok).json(likes);
+  })
+  .catch((err) => {
+    response.status(HttpResponse.InternalError).send("cannot disliked");
+  });
 }
 
 //comentarios
@@ -276,6 +307,78 @@ public getSharedsByPost(request: Request, response: Response) {
       response.status(HttpResponse.InternalError).send("cannot get shared");
     });
 }
+
+
+  /**
+   * Retorna si un usuario a reaccionado a una publicacion
+   *
+   * y devuelve la info de la reaccion
+   */
+   public userReactToNews(request: Request, response: Response) {
+    // obtenemos el id del news, y el id del usuario
+    let { id, user } = request.params;
+    // Buscamos si ha reaccionado
+    Like.userReactToNews(id, user)
+      .then((like) => {
+        // respondemos con la reaccion
+        response.status(HttpResponse.Ok).json(like);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send("cannot get reaction");
+      });
+  }
+
+
+    /**
+   * Obtiene la cantidad de comentarios en un news
+   */
+
+     public async countCommentsInNews(request: Request, response: Response) {
+      try {
+        // obtenemos el id del news
+        let id = request.params.id;
+        // obtenemos  la cantidad de comentarios
+        let comments = await Comment.getCountOfCommentsByNews(id);
+        // retornamos la cantidad de comentarios
+        response.status(HttpResponse.Ok).json(comments);
+      } catch (error) {
+  
+        // hubo un error
+        response.status(HttpResponse.BadRequest).send("something went wrong");
+      }
+    }
+
+      /**
+   * Saber si un un usuario ha comentado una noticia
+   */
+  public async userCommentNews(request: Request, response: Response) {
+    try {
+      // obtenemos el _id del news y el _id del usuario
+      let { id, user } = request.params;
+
+      let comment = await Comment.userCommentNews(user, id);
+      response.status(HttpResponse.Ok).json(comment);
+    } catch (error) {
+      response.status(HttpResponse.BadRequest).send("error");
+    }
+  }
+
+
+  /**
+   * Retorna la cantidad de comparticiones en un news
+   */
+   public async totalShared(request: Request, response: Response) {
+    // obtenemos el id del news
+    let id = request.params.id;
+    // obtenemos la cantidad total de veces que se compartio
+    try {
+      let shareds = await Post.getTotalSharedsByNews(id);
+      // respondemos con la cantidad
+      response.status(HttpResponse.Ok).json(shareds);
+    } catch (error) {
+      response.status(HttpResponse.BadRequest).send(error);
+    }
+  }
 
   
 }
