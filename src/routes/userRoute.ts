@@ -177,6 +177,11 @@ UserRouter.post('/sponsors',Authentication.jwt,userController.updateSponsors)
  */
 
 UserRouter.get('/admins',Authentication.jwt,userController.findAdmins)
+ /**
+ * Obtiene todos los administradores
+ */
+
+UserRouter.get('/all',Authentication.jwt,userController.findUsers)
 
 
 module.exports = UserRouter;

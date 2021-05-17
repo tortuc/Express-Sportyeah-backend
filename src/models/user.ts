@@ -103,6 +103,14 @@ const User = typedModel("User", schema, undefined, undefined, {
    *
    * @param {string} id   El id del usuario
    */
+  async getAllUsers(skip = 0) {
+    return User.find()
+  },
+  /**
+   * Obtiene el usuario por su id
+   *
+   * @param {string} id   El id del usuario
+   */
   async findByUserId(id: string) {
     return await User.findById(id).populate({ path: "experiences" });
   },

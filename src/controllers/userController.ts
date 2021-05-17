@@ -502,4 +502,15 @@ export class UserController extends BaseController {
         response.status(HttpResponse.BadRequest).send("cannot get admins");
       });
   }
+  public findUsers(request: Request, response: Response) {
+    User.getAllUsers()
+      .then((users) => {
+        // retornamos los admins
+        response.status(HttpResponse.Ok).json(users);
+      })
+      .catch((err) => {
+        // retornamos error
+        response.status(HttpResponse.BadRequest).send("cannot get admins");
+      });
+  }
 }
