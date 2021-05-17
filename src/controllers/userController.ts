@@ -49,8 +49,6 @@ export class UserController extends BaseController {
    * @method get
    */
   public user(request: Request, respose: Response) {
-    console.log(request.body.decoded);
-    
     // Obtiene el usuario
     User.findByUserId(request.body.decoded.id)
       .then((user) => {
@@ -75,7 +73,7 @@ export class UserController extends BaseController {
     // Crea el usuario
 
     console.log(request.body);
-    
+
     let newUser = new User(request.body);
 
     // Codifica la contraseña
@@ -455,11 +453,64 @@ export class UserController extends BaseController {
    * @param response
    */
 
-   public async mostPopulateUsersToAdd(request: Request, response: Response) {
+  public async mostPopulateUsersToAdd(request: Request, response: Response) {
     // buscamos los 5 usuarios mas populares
     let users = await userHelper.fivePopulateUsers(request.body.decoded.id);
     // respondemos con los 5 usuarios
     response.status(HttpResponse.Ok).json(users);
   }
-}
 
+  /**
+   * Crear un usuario del tipo administrador
+   */
+  public createAdmin(request: Request, response: Response) {
+    // obtenemos los datos del administrador
+    let admin = request.body.admin;
+    // generamos una password aleatoria
+    let password = userHelper.generateRandomPass();
+    User.createAdmin(admin, password.hash)
+      .then((admin) => {
+        // obetenemos el link del administrador
+        let link = Web.getUrlAdmin();
+        // obtenemos el link de app
+        let link_app = Web.getUrl();
+        // le mandamos un correo al admin, con sus datos, su password y los links de acceso
+        Mailer.newAdmin(admin, password.pass, link_app, link);
+        // respondemos con los datos del nuevo administrador
+        response.status(HttpResponse.Ok).json(admin);
+      })
+      .catch((err) => {
+        // si hay un error retornamos el error en la respuesta
+        response.status(HttpResponse.BadRequest).send(err);
+      });
+  }
+
+  /**
+   * Busca a todos los administradores de kecuki
+   * @param request
+   * @param response
+   */
+
+  public findAdmins(request: Request, response: Response) {
+    User.getAdmins()
+      .then((admins) => {
+        // retornamos los admins
+        response.status(HttpResponse.Ok).json(admins);
+      })
+      .catch((err) => {
+        // retornamos error
+        response.status(HttpResponse.BadRequest).send("cannot get admins");
+      });
+  }
+  public findUsers(request: Request, response: Response) {
+    User.getAllUsers()
+      .then((users) => {
+        // retornamos los admins
+        response.status(HttpResponse.Ok).json(users);
+      })
+      .catch((err) => {
+        // retornamos error
+        response.status(HttpResponse.BadRequest).send("cannot get admins");
+      });
+  }
+}

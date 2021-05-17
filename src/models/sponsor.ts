@@ -1,4 +1,3 @@
-import { create } from 'domain';
 import { createSchema, Type, typedModel } from 'ts-mongoose';
 
 

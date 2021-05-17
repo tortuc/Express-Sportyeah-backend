@@ -47,6 +47,14 @@ UserRouter.post('/delete/:id', userController.delete);
 UserRouter.post('/create', userController.create);
 
 /**
+ * crea un administrador
+ * 
+ * @route /v1/user/createadmin
+ * @method post
+ */
+ UserRouter.post('/createadmin',Authentication.jwt, userController.createAdmin);
+
+/**
  * Reenviar email de verificacion
  * 
  * @route /v1/user/resend
@@ -163,6 +171,17 @@ UserRouter.post('/sponsors',Authentication.jwt,userController.updateSponsors)
  */
 
  UserRouter.get('/fivepopular',Authentication.jwt,userController.mostPopulateUsersToAdd)
+
+ /**
+ * Obtiene todos los administradores
+ */
+
+UserRouter.get('/admins',Authentication.jwt,userController.findAdmins)
+ /**
+ * Obtiene todos los administradores
+ */
+
+UserRouter.get('/all',Authentication.jwt,userController.findUsers)
 
 
 module.exports = UserRouter;

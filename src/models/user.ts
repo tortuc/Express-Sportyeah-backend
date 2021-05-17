@@ -1,4 +1,5 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
+import { userHelper } from "../helpers/userHelper";
 import Experience from "./experience";
 /**
  * Esquema de Usuario
@@ -12,23 +13,20 @@ const schema = createSchema({
   lastConection: Type.date({ default: null }),
   connected: Type.boolean({ default: false }),
   password: Type.string(),
-  lang: Type.string({default:'es'}),
+  lang: Type.string({ default: "es" }),
   create: Type.date({ default: Date.now }),
   role: Type.string({ enum: ["user", "admin"], default: "user" }),
   verified: Type.boolean({ default: false }),
   attempts: Type.number({ default: 0 }),
   photo: Type.string({
-    default:
-      "https://files.sportyeah.com/v1/image/get/1616530480396",
+    default: "https://files.sportyeah.com/v1/image/get/1616530480396",
   }),
   photoBanner: Type.string({
-    default:
-      "https://trello-attachments.s3.amazonaws.com/5ff9d47572424648014190dc/700x422/29f3e5ed0cea0a6b7439bfb986a090cd/original.jpg",
+    default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
   }),
   slider: [
     Type.string({
-      default:
-        "https://trello-attachments.s3.amazonaws.com/5ff9d47572424648014190dc/700x422/29f3e5ed0cea0a6b7439bfb986a090cd/original.jpg",
+      default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
     }),
   ],
   experiences: [Type.objectId({ ref: Experience, default: null })],
@@ -81,20 +79,33 @@ const schema = createSchema({
   authorize: Type.boolean({ default: true }),
   sponsors: [Type.mixed()],
   structure: Type.mixed(),
-  geo:Type.object({ default: null }).of({
-    ip : Type.string(),
-    country : Type.string(),
-    city : Type.string(),
-    flag: Type.string({default: null})
-  }) ,
-   /**
+  /**
+   * Pais del usuario (countryCode)
+   */
+  country: Type.string({ default: null }),
+  /**
+   * Bandera del pais, aplica para usuarios espanioles que quieran cambiar entre sus 3 banderas
+   */
+  flag: Type.string({ default: null,enum:["catalunya","euskal","andalucia",null] }),
+  /**
    * Token del FCM para las Push Notifications
    */
-    fcmtoken: Type.string({default:null}),
-    
+  fcmtoken: Type.string({ default: null }),
+  /**
+   * Variable de control para saber si el usuario leyo el mensaje de el perfil
+   */
+  msgProfile: Type.boolean({ default: false }),
 });
 
 const User = typedModel("User", schema, undefined, undefined, {
+  /**
+   * Obtiene el usuario por su id
+   *
+   * @param {string} id   El id del usuario
+   */
+  async getAllUsers(skip = 0) {
+    return User.find()
+  },
   /**
    * Obtiene el usuario por su id
    *
@@ -282,7 +293,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @param {User} newData
    */
   updateOne(id: string, newData) {
-    return User.findByIdAndUpdate(id, newData,{new:true});
+    return User.findByIdAndUpdate(id, newData, { new: true });
   },
 
   listUsers() {
@@ -298,15 +309,14 @@ const User = typedModel("User", schema, undefined, undefined, {
     return User.findByIdAndUpdate(id, { sponsors });
   },
 
-  searchQueryUsers(query:string, limit = 5, skip = 0) {
-  
-    let regex = new RegExp(query.replace(/ /g,''),'i') ;
-    
+  searchQueryUsers(query: string, limit = 5, skip = 0) {
+    let regex = new RegExp(query.replace(/ /g, ""), "i");
+
     return User.aggregate([
       {
         $project: { search: { $concat: ["$name", "$last_name", "$username"] } },
       },
-      { $match: { search: { $regex: regex } }},
+      { $match: { search: { $regex: regex } } },
       { $sort: { search: 1 } },
       { $skip: skip },
       { $limit: limit },
@@ -317,7 +327,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    *
    * @param date Fecha desde cual consultar
    */
-   getUsersByDate(date) {
+  getUsersByDate(date) {
     // se crea la fecha como Date
     let day = new Date(date);
     // se crea otra fecha
@@ -327,21 +337,68 @@ const User = typedModel("User", schema, undefined, undefined, {
 
     return User.countDocuments({ create: { $gte: day, $lte: dayAfter } });
   },
-   /**
+  /**
    * Devuelve la cantidad de usuarios registrados o creados
    */
-    countOfUsers() {
-      return User.countDocuments();
-    },
-    /**
-     * Devuelve la cantidad de usuarios conectados
-     */
-    countOfUsersOnlines(){
-      return User.countDocuments({ connected: true });
-    },
-    setFCMTOken(user,fcmtoken){
-      return User.findByIdAndUpdate(user,{fcmtoken},{new:true})
+  countOfUsers() {
+    return User.countDocuments();
+  },
+  /**
+   * Devuelve la cantidad de usuarios conectados
+   */
+  countOfUsersOnlines() {
+    return User.countDocuments({ connected: true });
+  },
+  setFCMTOken(user, fcmtoken) {
+    return User.findByIdAndUpdate(user, { fcmtoken }, { new: true });
+  },
+  /**
+   * Crea un nuevo usuario
+   *
+   * @param  {User}    user   El usuario a crear
+   *
+   * @return {User}           El usuario guardado
+   * @throws {Error}          El usuario ya está registrado
+   */
+   async createAdmin(user: any, password) {
+    // le generamos un nombre de usuario
+    user.username = await userHelper.generateUsername(user);
+    // le generamos un password
+    user.password = password;
+    // Indicamos que es un usuario tipo admin
+    user.role = "admin";
+    // indicamos que ya este usuario se encuentra verificado
+    user.verified = true;
+
+    user.sport = "football"
+    user.profile_user = "administration"
+    // Comprueba si la dirección de correo suministrada ya está registrada
+    let emailExist = await User.findByEmail(user.email);
+    let userExist = await User.findByUsername(user.username);
+
+    if (emailExist) {
+      // El usuario ya existe
+      console.warn(
+        `[WARN] El usuario con el email ${user.email} ya está registrado. No se creará una nueva cuenta`
+      );
+      throw "email-already-exists";
+    } else if (userExist) {
+      console.warn(
+        `[WARN] El usuario con el username ${user.username} ya está registrado. No se creará una nueva cuenta`
+      );
+      throw "user-already-exists";
+    } else {
+      // Guarda el nuevo usuario
+      return new User(user).save();
     }
+  },
+  /**
+   * Obtiene todos los administradores
+   */
+   getAdmins() {
+    return User.find({ role: "admin" });
+  },
+
 });
 
 /**

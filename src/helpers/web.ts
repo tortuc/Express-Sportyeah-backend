@@ -46,4 +46,15 @@ export class Web
             return v.toString(16);
         });
     }
+
+     /**
+     * Obtiene la url del admin
+     * 
+     * @return {string}     La url del administrador
+     */
+      public static getUrlAdmin():string
+      {
+          return Environment.get() == Environment.Development ? 
+              Config.get('frontend.development.url_admin') : Config.get('frontend.production.url_admin');
+      }
 }
