@@ -486,7 +486,7 @@ export class UserController extends BaseController {
   }
 
   /**
-   * Busca a todos los administradores de kecuki
+   * Busca a todos los administradores de sportyeah
    * @param request
    * @param response
    */

@@ -264,7 +264,7 @@ export class AnalyticsController extends BaseController {
   // }
 
   /**
-   * Retorna el usuario con mas seguidores en kecuki
+   * Retorna el usuario con mas seguidores en sportyeah
    */
 
   public mostPopularUser(request: Request, response: Response) {

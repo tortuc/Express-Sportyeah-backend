@@ -1,7 +1,7 @@
 import { BaseController } from "./baseController";
 import { HttpResponse } from "../helpers/httpResponse";
 import { Request, Response } from "express";
-import Sponsor from "../models/sponsor";
+import Sponsor from "../models/viewsSponsor";
 import { SponsorFilter } from "../helpers/SponsorFilter"
 /**
  * ViewsProfileController

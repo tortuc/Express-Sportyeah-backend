@@ -5,40 +5,121 @@ import Experience from "./experience";
  * Esquema de Usuario
  */
 const schema = createSchema({
+  /**
+   * Nombre del usuario
+   */
   name: Type.string({ required: true }),
+  /**
+   * Apellido del usuario
+   */
   last_name: Type.string({ required: true }),
+  /**
+   * Correo electronico del usuario
+   */
   email: Type.string({ required: true, unique: true }),
+  /**
+   * Nombre de usuario, del usuario (unico)
+   */
   username: Type.string({ required: true, unique: true }),
+  /**
+   * Fecha de nacimiento del usuario
+   */
   birth_date: Type.date({ default: null }),
+  /**
+   * Ultima conexion del usuario
+   */
   lastConection: Type.date({ default: null }),
+  /**
+   * Si el usuario esta conectado
+   */
   connected: Type.boolean({ default: false }),
+  /**
+   * Password del usuario
+   */
   password: Type.string(),
+  /**
+   * Idioma que ha seleccionado el usuario
+   */
   lang: Type.string({ default: "es" }),
+  /**
+   * Fecha en que se creo el usuario
+   */
   create: Type.date({ default: Date.now }),
+  /**
+   * Role del usuario (administrador o usuario comun)
+   */
   role: Type.string({ enum: ["user", "admin"], default: "user" }),
+  /**
+   * Si el usuario verifico su cuenta
+   */
   verified: Type.boolean({ default: false }),
+  /**
+   * Intentos fallidos al intentar entrar en la cuenta
+   */
   attempts: Type.number({ default: 0 }),
+  /**
+   * Imagen de perfil del usuario
+   */
   photo: Type.string({
     default: "https://files.sportyeah.com/v1/image/get/1616530480396",
   }),
+  /**
+   * banner del usuario (portada)
+   */
   photoBanner: Type.string({
     default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
   }),
+  /**
+   * Slider (esto no puede ser asi)
+   */
   slider: [
     Type.string({
       default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
     }),
   ],
+  /**
+   * Experiencia (esto no puede ir aqui)
+   */
   experiences: [Type.objectId({ ref: Experience, default: null })],
+  /**
+   * Estado del usuario, mensaje que se muestra abajo del nombre
+   */
   estado: Type.string({ default: "Hey there I'm in SportYeah." }),
+  /**
+   * Si la cuenta fue eliminada
+   */
   deleted: Type.boolean({ default: false }),
+  /**
+   * Token de verificacion, se usa la primera vez para verificar el usuario por un token
+   */
   verification_token: Type.string({ default: null }),
+  /**
+   * Token para recuperar la password
+   */
   recover_password_token: Type.string({ default: null }),
+  /**
+   * Email de los padres
+   */
   parents_email: Type.string(),
+  /**
+   * Nombre de los padres
+   */
   parents_name: Type.string(),
+  /**
+   * Apellido de los padres
+   */
   parents_last_name: Type.string(),
+  /**
+   * Si el usuario es super administrador
+   */
   supera: Type.boolean({ default: false }),
+  /**
+   * Roles de administrador
+   */
   roles: Type.string(),
+  /**
+   * Deporte del usuario
+   */
   sport: Type.string({
     enum: [
       "soccer",
@@ -57,6 +138,9 @@ const schema = createSchema({
       "various",
     ],
   }),
+  /**
+   * tipo de perfil del usuario
+   */
   profile_user: Type.string({
     enum: [
       "club",
@@ -75,9 +159,27 @@ const schema = createSchema({
     ],
     default: null,
   }),
+  /**
+   * Sub_profile del usuario
+   */
   sub_profile: Type.string(),
+  /**
+   * Si fue authorizado por los padres
+   */
   authorize: Type.boolean({ default: true }),
-  sponsors: [Type.mixed()],
+  /**
+   * Patrocinadores ( esto no puede ir asi)
+   */
+  sponsor_info: Type.object().of({
+    name: Type.string({ default: "SportYeah" }),
+    miniature: Type.string({ default: "assets/sponsors/default_mini.jpg" }),
+    profile_image: Type.string({
+      default: "assets/sponsors/default_profile.jpg",
+    }),
+  }),
+  /**
+   * Estructura, muchisimo menos puede ir asi
+   */
   structure: Type.mixed(),
   /**
    * Pais del usuario (countryCode)
@@ -86,7 +188,10 @@ const schema = createSchema({
   /**
    * Bandera del pais, aplica para usuarios espanioles que quieran cambiar entre sus 3 banderas
    */
-  flag: Type.string({ default: null,enum:["catalunya","euskal","andalucia",null] }),
+  flag: Type.string({
+    default: null,
+    enum: ["catalunya", "euskal", "andalucia", null],
+  }),
   /**
    * Token del FCM para las Push Notifications
    */
@@ -104,7 +209,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @param {string} id   El id del usuario
    */
   async getAllUsers(skip = 0) {
-    return User.find()
+    return User.find();
   },
   /**
    * Obtiene el usuario por su id
@@ -323,6 +428,32 @@ const User = typedModel("User", schema, undefined, undefined, {
     ]);
   },
   /**
+   * Busca patrocinadores por nombre, apellido o usuario
+   * @param query
+   * @param limit
+   * @param skip
+   * @returns
+   */
+  searchQuerySponsors(query: string, limit = 5, skip = 0) {
+    let regex = new RegExp(query.replace(/ /g, ""), "i");
+    console.log(regex);
+
+    return User.aggregate([
+      {
+        $project: {
+          search: { $concat: ["$name", "$last_name", "$username"] },
+          profile_user: "$profile_user",
+        },
+      },
+      {
+        $match: { profile_user: "sponsor", search: { $regex: regex } },
+      },
+      { $sort: { search: 1 } },
+      { $skip: skip },
+      { $limit: limit },
+    ]);
+  },
+  /**
    * Retorna un conteo de la cantidad de usuarios registrados/creados en un intervalo de tiempo
    *
    * @param date Fecha desde cual consultar
@@ -360,7 +491,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @return {User}           El usuario guardado
    * @throws {Error}          El usuario ya está registrado
    */
-   async createAdmin(user: any, password) {
+  async createAdmin(user: any, password) {
     // le generamos un nombre de usuario
     user.username = await userHelper.generateUsername(user);
     // le generamos un password
@@ -370,8 +501,8 @@ const User = typedModel("User", schema, undefined, undefined, {
     // indicamos que ya este usuario se encuentra verificado
     user.verified = true;
 
-    user.sport = "football"
-    user.profile_user = "administration"
+    user.sport = "football";
+    user.profile_user = "administration";
     // Comprueba si la dirección de correo suministrada ya está registrada
     let emailExist = await User.findByEmail(user.email);
     let userExist = await User.findByUsername(user.username);
@@ -395,10 +526,9 @@ const User = typedModel("User", schema, undefined, undefined, {
   /**
    * Obtiene todos los administradores
    */
-   getAdmins() {
+  getAdmins() {
     return User.find({ role: "admin" });
   },
-
 });
 
 /**

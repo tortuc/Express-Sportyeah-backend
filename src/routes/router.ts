@@ -182,6 +182,13 @@ export class Router {
      *
      * @route /v1/livescore/...
      */
-    this.route.use('/v1/livescore', require('./livescoreRoute'));
+    this.route.use("/v1/livescore", require("./livescoreRoute"));
+
+    /**
+     * Manejador de rutas de sponsor (patrocinadores)
+     *
+     * @route /v1/sponsor/...
+     */
+    this.route.use("/v1/sponsor", require("./sponsorRoute"));
   }
 }

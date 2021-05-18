@@ -7,7 +7,7 @@
  * @copyright Retail Servicios Externos SL
  *
  */
- import Sponsor from "../models/sponsor";
+ import Sponsor from "../models/viewsSponsor";
  import * as moment from 'moment';
  export class SponsorFilter {
     private constructor() {
