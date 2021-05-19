@@ -30,7 +30,8 @@ export class SponsorController extends BaseController {
     const sponsor = request.body;
     // lo creamos
     Sponsor.createOne(sponsor)
-      .then((newSponsor) => {
+      .then(async (newSponsor) => {
+        await User.populate(newSponsor, { path: "idSponsor" });
         // respondemos con el nuevo patrocinador
         response.status(HttpResponse.Ok).json(newSponsor);
       })
@@ -58,20 +59,17 @@ export class SponsorController extends BaseController {
       });
   }
 
-
-
-
   /**
    * busca a patrocinadores de sportyeah, por una cadena de texto
    */
-   public searchSponsorQuerySkip(request: Request, response: Response) {
+  public searchSponsorQuerySkip(request: Request, response: Response) {
     let query = request.params.query; // obtenemos la busqueda o el texto que ingreso el usuario
     let skip = Number(request.params.skip); // obtenemos la paginacion y la convertimos a numero
     // buscamos a los usuarios que coincidan con la busqueda
     User.searchQuerySponsors(query, 15, skip)
       .then((users) => {
         console.log(users);
-        
+
         // hacemos el populate de los usuarios para obtener su data
         User.populate(users, { path: "_id" }).then((users) => {
           users = users.map((user) => {
