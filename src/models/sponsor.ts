@@ -20,19 +20,19 @@ const schema = createSchema({
   /**
    * Id del usuario patrocinador en sportyeah
    */
-  idSponsor: Type.objectId({ required: true, ref: "User" }),
+  idSponsor: Type.objectId({ required: false, ref: "User", default: null }),
   /**
-   * Url del patrocinador, si no tiene cuenta en sportyeah
+   * Sponsor personalizado
    */
-  url: Type.string({ required: false, default: "" }),
-  /**
-   * Nombre del patrocinador
-   */
-  name: Type.string({ required: false, default: "" }),
-  /**
-   * Imagen del patrocinador, si no tiene cuenta en sportyeah
-   */
-  image: Type.string({ required: false, default: "" }),
+  customSponsor: Type.object({ required: false}).of({
+    name: Type.string({ default: "SportYeah" }),
+    url: Type.string({ default: "app.sportyeah.com" }),
+    miniature: Type.string({ default: "assets/sponsors/default_mini.jpg" }),
+    profile_image: Type.string({
+      default: "assets/sponsors/default_profile.jpg",
+    })
+  }),
+ 
   /**
    * Indica si este patrocinador ha sido borrado
    */

@@ -42,6 +42,43 @@ export class SponsorController extends BaseController {
   }
 
   /**
+   * Eliminar un patrocinador
+   */
+
+  deleteSponsorById(request: Request, response: Response) {
+    // recuperamos el id del patrocinador
+    const { id } = request.params;
+
+    Sponsor.deleteSponsor(id)
+      .then(async (sponsor) => {
+        let sponsors = await Sponsor.getSponsorsByUser(sponsor.user);
+        response.status(HttpResponse.Ok).json(sponsors);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+
+  /**
+   * Editar  un patrocinador
+   */
+
+  updateSponsorById(request: Request, response: Response) {
+    // recuperamos el id del patrocinador
+    const { id } = request.params;
+    const newData = request.body;
+    Sponsor.updateSponsor(id,newData)
+      .then(async (sponsor) => {
+        let sponsors = await Sponsor.getSponsorsByUser(sponsor.user);
+        response.status(HttpResponse.Ok).json(sponsors);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  /**
    * Obtiene todos los patrocinadores de un usuario
    */
   getSponsorByUserId(request: Request, response: Response) {
