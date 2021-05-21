@@ -86,18 +86,18 @@ export class Analytic {
     return users;
   }
   /**
-   * Data de usuarios de kecuki, que visitaron un evento en especifico
+   * Data de usuarios de sportyeah, que visitaron un evento en especifico
    * @param day dia para calcular la semana
    * @param analytics cuerpo de la analitica de un evento
    */
 
-  public static async kecukiUsersVisitsEventData(day, analytics) {
+  public static async sportyeahUsersVisitsEventData(day, analytics) {
     let days = [];
     for (let index = 0; index < 7; index++) {
       let start = moment(day).startOf("week");
 
       days.push(
-        this.kecukiUsersVisitsEvent(
+        this.sportyeahUsersVisitsEvent(
           analytics.InvitedUserVisits,
           start.add(index, "days")
         )
@@ -108,13 +108,13 @@ export class Analytic {
   }
 
   /**
-     * Cantidad de usuarios de kecuki, que visitaron un evento en especifico
+     * Cantidad de usuarios de sportyeah, que visitaron un evento en especifico
 
    * @param visits 
    * @param date 
    * @returns 
    */
-  private static kecukiUsersVisitsEvent(visits: any[], date) {
+  private static sportyeahUsersVisitsEvent(visits: any[], date) {
     let day = moment(new Date(date));
     let total = visits.filter((visit) => {
       return (

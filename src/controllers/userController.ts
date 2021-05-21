@@ -486,7 +486,7 @@ export class UserController extends BaseController {
   }
 
   /**
-   * Busca a todos los administradores de kecuki
+   * Busca a todos los administradores de sportyeah
    * @param request
    * @param response
    */
@@ -496,6 +496,17 @@ export class UserController extends BaseController {
       .then((admins) => {
         // retornamos los admins
         response.status(HttpResponse.Ok).json(admins);
+      })
+      .catch((err) => {
+        // retornamos error
+        response.status(HttpResponse.BadRequest).send("cannot get admins");
+      });
+  }
+  public findUsers(request: Request, response: Response) {
+    User.getAllUsers()
+      .then((users) => {
+        // retornamos los admins
+        response.status(HttpResponse.Ok).json(users);
       })
       .catch((err) => {
         // retornamos error

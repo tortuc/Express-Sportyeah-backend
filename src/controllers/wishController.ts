@@ -27,12 +27,13 @@ export class WishController extends BaseController {
 
   public async openGraph(request: Request, response: Response) {
     let url = request.body.url;
+ 
     OpenGraph.pageInfo(url)
       .then((data) => {
         response.status(HttpResponse.Ok).json(data);
       })
       .catch((err) => {
-        response.status(HttpResponse.Unauthorized).send("cannot read info");
+        response.status(HttpResponse.BadRequest).send("cannot read info");
       });
   }
 }

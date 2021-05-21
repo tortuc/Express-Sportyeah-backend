@@ -23,21 +23,27 @@ const schema = createSchema({
         image       : Type.string({required:false}),
         video       : Type.string({default:null}),
         originMedia : Type.string({default:null}),
-        url         : Type.string({ required: false })
-        //streaming:
+        url         : Type.string({ required: false }),
+        link        : Type.string({ required: false }),
+        question    : Type.string({ required: false }),
+        format      : Type.string({ required: false }),
     }),
     principalSubtitle:Type.string(),
     principalImage:Type.string(),
     principalVideo:Type.string(),
+    audioNews:Type.string(),
     originPrincipaMedia : Type.string({default:null}),
     origin:Type.string({default:null}),
     sport   : Type.string({required:true,enum:['soccer', 'basketball','tennis',
     'baseball','golf','running','volleyball','swimming','boxing','table tennis','rugby','football','esport','various']})  ,   
     stream  : Type.boolean({default:false}),
-    postStream : Type.string({required:false}),
+    postStream : Type.string({required:false,default:null}),
     date        : Type.date({default:Date.now}),
     pusblishDate    : Type.date({default:Date.now}),
     deleted : Type.boolean({default:false}),
+    privated : Type.boolean({default:false}),
+    programatedDate        : Type.date({default:null}),
+    programated       : Type.boolean({default:false}),
     edited  : Type.date({defualt:null}),
     views  :[Type.string({default: 0})]
 });
@@ -54,7 +60,7 @@ const News = typedModel('News', schema, undefined, undefined, {
 
     findNews(){
         return News
-            .find({deleted:false})
+            .find({deleted:false,programated:false})
             .populate('user')
             .sort({date:-1})
             //.skip(skip)
@@ -74,7 +80,7 @@ const News = typedModel('News', schema, undefined, undefined, {
 
     findBySport(sport){
         return News
-            .find({sport,deleted:false})
+            .find({sport,deleted:false,programated:false})
             .populate('user')
             .sort({date:-1})
             //.skip(skip)
@@ -86,7 +92,33 @@ const News = typedModel('News', schema, undefined, undefined, {
      */
     findMyNewss(user){
         
-        return News.find({user,deleted:false})
+        return News.find({user,deleted:false,programated:false})
+        .populate('user')
+        .sort({date:-1})
+        //.skip(skip)
+        .limit(10)
+    },
+      /**
+     * Obtiene los News de un usuario que han sido borradas
+     * @param user Id del usuario
+     */
+    findMyNewsDeleted(user){
+        
+        return News.find({user,deleted:true,programated:false})
+        .populate('user')
+        .sort({date:-1})
+        //.skip(skip)
+        .limit(10)
+    },
+
+
+        /**
+     * Obtiene los News de un usuario que han sido programados
+     * @param user Id del usuario
+     */
+    findMyNewsProgramated(user){
+        
+        return News.find({user,programated:true})
         .populate('user')
         .sort({date:-1})
         //.skip(skip)
@@ -105,6 +137,14 @@ const News = typedModel('News', schema, undefined, undefined, {
         return News.findByIdAndUpdate(id,{deleted:true})
     },
 
+    /**
+     *  Restaura un News 
+     * @param id ID del News a restaurar
+     */
+     restoreOneById(id){
+        return News.findByIdAndUpdate(id,{deleted:false})
+    },
+
     /* getCountNewsByUser(user){
         return News.countDocuments({deleted:false,user})
     } */
@@ -118,6 +158,11 @@ const News = typedModel('News', schema, undefined, undefined, {
     },
     findViewIp(id,ip){
         return News.findOne({_id:id,views:{$elemMatch:{$eq:ip}}})
+    },
+
+    rescheduleNews(id,date){
+        console.log(id,date);
+        return News.findByIdAndUpdate(id,{programatedDate:date})
     }
 
 });
