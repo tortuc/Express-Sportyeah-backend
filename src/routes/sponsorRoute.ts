@@ -24,6 +24,19 @@ const SponsorRouter: e.Express = sponsorController.router();
  * @method post
  */
 SponsorRouter.post("/create", sponsorController.createSponsor);
+
+/**
+ * Elimina un patrocinador
+ * @route /v1/sponsor/one/:id
+ * @method delete
+ */
+SponsorRouter.delete("/one/:id", sponsorController.deleteSponsorById);
+/**
+ * Modifica un patrocinador
+ * @route /v1/sponsor/one/:id
+ * @method put
+ */
+SponsorRouter.put("/edit/:id", sponsorController.updateSponsorById);
 /**
  * Obtiene todos los patrocinadores de un usuario
  * @param id _id del usuario
