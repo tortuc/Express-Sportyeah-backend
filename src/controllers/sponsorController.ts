@@ -105,7 +105,6 @@ export class SponsorController extends BaseController {
     // buscamos a los usuarios que coincidan con la busqueda
     User.searchQuerySponsors(query, 15, skip)
       .then((users) => {
-        console.log(users);
 
         // hacemos el populate de los usuarios para obtener su data
         User.populate(users, { path: "_id" }).then((users) => {

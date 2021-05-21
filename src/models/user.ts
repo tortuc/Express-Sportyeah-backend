@@ -78,10 +78,6 @@ const schema = createSchema({
     }),
   ],
   /**
-   * Experiencia (esto no puede ir aqui)
-   */
-  experiences: [Type.objectId({ ref: Experience, default: null })],
-  /**
    * Estado del usuario, mensaje que se muestra abajo del nombre
    */
   estado: Type.string({ default: "Hey there I'm in SportYeah." }),
@@ -217,7 +213,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @param {string} id   El id del usuario
    */
   async findByUserId(id: string) {
-    return await User.findById(id).populate({ path: "experiences" });
+    return await User.findById(id);
   },
 
   /**
@@ -226,7 +222,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @param {string} email   El email del usuario
    */
   findByEmail(email: string) {
-    return User.findOne({ email: email }).populate({ path: "experiences" });
+    return User.findOne({ email: email });
   },
   /**
    * Obtiene el usuario por su username
@@ -234,7 +230,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @param {string} username   El username del usuario
    */
   findByUsername(username: string) {
-    return User.findOne({ username }).populate({ path: "experiences" });
+    return User.findOne({ username });
   },
 
   /**
@@ -402,7 +398,7 @@ const User = typedModel("User", schema, undefined, undefined, {
   },
 
   listUsers() {
-    return User.find().populate({ path: "experiences" });
+    return User.find();
   },
 
   /** Editar marcas
