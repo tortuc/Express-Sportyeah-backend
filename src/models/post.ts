@@ -88,6 +88,16 @@ const Post = typedModel("Post", schema, undefined, undefined, {
     return Post.countDocuments({ post: id, deleted: false }).sort({ date: -1 });
   },
 
+ /**
+   * Retorna la cantidad de compartiones de una noticia
+   * @param id
+   * @returns
+   */
+  getTotalSharedsByNews(id) {
+    return Post.countDocuments({ news: id, deleted: false }).sort({ date: -1 });
+  },
+
+
   /**
    * Obtiene los post de los amigos
    *

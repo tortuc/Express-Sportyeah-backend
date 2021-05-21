@@ -52,7 +52,7 @@ const Like = typedModel("Like", schema, undefined, undefined, {
 
   //Prueba de likes en noticias
   getLikesByNews(news) {
-    return Like.find({ news, deleted: false }).populate("user");
+    return Like.countDocuments({ news, deleted: false }).populate("user");
   },
   /**
    * Retorna 15 reacciones, de cualquier tipo en un post
@@ -133,6 +133,16 @@ const Like = typedModel("Like", schema, undefined, undefined, {
   userReactToPost(post, user) {
     return Like.findOne({ post, user, deleted: false });
   },
+
+   /**
+   * Retorna si un usuario reacciono a un newss
+   * @param news _id del news
+   * @param user _id del usuario
+   * @returns
+   */
+    userReactToNews(news, user) {
+      return Like.findOne({ news, user, deleted: false });
+    },
   /**
    * Cambia el tipo de una reaccion
    * @param id _id del like
@@ -150,6 +160,23 @@ const Like = typedModel("Like", schema, undefined, undefined, {
   countTotalOfEachReaction(post) {
     return Like.aggregate([
       { $match: { post: { $eq: new mongo.ObjectId(post) }, deleted: false } },
+      {
+        $group: {
+          _id: "$type",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+  },
+
+
+  /**
+   * Retorna la cantidad de reacciones por tipo, de un news
+   * post _id
+   */
+   countTotalOfEachReactionNews(news) {
+    return Like.aggregate([
+      { $match: { news: { $eq: new mongo.ObjectId(news) }, deleted: false } },
       {
         $group: {
           _id: "$type",

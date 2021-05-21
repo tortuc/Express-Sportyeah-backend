@@ -64,6 +64,35 @@ NewsRouter.get('/sport/:id', newsController.findBySport);
 NewsRouter.get('/own/:id', newsController.findMyNewss);
 
 /**
+ * Obtiene las noticias borradas de un usuario por id
+ * 
+ * 
+ * @route /v1/news/deleted/:id
+ * @method get
+ */
+ NewsRouter.get('/deleted/:id', newsController.findMyNewsDeleted);
+
+/**
+ * Obtiene las noticias programadas de un usuario por id
+ * 
+ * 
+ * @route /v1/news/programated/:id
+ * @method get
+ */
+ NewsRouter.get('/programated/:id', newsController.findMyNewsProgramated);
+
+
+/**
+ *Reprograma la noticia 
+ * 
+ * 
+ * @route /v1/news/rescheduleNews/:id
+ * @method get
+ */
+ NewsRouter.put('/rescheduleNews/:id', newsController.rescheduleNews);
+
+
+/**
  * Obtiene las noticias de un usuario por id
  * 
  * 
@@ -81,10 +110,16 @@ NewsRouter.put('/update/:id', newsController.updateNews);
  */
 NewsRouter.delete('/delete/:id', newsController.deleteOneById);
 
+/**
+ * Obtiene las noticias de un usuario por id
+ * 
+ * 
+ * @route /v1/news/restore/:id
+ * @method 
+ */
+ NewsRouter.put('/restore/:id', newsController.restoreOneById);
 
 
-//Prueba de likes en noticas
-//Quedaste aqui para mañana!!!!!
 /**
  * Obtiene las noticias de un usuario por id
  * 
@@ -126,5 +161,91 @@ NewsRouter.put('/dislike/:id',Authentication.jwt,newsController.dislikeNews)
  NewsRouter.get('/shareds/:id',Authentication.jwt,newsController.getSharedsByPost)
 
 
+ /**
+ * Cambiar el tipo de reaccion
+ *
+ * @route /v1/news/changereact/:id/:type
+ * @method put
+ * @param id id de la reaccion
+ * @param type tipo o id de la nueva reaccion
+ */
 
+  NewsRouter.put(
+    "/changereact/:id/:type",
+    Authentication.jwt,
+    newsController.changeReact
+  );
+
+
+  /**
+ *  Cantidad de reacciones en un noticia
+ *
+ * @route /v1/news/reactions/:id/
+ * @method get
+ */
+
+   NewsRouter.get("/reactions/:id", newsController.countReactionsNews);
+
+
+    /**
+ * Retorna si un usuario reacciono a un noticia o no
+ *
+ * @route /v1/news/reacted/:id/:user
+ * @method get
+ */
+
+  NewsRouter.get("/reacted/:id/:user", newsController.userReactToNews);
+
+
+  /**
+ * Retorna la cantidad de comentarios en una noticia
+ *
+ * @route /v1/news/countcomments/:id/
+ * @method get
+ */
+
+   NewsRouter.get("/countcomments/:id", newsController.countCommentsInNews);
+
+
+ /**
+ * Saber si un usuario comento una noticia
+ *
+ * @route /v1/news/usercomment/:id/:user
+ * @method get
+ */
+
+  NewsRouter.get("/usercomment/:id/:user", newsController.userCommentNews);
+
+
+
+  /**
+ *  Cantidad de comparticiones en una noticia
+ *
+ * @route /v1/news/totalshareds/:id/
+ * @method get
+ */
+
+   NewsRouter.get("/totalshareds/:id", newsController.totalShared);
+
+  /**
+ * Retorna cierta cantidad de comentarios en una noticia
+ *
+ * @route /v1/news/comments/:id/:skip
+ * @method get
+ */
+
+   NewsRouter.get("/comments/:id/:skip", newsController.getCommentsInNews);
+
+
+
+/**
+ * Retorna la cantidad de cada reaccion en una noticia
+ *
+ * @route /v1/post/totalReactions/:id
+ * @method get
+ */
+
+ NewsRouter.get("/totalReactions/:id", newsController.countTotalOfEachReactionNews);
+
+   
 module.exports = NewsRouter;
