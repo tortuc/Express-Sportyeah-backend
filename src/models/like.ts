@@ -168,6 +168,23 @@ const Like = typedModel("Like", schema, undefined, undefined, {
       },
     ]);
   },
+
+
+  /**
+   * Retorna la cantidad de reacciones por tipo, de un news
+   * post _id
+   */
+   countTotalOfEachReactionNews(news) {
+    return Like.aggregate([
+      { $match: { news: { $eq: new mongo.ObjectId(news) }, deleted: false } },
+      {
+        $group: {
+          _id: "$type",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+  },
 });
 
 /**

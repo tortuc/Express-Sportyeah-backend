@@ -5,6 +5,7 @@ import News from '../models/news';
 import Like from "../models/like";
 import Comment from "../models/comment";
 import Post from "../models/post";
+import User from "../models/user";
 import { Alert } from '../helpers/alert';
 import { PostFilter } from "../helpers/postFilter";
 import { NewsFilter } from "../helpers/newsFilter";
@@ -69,48 +70,15 @@ export class NewsController extends BaseController
    * @route /v1/news/find
    * @method news
    */
-  public findOneNews(request: Request, response: Response) {
+  public  findOneNews(request: Request, response: Response) {
     News.findOneNews(request.params.id)
-    .then((news) => {
+    .then( async (news) => {
       if(news){
-          Like.getLikesByNews(news._id)
-            .then((likes) => {
-              Comment.getCommentsByNews(news._id)
-                .then((comments) => {
-                  Post.getSharedsByNews(news._id)
-                    .then(async(shareds) => {
-                      let question =
-                      news.question != null
-                        ? await NewsFilter.getDataQuestion(news.question)
-                        : null;
-                      let geo = Net.geoIp(Net.ip(request));
-                      await NewsFilter.findIpView(request.params.id,geo.ip)
-                      response.status(HttpResponse.Ok).json({
-                        news,
-                        likes,
-                        comments,
-                        shareds,
-                        question
-                      });
-                    })
-
-                    .catch((err) => {
-                      response
-                        .status(HttpResponse.InternalError)
-                        .send("cannot get shareds");
-                    });
-                })
-                .catch((err) => {
-                  response
-                    .status(HttpResponse.InternalError)
-                    .send("cannot get comments");
-                });
-            })
-            .catch((err) => {
-              response
-                .status(HttpResponse.InternalError)
-                .send("cannot get likes");
-            });
+        let geo = Net.geoIp(Net.ip(request));
+                 await NewsFilter.findIpView(request.params.id,geo.ip)
+                    response.status(HttpResponse.Ok).json({news})
+      } else {
+        response.status(HttpResponse.InternalError).send("cannot get news");
       }
     })
     .catch((err) => {
@@ -147,12 +115,47 @@ export class NewsController extends BaseController
   /**
    * Encontrar Noticias de un usuario
    *
-   * @route /v1/news
+   * @route /v1/news/:id
    * @method news
    */
   public findMyNewss(request: Request, response: Response) {
     let user = request.params.id
   News.findMyNewss(user)
+    .then((resp) => {
+      response.status(HttpResponse.Ok).json(resp);
+    })
+    .catch((err) => {
+      response.status(HttpResponse.BadRequest).send("cannot-find-news-by-user");
+    });
+}
+
+ /**
+   * Encontrar Noticias borradas de un usuario
+   *
+   * @route /v1/news/deleted/:id
+   * @method news
+   */
+  public findMyNewsDeleted(request: Request, response: Response) {
+    let user = request.params.id
+  News.findMyNewsDeleted(user)
+    .then((resp) => {
+      response.status(HttpResponse.Ok).json(resp);
+    })
+    .catch((err) => {
+      response.status(HttpResponse.BadRequest).send("cannot-find-news-by-user");
+    });
+}
+
+
+ /**
+   * Encontrar Noticias programadas de un usuario
+   *
+   * @route /v1/news/programated/:id
+   * @method news
+   */
+  public findMyNewsProgramated(request: Request, response: Response) {
+    let user = request.params.id
+  News.findMyNewsProgramated(user)
     .then((resp) => {
       response.status(HttpResponse.Ok).json(resp);
     })
@@ -193,8 +196,40 @@ export class NewsController extends BaseController
       response.status(HttpResponse.BadRequest).json(err);
     });
 }
- 
-///////////Prueba de likes en noticias
+
+/**
+   * Restaura Noticias 
+   *
+   * @route /v1/news/restore/:id
+   * @method news
+   */
+ public restoreOneById(request: Request, response: Response) {
+  News.restoreOneById(request.params.id)
+    .then((resp) => {
+      response.status(HttpResponse.Ok).json(resp);
+    })
+    .catch((err) => {
+      response.status(HttpResponse.BadRequest).json(err);
+    });
+}
+
+/**
+   * Reprogramar Noticias 
+   *
+   * @route /v1/news/rescheduleNews/:id
+   * @method news
+   */
+ public rescheduleNews(request: Request, response: Response) {
+  News.rescheduleNews(request.params.id,request.body.date)
+    .then((resp) => {
+      response.status(HttpResponse.Ok).json(resp);
+    })
+    .catch((err) => {
+      response.status(HttpResponse.BadRequest).json(err);
+    });
+}
+
+
 public likeNews(request: Request, response: Response) {
   let like = {
     user: request.body.decoded.id,
@@ -271,27 +306,16 @@ public dislikeNews(request: Request, response: Response) {
 
 //comentarios
 public newComment(request: Request, response: Response) {
-  let comment = {
-    user: request.body.decoded.id,
-    news: request.body.news,
-    message: request.body.message,
-    image: request.body.image,
-    question: request.body.question,
-  };
+  let comment = request.body;
+  comment.user = comment.decoded.id;
+  delete comment.decoded;
+
   Comment.newComment(comment)
-    .then((comment) => {
-      Comment.getCommentsByNews(comment.news)
-        .then((comments) => {
-          Alert.commentNewsStream(comments,comment.news)
-          response.status(HttpResponse.Ok).json(comments);
-          /* Alert.commentAlert(comment);
-          Alert.mentionsComment(comment); */
-        })
-        .catch((err) => {
-          response
-            .status(HttpResponse.InternalError)
-            .send("cannot get comments");
-        });
+    .then(async (comment) => {
+      await User.populate(comment, { path: "user" });
+      Alert.commentAlert(comment);
+      Alert.mentionsComment(comment);
+      response.status(HttpResponse.Ok).json(comment);
     })
     .catch((err) => {
       response.status(HttpResponse.InternalError).send("cannot comment");
@@ -380,5 +404,46 @@ public getSharedsByPost(request: Request, response: Response) {
     }
   }
 
+
+
+   /**
+   * Obtiene cierta cantidad de comentarios en un news
+   */
+
+    public async getCommentsInNews(request: Request, response: Response) {
+      try {
+        // obtenemos el id del news
+        let id = request.params.id;
+        // paginacion
+        let skip = Number(request.params.skip);
+        // obtenemos  la cantidad de comentarios
+        let comments = await Comment.getCommentsByNews(id, skip);
+        // retornamos la cantidad de comentarios
+        response.status(HttpResponse.Ok).json(comments);
+      } catch (error) {
+        // hubo un error
+        response.status(HttpResponse.BadRequest).send("something went wrong");
+      }
+    }
+
+
+
+     /**
+   * Cuenta el total de cada reaccion en una publicacion
+   */
+
+  public countTotalOfEachReactionNews(request: Request, response: Response) {
+    // obtenemos el id del post
+    let id = request.params.id;
+    // buscamos el total de cada reaccion
+    Like.countTotalOfEachReaction(id)
+      .then((data) => {
+        // respondemos con la data
+        response.status(HttpResponse.Ok).json(data);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send("cannot get data");
+      });
+  }
   
 }

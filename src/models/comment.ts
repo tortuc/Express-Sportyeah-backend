@@ -121,10 +121,12 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
    * Obtiene todos los comentarios de un news
    * @param news id del news
    */
-  getCommentsByNews(news) {
+  getCommentsByNews(news, skip = 0) {
     return Comment.find({ news, deleted: false })
-      .populate("user question")
-      .sort({ date: -1 });
+    .populate("user")
+    .sort({ date: -1 })
+    .skip(skip)
+    .limit(15)
   },
   getCommentAllTime() {
     return Comment.aggregate([

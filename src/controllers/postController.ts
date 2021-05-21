@@ -37,6 +37,7 @@ export class PostController extends BaseController {
    * @method post
    */
   public create(request: Request, response: Response) {
+    
     Post.create(request.body)
       .then((resp) => {
         if (resp.post != null) {
