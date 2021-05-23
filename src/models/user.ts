@@ -164,7 +164,7 @@ const schema = createSchema({
    */
   authorize: Type.boolean({ default: true }),
   /**
-   * Patrocinadores ( esto no puede ir asi)
+   * Si el usuario es un patrocinador, podra editar su tarjeta
    */
   sponsor_info: Type.object().of({
     name: Type.string({ default: "SportYeah" }),
