@@ -190,5 +190,11 @@ export class Router {
      * @route /v1/sponsor/...
      */
     this.route.use("/v1/sponsor", require("./sponsorRoute"));
+    /**
+     * Manejador de rutas de Gallery (Galeria)
+     *
+     * @route /v1/gallery/...
+     */
+    this.route.use("/v1/gallery", require("./galleryRoute"));
   }
 }

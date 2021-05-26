@@ -37,18 +37,20 @@ export class PostController extends BaseController {
    * @method post
    */
   public create(request: Request, response: Response) {
-    
     Post.create(request.body)
       .then((resp) => {
         if (resp.post != null) {
           Alert.sharedNotification(resp);
+        }
+        if (resp.files.length > 0) {
+          userHelper.uploadFilesToGallery(resp);
         }
         Alert.mentionsPost(resp);
         response.status(HttpResponse.Ok).json(resp);
       })
       .catch((err) => {
         console.log(err);
-        
+
         response.status(HttpResponse.BadRequest).send("cannot-create");
       });
   }
@@ -473,7 +475,6 @@ export class PostController extends BaseController {
       // retornamos la cantidad de comentarios
       response.status(HttpResponse.Ok).json(comments);
     } catch (error) {
-
       // hubo un error
       response.status(HttpResponse.BadRequest).send("something went wrong");
     }
