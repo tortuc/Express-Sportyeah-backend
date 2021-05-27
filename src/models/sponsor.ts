@@ -72,6 +72,10 @@ const Sponsor = typedModel("Sponsor", schema, undefined, undefined, {
   deleteSponsor(id) {
     return Sponsor.findByIdAndUpdate(id, { deleted: true }, { new: true });
   },
+
+  getUsersBySponsorID(sponsor){
+    return Sponsor.find({idSponsor:sponsor,deleted:false})
+  }
 });
 
 /**
