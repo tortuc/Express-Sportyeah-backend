@@ -196,6 +196,14 @@ const schema = createSchema({
    * Variable de control para saber si el usuario leyo el mensaje de el perfil
    */
   msgProfile: Type.boolean({ default: false }),
+
+  socialNetworks: Type.object().of({
+    tiktok:Type.string({default:null}),
+    facebook:Type.string({default:null}),
+    linkedin:Type.string({default:null}),
+    instagram:Type.string({default:null}),
+    twitter:Type.string({default:null}),
+  })
 });
 
 const User = typedModel("User", schema, undefined, undefined, {

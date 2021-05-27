@@ -66,7 +66,7 @@ export class PostController extends BaseController {
         let regex = `/user/${user.username}`;
         // paginacion
         let skip = Number(request.params.skip);
-        Post.findMyPosts(request.body.decoded.id, regex, skip)
+        Post.findMyPosts([request.body.decoded.id], regex, skip)
           .then((posts) => {
             response.status(HttpResponse.Ok).json(posts);
           })
