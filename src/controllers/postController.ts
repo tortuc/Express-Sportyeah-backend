@@ -75,7 +75,6 @@ export class PostController extends BaseController {
           return (x = x.user);
         });
         let ids = [userId].concat(sponsoreds);
-        console.log(ids);
 
         Post.findMyPosts(ids, regex, skip)
           .then((posts) => {

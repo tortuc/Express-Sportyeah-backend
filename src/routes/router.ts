@@ -196,5 +196,11 @@ export class Router {
      * @route /v1/gallery/...
      */
     this.route.use("/v1/gallery", require("./galleryRoute"));
+    /**
+     * Manejador de rutas de Structure (Estructura de club)
+     *
+     * @route /v1/structure/...
+     */
+    this.route.use("/v1/structure", require("./structureRoute"));
   }
 }
