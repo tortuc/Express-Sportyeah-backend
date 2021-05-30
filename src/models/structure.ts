@@ -27,6 +27,11 @@ const schema = createSchema({
    */
 
   name: Type.string({ required: true }),
+  /**
+   * Logo del club
+   */
+
+  logo: Type.string({ required: true, default: "assets/logos/logo.png" }),
 
   /**
    * Descripcion de la estructura o club

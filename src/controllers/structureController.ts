@@ -3,6 +3,7 @@ import { HttpResponse } from "../helpers/httpResponse";
 import { request, Request, Response } from "express";
 import Structure from "../models/structure";
 import OrganizationProfile from "../models/organizationProfile";
+import User from "../models/user";
 
 /**
  * structureController
@@ -52,6 +53,27 @@ export class StructureController extends BaseController {
       });
   }
 
+  getStructureByUsername(request: Request, response: Response) {
+    const { username } = request.params;
+    User.findByUsername(username)
+      .then((user) => {
+        if (["club"].includes(user.profile_user)) {
+          Structure.findByUSer(user._id)
+            .then((structure) => {
+              response.status(HttpResponse.Ok).json(structure);
+            })
+            .catch((err) => {
+              response.status(HttpResponse.BadRequest).send(err);
+            });
+        } else {
+          response.status(HttpResponse.Unauthorized).send("profile invalid");
+        }
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send(err);
+      });
+  }
+
   /**
    * Crea un perfil del organigrama
    */
@@ -81,6 +103,32 @@ export class StructureController extends BaseController {
       .catch((err) => {
         response.status(HttpResponse.BadRequest).send(err);
       });
+  }
+
+  /**
+    Busca todos los perfiles de un organigrama pertenecientes a una estrucura (que a su vez se busca por el username)
+   */
+  async getOrganizationChartByUsername(request: Request, response: Response) {
+    try {
+      // recuperamos el username
+      const { username } = request.params;
+      // Obtenemos el usuario
+      const user = await User.findByUsername(username);
+      // si el perfil del usuario coincide con los que tienen estructura, obtenemos la estrucura de ese usuario
+      if (["club"].includes(user.profile_user)) {
+        const structure = await Structure.findByUSer(user._id);
+        // con la estructura, buscamos el organigrama
+
+        const profiles = await OrganizationProfile.getAllByStructure(
+          structure._id
+        );
+        response.status(HttpResponse.Ok).json(profiles);
+      } else {
+        response.status(HttpResponse.Unauthorized).send("profile invalid");
+      }
+    } catch (error) {
+      response.status(HttpResponse.BadRequest).send(error);
+    }
   }
   /**
    * Edita un perfil del organigrama

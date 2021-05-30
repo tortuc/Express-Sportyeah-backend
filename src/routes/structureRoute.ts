@@ -27,6 +27,16 @@ const StructureRouter: any = structureController.router();
  * @method get
  */
 StructureRouter.get("/getbyuser/:id", structureController.getStructureByUser);
+/**
+ * Obtiene la estructura de un perfil (usuario) por el nombre de usuario
+ *
+ * @route /v1/structure/getbyusername/:username
+ * @method get
+ */
+StructureRouter.get(
+  "/getbyusername/:username",
+  structureController.getStructureByUsername
+);
 
 /**
  * Edita la estructura de un perfil (usuario)
@@ -64,6 +74,18 @@ StructureRouter.get(
   "/organization/bystructure/:id",
   structureController.getOrganizationChartByStructure
 );
+
+/**
+ * Obtiene el organigrama (todos los perfiles) de una estructura, mediante el username del usuario a quien pertenece la estructura
+ * @route /v1/structure/organization/byusername/:username
+ * @method get
+ */
+
+StructureRouter.get(
+  "/organization/byusername/:username",
+  structureController.getOrganizationChartByUsername
+);
+
 /**
  * Obtiene  la informacion de un perfil del organigrama
  * @route /v1/structure/organization/getone/:id

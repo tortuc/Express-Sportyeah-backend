@@ -92,7 +92,7 @@ const OrganizationProfile = typedModel(
         position: "Director de area",
         description: "Director de area del club",
         history: "Usuario de demostracion para el organigrama del club",
-        photo: "assets/structure/vicepresident.jpg",
+        photo: "assets/structure/director.jpg",
       });
 
       await pepe.save();
@@ -115,9 +115,9 @@ const OrganizationProfile = typedModel(
      * @returns
      */
     getInfoByID(id) {
-      return OrganizationProfile.findOne({ _id: id, deleted: false }).populate(
-        "user structure"
-      );
+      return OrganizationProfile.findOne({ _id: id, deleted: false })
+        .populate("user structure")
+        .populate({ path: "structure", populate: { path: "user" } });
     },
     /**
      * Modifica la informacion de un perfil
