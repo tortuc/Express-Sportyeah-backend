@@ -1,5 +1,5 @@
 /**
- * Clase postFilter
+ * Clase newsFilter
  *
  * Se usa para filtrar los comenterios, publicaciones, likes
  *
@@ -82,4 +82,23 @@ export class NewsFilter {
         console.log(err);
       });
   }
+
+
+
+  public static Init() {
+    // Busca todas las noticias que esten programadas
+    setInterval(() => {
+      News.find({programatedDate: { $lt: new Date() }, programated:true }).then(
+        (news) => {
+          if (news.length > 0) {
+            news.forEach(async(news:any) => {
+              //Cambiamos el estado de programado a false
+              News.published(news._id).then(()=>console.log("bien"))
+            });
+          } 
+        }
+      );
+    }, 1000 * 60  );
+  }
+
 }

@@ -288,6 +288,26 @@ public changeReact(request: Request, response: Response) {
     }
   }
 
+  /**
+   * Retorna de a 15 reacciones, de cualquier tipo en un news
+   */
+   public getAllReactionsNews(request: Request, response: Response) {
+    // obtenemos el id del news
+    let { id } = request.params;
+    // obtenemos la paginacion
+    let skip = Number(request.params.skip);
+    Like.allReactionsNewsUsers(id, skip)
+      .then((reactions) => {
+        // retornamos las reacciones que encontremos
+        response.status(HttpResponse.Ok).json(reactions);
+      })
+      .catch((err) => {
+        // ocurrio un error
+        response.status(HttpResponse.BadRequest).send("cannot get reactions");
+      });
+  }
+
+
 //dislikes
 public dislikeNews(request: Request, response: Response) {
   Like.dislike(request.params.id)
@@ -436,13 +456,34 @@ public getSharedsByPost(request: Request, response: Response) {
     // obtenemos el id del post
     let id = request.params.id;
     // buscamos el total de cada reaccion
-    Like.countTotalOfEachReaction(id)
+    Like.countTotalOfEachReactionNews(id)
       .then((data) => {
         // respondemos con la data
         response.status(HttpResponse.Ok).json(data);
       })
       .catch((err) => {
         response.status(HttpResponse.BadRequest).send("cannot get data");
+      });
+  }
+
+  /**
+   * Retorna de a 15 reacciones, de cualquier de unn tipo en especifico en una noticia
+   */
+   public getReactionsByTypeInNews(request: Request, response: Response) {
+    // obtenemos el id del news
+    let { id } = request.params;
+    // obtenemos la paginacion
+    let skip = Number(request.params.skip);
+    // obtenemos el tipo de reaccion
+    let type = Number(request.params.type);
+    Like.reactionsByTypeNewsUsers(id, type, skip)
+      .then((reactions) => {
+        // retornamos las reacciones que encontremos
+        response.status(HttpResponse.Ok).json(reactions);
+      })
+      .catch((err) => {
+        // ocurrio un error
+        response.status(HttpResponse.BadRequest).send("cannot get reactions");
       });
   }
   

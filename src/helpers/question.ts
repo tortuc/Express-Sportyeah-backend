@@ -97,7 +97,7 @@ export class QuestionHelper
             }
           }
         );
-      }, 10 * 60 * 15);//ponle el 00 que falta
+      }, 1000 * 60 * 60);
     }
 
 
