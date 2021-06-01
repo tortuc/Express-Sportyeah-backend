@@ -1,5 +1,6 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
 import OrganizationProfile from "./organizationProfile";
+import StructureDivision from "./structureDivision";
 import User from "./user";
 
 /**
@@ -80,6 +81,7 @@ const Structure = typedModel("Structure", schema, undefined, undefined, {
       };
       let structureCreated = await new Structure(newStructure).save();
       OrganizationProfile.createDefaultProfiles(structureCreated._id);
+      StructureDivision.createDefaultDivisions(structureCreated._id);
       return structureCreated;
     }
   },

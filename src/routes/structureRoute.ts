@@ -124,4 +124,104 @@ StructureRouter.delete(
 // --------------FIN CRUD ORGANIGRAMA------------
 // ----------------------------------------------
 
+// ----------------------------------------------
+// -------------- CRUD DIVISION  ----------------
+// ----------------------------------------------
+
+/**
+ * Crear una division
+ * @method post
+ * @route /v1/structure/division/create
+ */
+StructureRouter.post("/division/create", structureController.createDivision);
+
+/**
+ * Obtiene todas las divisiones por estructura
+ * @method get
+ * @route /v1/structure/division/bystructure/:id
+ */
+StructureRouter.get(
+  "/division/bystructure/:id",
+  structureController.getAllDivisionByStructure
+);
+
+/**
+ * Obtiene la informacion de una division por su id
+ * @method get
+ * @route /v1/structure/division/byid/:id
+ */
+StructureRouter.get("/division/byid/:id", structureController.getDivisionById);
+
+/**
+ * Edita una division por su id
+ * @method put
+ * @route /v1/structure/division/update/:id
+ */
+StructureRouter.put(
+  "/division/update/:id",
+  structureController.updateDivisionById
+);
+/**
+ * Elimina una division por su id
+ * @method delete
+ * @route /v1/structure/division/delete/:id
+ */
+StructureRouter.delete(
+  "/division/delete/:id",
+  structureController.deleteDivisionById
+);
+
+// ----------------------------------------------
+// --------------FIN CRUD DIVISION   ------------
+// ----------------------------------------------
+
+// ----------------------------------------------
+// -------------- CRUD CATEGORIA  ---------------
+// ----------------------------------------------
+
+/**
+ * Crea una categoria para una division
+ * @method post
+ * @route /v1/structure/category/create
+ */
+StructureRouter.post("/category/create", structureController.createCategory);
+/**
+ * Obtiene todas las categorias de una division
+ * @method get
+ * @route /v1/structure/category/bydivision/:id
+ */
+StructureRouter.get(
+  "/category/bydivision/:id",
+  structureController.getAllCategoriesByDivision
+);
+/**
+ * Obtiene la informacion de una categoria
+ * @method get
+ * @route /v1/structure/category/byid/:id
+ */
+StructureRouter.get("/category/byid/:id", structureController.getCategoriaById);
+/**
+ *
+ * Edita la informacion de una categoria
+ * @method put
+ * @route /v1/structure/category/update/:id
+ */
+StructureRouter.put(
+  "/category/update/:id",
+  structureController.updateCategoryById
+);
+/**
+ * Elimina una categoria
+ * @method delete
+ * @route /v1/structure/category/delete/:id
+ */
+StructureRouter.delete(
+  "/category/delete/:id",
+  structureController.deleteCategoryById
+);
+
+// ----------------------------------------------
+// ------------- FIN CRUD CATEGORIA  ------------
+// ----------------------------------------------
+
 module.exports = StructureRouter;

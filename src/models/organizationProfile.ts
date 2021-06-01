@@ -75,7 +75,7 @@ const OrganizationProfile = typedModel(
         name: "Pepe escamilla",
         position: "Presidente",
         description: "Presidente del club",
-        history: "Usuario de demostracion para el organigrama del club",
+        history: "Usuario de demostración para el organigrama del club",
         photo: "assets/structure/president.jpg",
       });
       let maria = new OrganizationProfile({
@@ -83,7 +83,7 @@ const OrganizationProfile = typedModel(
         name: "Maria infante",
         position: "Vicepresidenta",
         description: "Vicepresidenta del club",
-        history: "Usuario de demostracion para el organigrama del club",
+        history: "Usuario de demostración para el organigrama del club",
         photo: "assets/structure/vicepresident.jpg",
       });
       let pablo = new OrganizationProfile({
@@ -91,7 +91,7 @@ const OrganizationProfile = typedModel(
         name: "Pablo Valderrama",
         position: "Director de area",
         description: "Director de area del club",
-        history: "Usuario de demostracion para el organigrama del club",
+        history: "Usuario de demostración para el organigrama del club",
         photo: "assets/structure/director.jpg",
       });
 

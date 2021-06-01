@@ -4,6 +4,8 @@ import { request, Request, Response } from "express";
 import Structure from "../models/structure";
 import OrganizationProfile from "../models/organizationProfile";
 import User from "../models/user";
+import StructureDivision from "../models/structureDivision";
+import StructureCategory from "../models/structureCategory";
 
 /**
  * structureController
@@ -176,4 +178,160 @@ export class StructureController extends BaseController {
         response.status(HttpResponse.BadRequest).send(err);
       });
   }
+
+  /**
+   * ----------------------------------------------------------
+   * ----------------- CRUD DIVISIONES ------------------------
+   * ----------------------------------------------------------
+   */
+
+  /**
+   * Crear una division
+   */
+  createDivision(request: Request, response: Response) {
+    const division = request.body;
+    StructureDivision.createOne(division)
+      .then((division) => {
+        StructureCategory.createDefaultCategorys(division._id);
+        response.status(HttpResponse.Ok).json(division);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  /**
+   * Obtiene todas las divisones de una estructura
+   */
+  getAllDivisionByStructure(request: Request, response: Response) {
+    const { id } = request.params;
+
+    StructureDivision.getAllByStructure(id)
+      .then((divisions) => {
+        response.status(HttpResponse.Ok).json(divisions);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  /**
+   * Obtiene todas las divisones de una estructura
+   */
+  getDivisionById(request: Request, response: Response) {
+    const { id } = request.params;
+
+    StructureDivision.getOne(id)
+      .then((division) => {
+        response.status(HttpResponse.Ok).json(division);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  /**
+   * Editar division
+   */
+
+  updateDivisionById(request: Request, response: Response) {
+    const { id } = request.params;
+    const newData = request.body;
+    StructureDivision.updateDivision(id, newData)
+      .then((division) => {
+        response.status(HttpResponse.Ok).json(division);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  /**
+   * Eliminar una division
+   */
+
+  deleteDivisionById(request: Request, response: Response) {
+    const { id } = request.params;
+    StructureDivision.deleteDivision(id)
+      .then((division) => {
+        response.status(HttpResponse.Ok).json(division);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  /**
+   * ----------------------------------------------------------
+   * ----------------- END CRUD DIVISIONES --------------------
+   * ----------------------------------------------------------
+   */
+
+  /**
+   * ----------------------------------------------------------
+   * -------------------- CRUD CATEGORIAS ---------------------
+   * ----------------------------------------------------------
+   */
+
+  createCategory(request: Request, response: Response) {
+    const category = request.body;
+    StructureCategory.createOne(category)
+      .then((newCategory) => {
+        response.status(HttpResponse.Ok).json(newCategory);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  getAllCategoriesByDivision(request: Request, response: Response) {
+    const { id } = request.params;
+    StructureCategory.getAllByDivision(id)
+      .then((categories) => {
+        response.status(HttpResponse.Ok).json(categories);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  getCategoriaById(request: Request, response: Response) {
+    const { id } = request.params;
+    StructureCategory.getOne(id)
+      .then((category) => {
+        response.status(HttpResponse.Ok).json(category);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  updateCategoryById(request: Request, response: Response) {
+    const { id } = request.params;
+    const newData = request.body;
+    StructureCategory.updateCategory(id, newData)
+      .then((category) => {
+        response.status(HttpResponse.Ok).json(category);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+  deleteCategoryById(request: Request, response: Response) {
+    const { id } = request.params;
+
+    StructureCategory.deleteCategory(id)
+      .then((category) => {
+        response.status(HttpResponse.Ok).json(category);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  /**
+   * ----------------------------------------------------------
+   * ----------------- END CRUD CATEGORIAS --------------------
+   * ----------------------------------------------------------
+   */
 }
