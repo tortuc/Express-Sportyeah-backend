@@ -1,5 +1,6 @@
 import { mongo, Types } from "mongoose";
 import Friend from "../models/friend";
+import Gallery from "../models/gallery";
 import Message from "../models/message";
 import User from "../models/user";
 import { Crypto } from "./crypto";
@@ -34,7 +35,7 @@ export class userHelper {
       User.find({ role: "admin" }).then(async (users) => {
         // una vez retornado, pasamos a los usuarios a esta funcion que nos retornara solo los objectIds
         let ids = await this.getOnlyIdOfUsers(users);
-        // buscamos a los usuarios mas populares de kecuki
+        // buscamos a los usuarios mas populares de sportyeah
         let popular = await this.fivePopulateUsers(id);
         // unimos los ids del admins mas los ids de los usuarios populares
         ids = ids.concat(await this.getOnlyIdOfUsers(popular));
@@ -223,6 +224,20 @@ export class userHelper {
             // retornamos los chats
             resolve(chatsLastMessage);
           }
+        });
+      }
+    });
+  }
+
+  public static uploadFilesToGallery(post) {
+    let files: any[] = post.files;
+
+    files.forEach((file) => {
+      if (["image", "video"].includes(file.format)) {
+        Gallery.createOne({
+          user: post.user,
+          format: file.format,
+          url: file.url,
         });
       }
     });

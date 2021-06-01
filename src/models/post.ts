@@ -34,7 +34,7 @@ const schema = createSchema({
   /**
    * Mensaje o texto de la publicacion
    */
-  message: Type.string({default:''}),
+  message: Type.string({ default: "" }),
   /**
    * Archivos del post (imagenes y videos)
    */
@@ -84,11 +84,11 @@ const Post = typedModel("Post", schema, undefined, undefined, {
    * @param id
    * @returns
    */
-   getTotalSharedsByPost(id) {
+  getTotalSharedsByPost(id) {
     return Post.countDocuments({ post: id, deleted: false }).sort({ date: -1 });
   },
 
- /**
+  /**
    * Retorna la cantidad de compartiones de una noticia
    * @param id
    * @returns
@@ -97,15 +97,18 @@ const Post = typedModel("Post", schema, undefined, undefined, {
     return Post.countDocuments({ news: id, deleted: false }).sort({ date: -1 });
   },
 
-
   /**
    * Obtiene los post de los amigos
    *
    * @param {objectId[]}  friends Array de objectId de los usuarios amigos
    */
 
-  findByFriends(friends: string[], skip,limitDate) {
-    return Post.find({ user: { $in: friends }, deleted: false , date: { $gte: limitDate },})
+  findByFriends(friends: string[], skip, limitDate) {
+    return Post.find({
+      user: { $in: friends },
+      deleted: false,
+      date: { $gte: limitDate },
+    })
       .populate("user post news")
       .populate({ path: "post", populate: { path: "user news" } })
       .sort({ date: -1 })
@@ -113,17 +116,15 @@ const Post = typedModel("Post", schema, undefined, undefined, {
       .limit(10);
   },
 
-
   /**
    * Obtiene los Posts de un usuario
-   * @param user Id del usuario
+   * @param friends array Id del usuario y sus patrocinados (si es sponsor)
    */
-  findMyPosts(user, regex, skip) {
+  findMyPosts(friends, regex, skip) {
     return Post.find({ deleted: false })
       .or([
-        {
-          user,
-        },
+        { user: { $in: friends } },
+
         {
           message: { $regex: regex },
         },
@@ -160,17 +161,17 @@ const Post = typedModel("Post", schema, undefined, undefined, {
   },
   /**
    * Modifica una publicacion
-   * @param id 
-   * @param newValues 
-   * @returns 
+   * @param id
+   * @param newValues
+   * @returns
    */
   updatePost(id, newValues) {
     return Post.findByIdAndUpdate(id, newValues);
   },
   /**
    * Retorna una publicacion
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
   findOnePost(id) {
     return Post.findById(id)
@@ -180,21 +181,21 @@ const Post = typedModel("Post", schema, undefined, undefined, {
   },
   /**
    * Retorna la cantidad de veces que se compartio una publicacion
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
-  getSharedsByPost(id,skip) {
+  getSharedsByPost(id, skip) {
     return Post.find({ post: id })
       .populate("user post news")
       .populate({ path: "post", populate: { path: "user news" } })
       .sort({ date: -1 })
       .skip(skip)
-      .limit(10)
+      .limit(10);
   }, //esto metelo en el newsCOntroller
   /**
    * Retorna la cantidad de veces qeu se compartio una noticia
-   * @param id 
-   * @returns 
+   * @param id
+   * @returns
    */
   getSharedsByNews(id) {
     return Post.find({ news: id })
@@ -204,17 +205,17 @@ const Post = typedModel("Post", schema, undefined, undefined, {
   },
   /**
    * Retorna la cantidad de publicaicones de un usuario
-   * @param user 
-   * @returns 
+   * @param user
+   * @returns
    */
   getCountPostByUser(user) {
     return Post.countDocuments({ deleted: false, user });
   },
   /**
    * Obtiene todas las publicaciones en un rango de fecha
-   * @param start 
-   * @param end 
-   * @returns 
+   * @param start
+   * @param end
+   * @returns
    */
   getPostsByDate(start, end) {
     let dayStart = new Date(start);
@@ -225,8 +226,8 @@ const Post = typedModel("Post", schema, undefined, undefined, {
     });
   },
   /**
-   * Obtiene todos las comparticiones de una publicacion desde siempre 
-   * @returns 
+   * Obtiene todos las comparticiones de una publicacion desde siempre
+   * @returns
    */
   getPostAllTime() {
     return Post.aggregate([
@@ -242,9 +243,9 @@ const Post = typedModel("Post", schema, undefined, undefined, {
   },
   /**
    * Obtiene las comparticiones de una publicacion en un rango de fecha
-   * @param start 
-   * @param end 
-   * @returns 
+   * @param start
+   * @param end
+   * @returns
    */
   getPostByTime(start, end) {
     let startTime = new Date(start);
@@ -268,9 +269,9 @@ const Post = typedModel("Post", schema, undefined, undefined, {
   },
   /**
    * Obtiene la cantida de vistas en una publicacion en un rango de fecha
-   * @param start 
-   * @param end 
-   * @returns 
+   * @param start
+   * @param end
+   * @returns
    */
   getPostViewsByTime(start, end) {
     let startTime = new Date(start);
@@ -283,7 +284,7 @@ const Post = typedModel("Post", schema, undefined, undefined, {
   },
   /**
    * Obtiene la cantida de vistas de todos los post, desde siempre
-   * @returns 
+   * @returns
    */
   getPostViewsAllTime() {
     return Post.find({
@@ -293,18 +294,18 @@ const Post = typedModel("Post", schema, undefined, undefined, {
   },
   /**
    * Agrega una vista a una publicacion
-   * @param id 
-   * @param ip 
-   * @returns 
+   * @param id
+   * @param ip
+   * @returns
    */
   newView(id, ip) {
     return Post.findByIdAndUpdate(id, { $push: { views: ip } }); //colocar en el controler el beta la ruta etc etc
   },
   /**
    * Busca si hay una ip registrada en la vista de una publicacion
-   * @param id 
-   * @param ip 
-   * @returns 
+   * @param id
+   * @param ip
+   * @returns
    */
   findViewIp(id, ip) {
     return Post.findOne({ _id: id, views: { $elemMatch: { $eq: ip } } });

@@ -11,6 +11,7 @@ import { Net } from "../helpers/net";
 import { userHelper } from "../helpers/userHelper";
 
 import * as moment from "moment";
+import Sponsor from "../models/sponsor";
 
 /**
  * PostController
@@ -37,18 +38,20 @@ export class PostController extends BaseController {
    * @method post
    */
   public create(request: Request, response: Response) {
-    
     Post.create(request.body)
       .then((resp) => {
         if (resp.post != null) {
           Alert.sharedNotification(resp);
+        }
+        if (resp.files.length > 0) {
+          userHelper.uploadFilesToGallery(resp);
         }
         Alert.mentionsPost(resp);
         response.status(HttpResponse.Ok).json(resp);
       })
       .catch((err) => {
         console.log(err);
-        
+
         response.status(HttpResponse.BadRequest).send("cannot-create");
       });
   }
@@ -58,13 +61,22 @@ export class PostController extends BaseController {
    */
 
   public getMyPosts(request: Request, response: Response) {
-    User.findById(request.body.decoded.id)
-      .then((user) => {
+    const userId = request.body.decoded.id;
+    User.findById(userId)
+      .then(async (user) => {
         // una REGEX para saber si hay post donde lo hayan mencionado
         let regex = `/user/${user.username}`;
         // paginacion
         let skip = Number(request.params.skip);
-        Post.findMyPosts(request.body.decoded.id, regex, skip)
+        // si el usuario es patrocinador, deberia encontrar patrocinados y mostrar sus postss
+        let sponsoreds: any[] = ((await Sponsor.getUsersBySponsorID(
+          userId
+        )) as any[]).map((x) => {
+          return (x = x.user);
+        });
+        let ids = [userId].concat(sponsoreds);
+
+        Post.findMyPosts(ids, regex, skip)
           .then((posts) => {
             response.status(HttpResponse.Ok).json(posts);
           })
@@ -473,7 +485,6 @@ export class PostController extends BaseController {
       // retornamos la cantidad de comentarios
       response.status(HttpResponse.Ok).json(comments);
     } catch (error) {
-
       // hubo un error
       response.status(HttpResponse.BadRequest).send("something went wrong");
     }

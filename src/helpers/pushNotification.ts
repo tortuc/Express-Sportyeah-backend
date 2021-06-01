@@ -49,7 +49,7 @@ export class PushNotification {
       defaultSound: true, // si el sonido por defecto
       visibility: "public", // que sea publico
       priority: "high", // prioridad alta
-      channelId: "kecuki_channel", // canal de kecuki, donde se reciben la mayoria de las notificaciones push
+      channelId: "sportyeah_channel", // canal de sportyeah, donde se reciben la mayoria de las notificaciones push
       notificationCount: 1,
       sound: "notification.wav",
     };
@@ -66,7 +66,7 @@ export class PushNotification {
       android: {
         notification: androidNotification,
         ttl: 20000,
-        collapseKey: "com.kecuki.app",
+        collapseKey: "com.sportyeah.app",
       },
     };
 

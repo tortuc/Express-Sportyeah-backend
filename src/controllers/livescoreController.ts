@@ -7,6 +7,9 @@ enum Endpoints {
   SCORES = 'scores/live.json',
   PAST_MATCHES = 'scores/history.json',
   FIXTURES = 'fixtures/matches.json',
+  EVENTS = 'scores/events.json',
+  STANDINGS = 'leagues/table.json',
+  STATISTIC = 'matches/stats.json',
 }
 
 export class LivescoreController extends BaseController {
@@ -30,6 +33,27 @@ export class LivescoreController extends BaseController {
   public async getFixtures(request: Request, response: Response) { 
     const endpoint: string = this.buildUrl(Endpoints.FIXTURES); 
     const result: any = await axios.get(endpoint);
+    response.send(result.data);
+  }
+
+  public async getMatchEvents(request: Request, response: Response) { 
+    const eventId: string = request.params.id;
+    const endpoint: string = this.buildUrl(Endpoints.EVENTS);
+    const result: any = await axios.get(`${ endpoint }&id=${ eventId }`);
+    response.send(result.data);
+  }  
+
+  public async getCompetitionStandings(request: Request, response: Response) { 
+    const competitionId: string = request.params.id;
+    const endpoint: string = this.buildUrl(Endpoints.STANDINGS); 
+    const result: any = await axios.get(`${ endpoint }&competition_id=${ competitionId }`);
+    response.send(result.data);
+  }
+
+  public async getStatistic(request: Request, response: Response) { 
+    const matchId: string = request.params.id;
+    const endpoint: string = this.buildUrl(Endpoints.STATISTIC); 
+    const result: any = await axios.get(`${ endpoint }&match_id=${ matchId }`);
     response.send(result.data);
   }
 

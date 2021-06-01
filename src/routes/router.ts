@@ -199,6 +199,25 @@ export class Router {
      * @route /v1/ticketevent/...
      */
      this.route.use('/v1/ticketevent', require('./ticketEventRoute'));
+
+    /**
+     * Manejador de rutas de sponsor (patrocinadores)
+     *
+     * @route /v1/sponsor/...
+     */
+    this.route.use("/v1/sponsor", require("./sponsorRoute"));
+    /**
+     * Manejador de rutas de Gallery (Galeria)
+     *
+     * @route /v1/gallery/...
+     */
+    this.route.use("/v1/gallery", require("./galleryRoute"));
+    /**
+     * Manejador de rutas de Structure (Estructura de club)
+     *
+     * @route /v1/structure/...
+     */
+    this.route.use("/v1/structure", require("./structureRoute"));
   }
 
  
