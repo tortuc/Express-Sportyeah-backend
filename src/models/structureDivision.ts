@@ -102,7 +102,7 @@ const StructureDivision = typedModel(
       StructureCategory.createDefaultCategorys(two._id);
 
       await three.save();
-      StructureCategory.createDefaultCategorys(two._id);
+      StructureCategory.createDefaultCategorys(three._id);
     },
   }
 );

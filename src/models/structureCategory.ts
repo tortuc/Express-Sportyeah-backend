@@ -1,4 +1,5 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
+import StructureTeam from "./structureTeam";
 
 /**
  * Modelo de StructureCategory
@@ -52,8 +53,9 @@ const StructureCategory = typedModel(
       return StructureCategory.findOne({
         _id: category,
         deleted: false,
-      }).populate("division")
-      .populate({ path: "division", populate: { path: "structure" } });
+      })
+        .populate("division")
+        .populate({ path: "division", populate: { path: "structure" } });
     },
     /**
      * Modifica una categoria
@@ -90,9 +92,11 @@ const StructureCategory = typedModel(
         division,
         image: "assets/structure/young.jpg",
       });
-      
+
       await one.save();
+      StructureTeam.createDefaultTeams(one._id);
       await two.save();
+      StructureTeam.createDefaultTeams(two._id);
     },
   }
 );
