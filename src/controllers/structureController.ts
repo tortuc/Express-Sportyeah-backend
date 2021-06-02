@@ -6,6 +6,8 @@ import OrganizationProfile from "../models/organizationProfile";
 import User from "../models/user";
 import StructureDivision from "../models/structureDivision";
 import StructureCategory from "../models/structureCategory";
+import StructureTeam from "../models/structureTeam";
+import StructurePlayer from "../models/structurePlayer";
 
 /**
  * structureController
@@ -55,25 +57,19 @@ export class StructureController extends BaseController {
       });
   }
 
-  getStructureByUsername(request: Request, response: Response) {
-    const { username } = request.params;
-    User.findByUsername(username)
-      .then((user) => {
-        if (["club"].includes(user.profile_user)) {
-          Structure.findByUSer(user._id)
-            .then((structure) => {
-              response.status(HttpResponse.Ok).json(structure);
-            })
-            .catch((err) => {
-              response.status(HttpResponse.BadRequest).send(err);
-            });
-        } else {
-          response.status(HttpResponse.Unauthorized).send("profile invalid");
-        }
-      })
-      .catch((err) => {
-        response.status(HttpResponse.BadRequest).send(err);
-      });
+  async getStructureByUsername(request: Request, response: Response) {
+    try {
+      const { username } = request.params;
+      const user = await User.findByUsername(username);
+      if (["club"].includes(user.profile_user)) {
+        const structure = Structure.findByUSer(user._id);
+        response.status(HttpResponse.Ok).json(structure);
+      } else {
+        response.status(HttpResponse.Unauthorized).send("profile invalid");
+      }
+    } catch (error) {
+      response.status(HttpResponse.BadRequest).send(error);
+    }
   }
 
   /**
@@ -277,6 +273,7 @@ export class StructureController extends BaseController {
     const category = request.body;
     StructureCategory.createOne(category)
       .then((newCategory) => {
+        StructureTeam.createDefaultTeams(newCategory._id);
         response.status(HttpResponse.Ok).json(newCategory);
       })
       .catch((error) => {
@@ -332,6 +329,138 @@ export class StructureController extends BaseController {
   /**
    * ----------------------------------------------------------
    * ----------------- END CRUD CATEGORIAS --------------------
+   * ----------------------------------------------------------
+   */
+  /**
+   * ----------------------------------------------------------
+   * -------------------- CRUD EQUPOS ---------------------
+   * ----------------------------------------------------------
+   */
+
+  createTeam(request: Request, response: Response) {
+    const team = request.body;
+    StructureTeam.createOne(team)
+      .then((newTeam) => {
+        response.status(HttpResponse.Ok).json(newTeam);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  getAllTeamsByCategory(request: Request, response: Response) {
+    const { id } = request.params;
+    StructureTeam.getAllByCategory(id)
+      .then((teams) => {
+        response.status(HttpResponse.Ok).json(teams);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  getTeamById(request: Request, response: Response) {
+    const { id } = request.params;
+    StructureTeam.getOne(id)
+      .then((team) => {
+        response.status(HttpResponse.Ok).json(team);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  updateTeamById(request: Request, response: Response) {
+    const { id } = request.params;
+    const newData = request.body;
+    StructureTeam.updateTeam(id, newData)
+      .then((team) => {
+        response.status(HttpResponse.Ok).json(team);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+  deleteTeamById(request: Request, response: Response) {
+    const { id } = request.params;
+
+    StructureTeam.deleteTeam(id)
+      .then((team) => {
+        response.status(HttpResponse.Ok).json(team);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+  /**
+   * ----------------------------------------------------------
+   * ----------------- END CRUD Equipos --------------------
+   * ----------------------------------------------------------
+   */
+  /**
+   * ----------------------------------------------------------
+   * --------------------- CRUD JUGADORES ---------------------
+   * ----------------------------------------------------------
+   */
+
+  createPlayer(request: Request, response: Response) {
+    const player = request.body;
+    StructurePlayer.createOne(player)
+      .then((newplayer) => {
+        response.status(HttpResponse.Ok).json(newplayer);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  getAllPlayersByTeam(request: Request, response: Response) {
+    const { id } = request.params;
+    StructurePlayer.getAllByTeam(id)
+      .then((players) => {
+        response.status(HttpResponse.Ok).json(players);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  getPlayerById(request: Request, response: Response) {
+    const { id } = request.params;
+    StructurePlayer.getOne(id)
+      .then((player) => {
+        response.status(HttpResponse.Ok).json(player);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+
+  updatePlayerById(request: Request, response: Response) {
+    const { id } = request.params;
+    const newData = request.body;
+    StructurePlayer.updatePlayer(id, newData)
+      .then((player) => {
+        response.status(HttpResponse.Ok).json(player);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+  deletePlayerById(request: Request, response: Response) {
+    const { id } = request.params;
+
+    StructurePlayer.deletePlayer(id)
+      .then((player) => {
+        response.status(HttpResponse.Ok).json(player);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
+      });
+  }
+  /**
+   * ----------------------------------------------------------
+   * ----------------- END CRUD JUGADORES ---------------------
    * ----------------------------------------------------------
    */
 }

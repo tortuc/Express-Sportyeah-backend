@@ -224,4 +224,93 @@ StructureRouter.delete(
 // ------------- FIN CRUD CATEGORIA  ------------
 // ----------------------------------------------
 
+// ----------------------------------------------
+// ---------------- CRUD EQUIPOS  ---------------
+// ----------------------------------------------
+
+/**
+ * Crea un equipo para una categoria
+ * @method post
+ * @route /v1/structure/team/create
+ */
+StructureRouter.post("/team/create", structureController.createTeam);
+/**
+ * Obtiene todos los equipos, de una categoria
+ * @method get
+ * @route /v1/structure/team/bycategory/:id
+ */
+StructureRouter.get(
+  "/team/bycategory/:id",
+  structureController.getAllTeamsByCategory
+);
+/**
+ * Obtiene la informacion de un equipo
+ * @method get
+ * @route /v1/structure/team/byid/:id
+ */
+StructureRouter.get("/team/byid/:id", structureController.getTeamById);
+/**
+ *
+ * Edita la informacion de un equipo
+ * @method put
+ * @route /v1/structure/team/update/:id
+ */
+StructureRouter.put("/team/update/:id", structureController.updateTeamById);
+/**
+ * Elimina un equipo
+ * @method delete
+ * @route /v1/structure/team/delete/:id
+ */
+StructureRouter.delete("/team/delete/:id", structureController.deleteTeamById);
+
+// ----------------------------------------------
+// ------------- FIN CRUD EQUIPO  ------------
+// ----------------------------------------------
+
+// ----------------------------------------------
+// ---------------- CRUD JUGADORES  ---------------
+// ----------------------------------------------
+
+/**
+ * Crea un un jugador para un equipo
+ * @method post
+ * @route /v1/structure/player/create
+ */
+StructureRouter.post("/player/create", structureController.createPlayer);
+/**
+ * Obtiene todos jugadores de un equipo
+ * @method get
+ * @route /v1/structure/player/byteam/:id
+ */
+StructureRouter.get(
+  "/player/byteam/:id",
+  structureController.getAllPlayersByTeam
+);
+/**
+ * Obtiene la informacion de un jugador
+ * @method get
+ * @route /v1/structure/player/byid/:id
+ */
+StructureRouter.get("/player/byid/:id", structureController.getPlayerById);
+/**
+ *
+ * Edita la informacion de un jugador
+ * @method put
+ * @route /v1/structure/player/update/:id
+ */
+StructureRouter.put("/player/update/:id", structureController.updatePlayerById);
+/**
+ * Elimina un jugador
+ * @method delete
+ * @route /v1/structure/player/delete/:id
+ */
+StructureRouter.delete(
+  "/player/delete/:id",
+  structureController.deletePlayerById
+);
+
+// ----------------------------------------------
+// ------------- FIN CRUD EQUIPO  ------------
+// ----------------------------------------------
+
 module.exports = StructureRouter;

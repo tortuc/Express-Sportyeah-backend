@@ -52,7 +52,8 @@ const StructureCategory = typedModel(
       return StructureCategory.findOne({
         _id: category,
         deleted: false,
-      }).populate("division");
+      }).populate("division")
+      .populate({ path: "division", populate: { path: "structure" } });
     },
     /**
      * Modifica una categoria
