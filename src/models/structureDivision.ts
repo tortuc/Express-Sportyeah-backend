@@ -1,4 +1,5 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
+import StructureCategory from "./structureCategory";
 
 /**
  * Modelo de StructureDivision
@@ -96,8 +97,12 @@ const StructureDivision = typedModel(
         image: "assets/structure/mixta.jpg",
       });
       await one.save();
+      StructureCategory.createDefaultCategorys(one._id);
       await two.save();
+      StructureCategory.createDefaultCategorys(two._id);
+
       await three.save();
+      StructureCategory.createDefaultCategorys(two._id);
     },
   }
 );

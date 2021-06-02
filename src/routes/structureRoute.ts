@@ -144,6 +144,15 @@ StructureRouter.get(
   "/division/bystructure/:id",
   structureController.getAllDivisionByStructure
 );
+/**
+ * Obtiene todas las divisiones por estructura mediante el username del usuario
+ * @method get
+ * @route /v1/structure/division/byusername/:username
+ */
+StructureRouter.get(
+  "/division/byusername/:username",
+  structureController.getAllDivisionByUsername
+);
 
 /**
  * Obtiene la informacion de una division por su id
@@ -283,7 +292,7 @@ StructureRouter.post("/player/create", structureController.createPlayer);
  * @route /v1/structure/player/byteam/:id
  */
 StructureRouter.get(
-  "/player/byteam/:id",
+  "/player/byteam/:id/:role",
   structureController.getAllPlayersByTeam
 );
 /**

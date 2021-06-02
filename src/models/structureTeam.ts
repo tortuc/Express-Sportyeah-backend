@@ -1,4 +1,5 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
+import StructurePlayer from "./structurePlayer";
 
 /**
  * Modelo de StructureTeam
@@ -54,7 +55,10 @@ const StructureTeam = typedModel(
         deleted: false,
       })
         .populate("category")
-        .populate({ path: "category", populate: { path: "division" , populate:{path:"structure"}} });
+        .populate({
+          path: "category",
+          populate: { path: "division", populate: { path: "structure" } },
+        });
     },
     /**
      * Modifica un equipo
@@ -93,7 +97,9 @@ const StructureTeam = typedModel(
       });
 
       await one.save();
+      StructurePlayer.createDefaultPlayers(one._id);
       await two.save();
+      StructurePlayer.createDefaultPlayers(two._id);
     },
   }
 );

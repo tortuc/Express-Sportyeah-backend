@@ -62,7 +62,7 @@ export class StructureController extends BaseController {
       const { username } = request.params;
       const user = await User.findByUsername(username);
       if (["club"].includes(user.profile_user)) {
-        const structure = Structure.findByUSer(user._id);
+        const structure = await Structure.findByUSer(user._id);
         response.status(HttpResponse.Ok).json(structure);
       } else {
         response.status(HttpResponse.Unauthorized).send("profile invalid");
@@ -212,6 +212,24 @@ export class StructureController extends BaseController {
   }
 
   /**
+  /**
+   * Obtiene todas las divisones de una estructura
+   */
+  async getAllDivisionByUsername(request: Request, response: Response) {
+    try {
+      const { username } = request.params;
+      const user = await User.findByUsername(username);
+      const structure = await Structure.findByUSer(user._id);
+      const divisions = await StructureDivision.getAllByStructure(
+        structure._id
+      );
+      response.status(HttpResponse.Ok).json(divisions);
+    } catch (error) {
+      response.status(HttpResponse.BadRequest).send(error);
+    }
+  }
+
+  /**
    * Obtiene todas las divisones de una estructura
    */
   getDivisionById(request: Request, response: Response) {
@@ -341,6 +359,7 @@ export class StructureController extends BaseController {
     const team = request.body;
     StructureTeam.createOne(team)
       .then((newTeam) => {
+        StructurePlayer.createDefaultPlayers(newTeam._id);
         response.status(HttpResponse.Ok).json(newTeam);
       })
       .catch((error) => {
@@ -416,7 +435,8 @@ export class StructureController extends BaseController {
 
   getAllPlayersByTeam(request: Request, response: Response) {
     const { id } = request.params;
-    StructurePlayer.getAllByTeam(id)
+    const { role } = request.params;
+    StructurePlayer.getAllByTeam(id, role)
       .then((players) => {
         response.status(HttpResponse.Ok).json(players);
       })

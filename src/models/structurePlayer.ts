@@ -48,8 +48,8 @@ const StructurePlayer = typedModel(
      * @param team _id team
      * @returns
      */
-    getAllByTeam(team) {
-      return StructurePlayer.find({ deleted: false, team });
+    getAllByTeam(team, role) {
+      return StructurePlayer.find({ deleted: false, team, role });
     },
     /**
      * Obtiene la informacion de un jugador/staff
@@ -61,12 +61,15 @@ const StructurePlayer = typedModel(
         _id: player,
         deleted: false,
       })
-        .populate("team")
+        .populate("team user")
         .populate({
           path: "team",
           populate: {
-            path: "team",
-            populate: { path: "category", populate: { path: "division" } },
+            path: "category",
+            populate: {
+              path: "division",
+              populate: { path: "structure", populate: { path: "user" } },
+            },
           },
         });
     },
@@ -96,7 +99,7 @@ const StructurePlayer = typedModel(
       let one = new StructurePlayer({
         name: "Daniel Hernandez",
         position: "Entrenador",
-        birthday: "24/04/1968",
+        birthday: new Date("1968-04-24"),
         place: "Madrid, España",
         height: "1,76 m",
         photo: "assets/structure/staff2.jpg",
@@ -107,7 +110,7 @@ const StructurePlayer = typedModel(
       let two = new StructurePlayer({
         name: "Pepe Villa",
         position: "Portero",
-        birthday: "31/12/1999",
+        birthday: new Date("1999-12-31"),
         place: "Caracas, Venezuela",
         height: "1,70 m",
         photo: "assets/structure/player2.jpg",
@@ -115,9 +118,21 @@ const StructurePlayer = typedModel(
         team,
         history: "Jugador de muestra",
       });
+      let three = new StructurePlayer({
+        name: "Maria Perez",
+        position: "Delantera",
+        birthday: new Date("1996-05-23"),
+        place: "Valencia, España",
+        height: "1,65 m",
+        photo: "assets/structure/player3.jpg",
+        role: "player",
+        team,
+        history: "Jugadora de muestra",
+      });
 
       await one.save();
       await two.save();
+      await three.save();
     },
   }
 );
