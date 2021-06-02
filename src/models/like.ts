@@ -67,6 +67,20 @@ const Like = typedModel("Like", schema, undefined, undefined, {
       .limit(15)
       .sort({ date: -1 });
   },
+
+  /**
+   * Retorna 15 reacciones, de cualquier tipo en un news
+   * @param news
+   * @param skip
+   * @returns
+   */
+   allReactionsNewsUsers(news, skip) {
+    return Like.find({ news, deleted: false })
+      .populate("user")
+      .skip(skip)
+      .limit(15)
+      .sort({ date: -1 });
+  },
    /**
    * Retorna 15 reacciones de un solo tipo
    * 1 = likes
@@ -82,6 +96,17 @@ const Like = typedModel("Like", schema, undefined, undefined, {
    */
     reactionsByTypePostUsers(post,type,skip){
       return Like.find({post,deleted:false,type}).populate('user').skip(skip).limit(10).sort({date:-1})
+    },
+
+  /**
+   * Retorna 15 reacciones de un solo tipo 
+   * @param news 
+   * @param type 
+   * @param skip 
+   * @returns 
+   */
+    reactionsByTypeNewsUsers(news,type,skip){
+      return Like.find({news,deleted:false,type}).populate('user').skip(skip).limit(10).sort({date:-1})
     },
        /**
    * Retorna la cantidad de likes que ha recibido un usuario

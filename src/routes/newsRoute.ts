@@ -241,11 +241,29 @@ NewsRouter.put('/dislike/:id',Authentication.jwt,newsController.dislikeNews)
 /**
  * Retorna la cantidad de cada reaccion en una noticia
  *
- * @route /v1/post/totalReactions/:id
+ * @route /v1/news/totalReactions/:id
  * @method get
  */
 
  NewsRouter.get("/totalReactions/:id", newsController.countTotalOfEachReactionNews);
 
+ /**
+  * Retorna cierta cantidad de reacciones de cualquier tipo a una noticia
+  *
+  * @route /v1/news/anyreactions/:id/:skip
+  * @method get
+  */
+ 
+  NewsRouter.get("/anyreactions/:id/:skip", newsController.getAllReactionsNews);
+ 
+ 
+ /**
+  * Retorna cierta cantidad de reacciones de un tipo en especifico
+  *
+  * @route /v1/news/reactionstype/:id/:type/:skip
+  * @method get
+  */
+ 
+  NewsRouter.get("/reactionstype/:id/:type/:skip",newsController.getReactionsByTypeInNews);
    
 module.exports = NewsRouter;

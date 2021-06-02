@@ -1,4 +1,5 @@
 import { createSchema, Type, typedModel } from 'ts-mongoose';
+import { createFalse } from 'typescript';
 
 /**
  * Modelo de conexión
@@ -161,8 +162,11 @@ const News = typedModel('News', schema, undefined, undefined, {
     },
 
     rescheduleNews(id,date){
-        console.log(id,date);
         return News.findByIdAndUpdate(id,{programatedDate:date})
+    },
+
+    published(id){
+        return News.findByIdAndUpdate(id,{programated:false})
     }
 
 });

@@ -182,7 +182,23 @@ export class Router {
      *
      * @route /v1/livescore/...
      */
-    this.route.use("/v1/livescore", require("./livescoreRoute"));
+    this.route.use('/v1/livescore', require('./livescoreRoute'));
+ 
+ 
+  /**
+     * Manejador de rutas de event
+     *
+     * @route /v1/event/...
+     */
+   this.route.use('/v1/event', require('./eventRoute'));
+
+
+    /**
+     * Manejador de rutas de event
+     *
+     * @route /v1/ticketevent/...
+     */
+     this.route.use('/v1/ticketevent', require('./ticketEventRoute'));
 
     /**
      * Manejador de rutas de sponsor (patrocinadores)
@@ -203,4 +219,6 @@ export class Router {
      */
     this.route.use("/v1/structure", require("./structureRoute"));
   }
+
+ 
 }
