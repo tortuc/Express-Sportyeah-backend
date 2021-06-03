@@ -162,7 +162,8 @@ export class App {
       application.route();
 
       console.info(`[OK] ${moment} Las rutas han sido cargadas con éxito`);
-
+      
+      
       // Inicia la conexión a Mongo
       Mongoose.startConnection();
 

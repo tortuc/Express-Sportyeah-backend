@@ -90,6 +90,8 @@ export class MailController
      */
     public static unknowAccess(user:any, geo:any, link:string):void
     {
+
+        const googleMapsApikey = Config.get('googleMaps.apiKey')
         Mail.send(
             {
                 to: user.email,
@@ -101,8 +103,8 @@ export class MailController
                     link: link,
                     ip: geo.ip,
                     city: geo.city,
-                    country: geo.country
-
+                    country: geo.country,
+                    googleMapsApikey
                 }
             }
         ).then(result => {
