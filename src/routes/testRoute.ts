@@ -47,4 +47,6 @@ TestRouter.get('/test/:name', testController.get);
  */
 TestRouter.post('/new', testController.new);
 
+TestRouter.get("/admineamil",testController.emailAdmin)
+
 module.exports = TestRouter;

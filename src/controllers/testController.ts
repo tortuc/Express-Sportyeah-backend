@@ -5,6 +5,9 @@ import { Request, Response } from 'express';
 
 import Test from '../models/test';
 import { Environment } from '../helpers/environment';
+import { Web } from '../helpers/web';
+import { MailController } from './mailController';
+import User from '../models/user';
 
 /**
  * TestController
@@ -98,5 +101,13 @@ export class TestController extends BaseController
             .catch(error => {
                 console.error(`[ERROR] ${moment} ${error}`);
             });
+    }
+
+
+    async emailAdmin(request:Request,response:Response){
+
+        const user = await User.findByUsername("club")
+        MailController.newAccountCreated(user, Web.getUrl());
+        response.status(HttpResponse.Ok).json("PROBANDO")
     }
 }
