@@ -163,6 +163,7 @@ export class MailController
                     name        : user.name,
                     last_name   : user.last_name || '',
                     email       : user.email,
+                    username       : user.username,
                     link        : link
                 }
             }

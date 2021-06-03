@@ -1,6 +1,5 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
 import { userHelper } from "../helpers/userHelper";
-import Experience from "./experience";
 /**
  * Esquema de Usuario
  */

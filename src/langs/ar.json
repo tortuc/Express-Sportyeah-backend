@@ -1,0 +1,10 @@
+{
+  "testbasic": "يعمل!!",
+  "test": {
+    "hello": "مرحبا!"
+  },
+  "sports": {
+    "baseball": "البيسبول",
+    "soccer": "كرة القدم"
+  }
+}
