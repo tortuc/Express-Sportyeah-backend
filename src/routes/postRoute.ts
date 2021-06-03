@@ -110,6 +110,15 @@ PostRoute.get('/get/:id',postController.getPost)
  PostRoute.post('/comment',Authentication.jwt,postController.newComment)
 
 
+
+
+ PostRoute.delete('/comment/:id', postController.deleteOneComment);
+
+
+
+PostRoute.put('/comment/update/:id',postController.updateOneComment)
+
+
  /**
  * Retorna cierta cantidad de comentarios en una publicacion
  *

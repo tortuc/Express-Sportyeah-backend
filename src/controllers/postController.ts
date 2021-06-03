@@ -153,6 +153,16 @@ export class PostController extends BaseController {
       });
   }
 
+  public deleteOneComment(request: Request, response: Response) {
+    Comment.deleteComment(request.params.id)
+      .then((resp) => {
+        response.status(HttpResponse.Ok).json(resp);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.Ok).json(err);
+      });
+  }
+
   public updateOne(request: Request, response: Response) {
     request.body.edited = Date.now();
     Post.updatePost(request.params.id, request.body)
@@ -241,6 +251,18 @@ export class PostController extends BaseController {
       })
       .catch((err) => {
         response.status(HttpResponse.InternalError).send("cannot comment");
+      });
+  }
+
+
+  public updateOneComment(request: Request, response: Response) {
+    request.body.edited = Date.now();
+    Comment.updateComment(request.params.id, request.body)
+      .then((resp) => {
+        response.status(HttpResponse.Ok).json(resp);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send("cannot update post");
       });
   }
 
