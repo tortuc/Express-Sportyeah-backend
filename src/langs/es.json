@@ -6,5 +6,10 @@
   "sports": {
     "baseball": "Beisbol",
     "soccer": "Futbol"
+  },
+  "email": {
+    "new_user": {
+      "title": "Se ha registrado un usuario en SportYeah!"
+    }
   }
 }
