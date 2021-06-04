@@ -1,4 +1,3 @@
-import { GoogleMapsStatic } from './../helpers/googleMapsStatic';
 import { Mail } from '../helpers/mail';
 import { Config } from '../helpers/config';
 
@@ -91,12 +90,11 @@ export class MailController
      */
     public static unknowAccess(user:any, geo:any, link:string):void
     {
-
+        //Se genera el url para la imagen de la ubicacion
         const googleMapsApikey = Config.get('googleMaps.apiKey');
         const baseURl = Config.get('googleMaps.baseURL')
-        const gms = new GoogleMapsStatic()
+        const url = `${baseURl}center=${geo.latitud},${geo.longitud}&size=600x450&zoom=13&key=${googleMapsApikey}`
         
-        // gms.sign()
         Mail.send(
             {
                 to: user.email,
@@ -109,7 +107,7 @@ export class MailController
                     ip: geo.ip,
                     city: geo.city,
                     country: geo.country,
-                    googleMapsApikey
+                    mapUrl: url
                 }
             }
         ).then(result => {

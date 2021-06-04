@@ -1,3 +1,4 @@
+import { Net } from './net';
 /**
  * App
  *
@@ -13,7 +14,6 @@ import { Config } from "./config";
 import { Router } from "../routes/router";
 import { Socket } from "./socket";
 import { Mongoose } from "./mongoose";
-import { GoogleMapsStatic } from "./googleMapsStatic";
 
 export class App {
   /**
@@ -140,12 +140,9 @@ export class App {
    * @return {void}
    */
   public static run(): void {
-    const googleMapsApikey = Config.get('googleMaps.apiKey');
-    let baseURl = Config.get('googleMaps.baseURL')
-    baseURl += 'center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&key=' + googleMapsApikey
-    const gms = new GoogleMapsStatic()
-    const result = gms.sign(baseURl, Config.get('googleMaps.secret'))
-    console.log('url codificada', result);
+    
+    
+    
     
     // Obtiene la aplicación
     let application: App = App.get();

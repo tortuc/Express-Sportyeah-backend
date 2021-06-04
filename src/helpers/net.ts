@@ -58,7 +58,9 @@ export class Net
             ip          : ip,
             city        : geo ? geo.city    : null,
             country     : geo ? geo.country : null,
-            user        : null
+            user        : null,
+            latitud: geo ? geo.ll[0] : null,
+            longitud: geo ? geo.ll[1] : null
         };
     }
 }

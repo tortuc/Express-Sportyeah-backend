@@ -50,7 +50,7 @@ const Connection = typedModel('Connection', schema, undefined, undefined, {
             let different = 0
             connections.forEach((connection, i, arr) => {
                 
-                if (connection.ip != '::2') 
+                if (connection.ip != geo.ip) 
                 {
                     different += 1
                 }

@@ -157,6 +157,7 @@ export class UserController extends BaseController {
             // Guardar la conexión con los datos de geolocalización
             let geo = Net.geoIp(Net.ip(request));
 
+
             if (geo) {
               geo.user = user._id;
               Connection.create(geo);
