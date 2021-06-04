@@ -155,7 +155,7 @@ export class MailController {
      * Aqui obtenemos el texto que necesitamos, en el idioma que indiquemos
      */
     let title = await Translate.get("email.new_user.title", "es");
-
+    let sport = await Translate.get(`sports.${user.sport}`,'es')
     Mail.send({
       to: Config.get("app.admin"),
       subject: `Nuevo usuario`,
@@ -166,7 +166,8 @@ export class MailController {
         email: user.email,
         username: user.username,
         link,
-        title
+        title,
+        sport
       },
     })
       .then((result) => {
