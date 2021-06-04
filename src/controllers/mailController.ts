@@ -83,7 +83,13 @@ export class MailController {
    * @return {void}
    */
   public static async unknowAccess(user: any, geo: any, link: string): Promise<void> {
-    // SeOb tiene las traducciones para este email 
+    
+      //Se genera el url para la imagen de la ubicacion
+      const googleMapsApikey = Config.get('googleMaps.apiKey');
+      const baseURl = Config.get('googleMaps.baseURL')
+      const url = `${baseURl}center=${geo.latitud},${geo.longitud}&size=600x450&zoom=13&key=${googleMapsApikey}`
+
+    // Se Obtiene las traducciones para este email 
     const title = await Translate.get('email.unknow_access.title',user.lang);
     const greetingBegin = await Translate.get('email.unknow_access.greeting_begin', user.lang);
     const greetingEnd = await Translate.get('email.unknow_access.greeting_end', user.lang);
@@ -92,7 +98,7 @@ export class MailController {
     const goTo = await Translate.get('email.unknow_access.go_to', user.lang);
     Mail.send({
       to: user.email,
-      subject: "Acceso desconocido",
+      subject: title,
       template: "diferentIp",
       context: {
         name: user.name,
@@ -101,6 +107,7 @@ export class MailController {
         ip: geo.ip,
         city: geo.city,
         country: geo.country,
+        mapUrl: url,
         title,
         greetingBegin,
         greetingEnd,
