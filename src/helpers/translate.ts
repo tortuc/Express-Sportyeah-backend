@@ -29,26 +29,35 @@ export class Translate {
    */
   public static get(text: string, lang: Languajes): Promise<string> {
     return new Promise((resolve) => {
-      fs.readFile(
-        path.resolve(__dirname + `/../langs/${lang}.json`),
-        "utf-8",
-        (error, data: any) => {
-          if (error) {
-            resolve(text);
-          } else {
-            const json = JSON.parse(data);
-            let responseText = json;
-            text.split(".").forEach((chunk) => {
-              responseText = responseText[chunk];
-            });
-            if (typeof responseText == "string") {
-              resolve(responseText);
-            } else {
+      try {
+        fs.readFile(
+          path.resolve(__dirname + `/../langs/${lang}.json`),
+          "utf-8",
+          (error, data: any) => {
+            if (error) {
               resolve(text);
+            } else {
+              const json = JSON.parse(data);
+              let responseText = json;
+              text.split(".").forEach((chunk) => {
+                if(responseText){
+                  responseText = responseText[chunk];
+
+                }else{
+                  resolve(text)
+                }
+              });
+              if (typeof responseText == "string") {
+                resolve(responseText);
+              } else {
+                resolve(text);
+              }
             }
           }
-        }
-      );
+        );
+      } catch (error) {
+        resolve(text);
+      }
     });
   }
 }
