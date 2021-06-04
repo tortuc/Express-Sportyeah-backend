@@ -161,7 +161,6 @@ export class UserController extends BaseController {
               geo.user = user._id;
               Connection.create(geo);
               Connection.diferentIp(geo).catch((error) => {
-                console.log('diferentIp');
                 
                 // Envía el coreo de acceso desconocido
                 Mailer.unknowAccess(user, geo, Web.getUrl());

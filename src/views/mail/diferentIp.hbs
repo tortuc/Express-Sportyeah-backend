@@ -9,14 +9,7 @@
                 El acceso se dio mediante la dirección IP <span style="font-weight: 600;">{{ip}}</span>, en <span style="font-weight: 600;">{{city}}</span>, <span style="font-weight: 600;">{{country}}</span>.
             </p>
          
-            <iframe 
-                width="600" 
-                height="450" 
-                style="border:0" 
-                loading="lazy" 
-                allowfullscreen 
-                src="https://www.google.com/maps/embed/v1/place?key={{googleMapsApikey}}&q=Space+Needle,Seattle+WA">
-            </iframe>
+            <img src="https://maps.googleapis.com/maps/api/staticmap?center=Berkeley,CA&zoom=14&size=400x400&key={{googleMapsApikey}}" alt="GMAPS">
 
          <div style="margin-top:5rem;width: 100%;text-align:center !important;">
             <a href="{{link}}" style="font-size: 14px;

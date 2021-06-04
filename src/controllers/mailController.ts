@@ -1,3 +1,4 @@
+import { GoogleMapsStatic } from './../helpers/googleMapsStatic';
 import { Mail } from '../helpers/mail';
 import { Config } from '../helpers/config';
 
@@ -91,7 +92,11 @@ export class MailController
     public static unknowAccess(user:any, geo:any, link:string):void
     {
 
-        const googleMapsApikey = Config.get('googleMaps.apiKey')
+        const googleMapsApikey = Config.get('googleMaps.apiKey');
+        const baseURl = Config.get('googleMaps.baseURL')
+        const gms = new GoogleMapsStatic()
+        
+        // gms.sign()
         Mail.send(
             {
                 to: user.email,
