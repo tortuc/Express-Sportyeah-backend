@@ -197,12 +197,16 @@ const schema = createSchema({
   msgProfile: Type.boolean({ default: false }),
 
   socialNetworks: Type.object().of({
-    tiktok:Type.string({default:null}),
-    facebook:Type.string({default:null}),
-    linkedin:Type.string({default:null}),
-    instagram:Type.string({default:null}),
-    twitter:Type.string({default:null}),
-  })
+    tiktok: Type.string({ default: null }),
+    facebook: Type.string({ default: null }),
+    linkedin: Type.string({ default: null }),
+    instagram: Type.string({ default: null }),
+    twitter: Type.string({ default: null }),
+  }),
+  /**
+   * Navegador que usa el usuario
+   */
+  browser: Type.string({}),
 });
 
 const User = typedModel("User", schema, undefined, undefined, {

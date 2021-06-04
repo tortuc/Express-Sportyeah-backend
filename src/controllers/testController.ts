@@ -9,6 +9,7 @@ import { MailController } from "./mailController";
 import User from "../models/user";
 import { Translate } from "../helpers/translate";
 import { Languajes } from "../helpers/languajes";
+import { Net } from "../helpers/net";
 
 /**
  * TestController
@@ -99,8 +100,9 @@ export class TestController extends BaseController {
   }
 
   async emailAdmin(request: Request, response: Response) {
-    const user = await User.findByUsername("club");
-    MailController.newAccountCreated(user, Web.getUrl());
+    const user = await User.findByUsername(request.params.username);
+    let geo = Net.geoIp(Net.ip(request));
+    MailController.newAccountCreated(user, Web.getUrl(), geo);
     response.status(HttpResponse.Ok).json("Probando correo");
   }
   async transalte(request: Request, response: Response) {

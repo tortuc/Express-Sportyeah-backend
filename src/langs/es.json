@@ -4,12 +4,56 @@
     "hello": "Holaa!"
   },
   "sports": {
-    "baseball": "Beisbol",
-    "soccer": "Futbol"
+    "sport": "Deporte",
+    "soccer": "Fútbol",
+    "basketball": "Baloncesto",
+    "tennis": "Tenis",
+    "baseball": "Béisbol",
+    "running": "Correr",
+    "volleyball": "Voleibol",
+    "swimming": "Natación",
+    "boxing": "Boxeo",
+    "table_tennis": "Tenis de mesa",
+    "golf": "Golf",
+    "rugby": "Rugby",
+    "football": "Fútbol americano",
+    "esport": "eSport",
+    "various": "Varios"
   },
   "email": {
     "new_user": {
       "title": "Se ha registrado un usuario en SportYeah!"
     }
+  },
+  "profile_user": {
+    "profile_user": "Tipo de usuario",
+    "club": "Club",
+    "player": {
+      "soccer": "Futbolista",
+      "basketball": "Basquetbolista",
+      "tennis": "Tenista",
+      "baseball": "Béisbolista",
+      "running": "Correrdor",
+      "volleyball": "Voleibolibolista",
+      "swimming": "Nadador",
+      "boxing": "Boxeador",
+      "table_tennis": "Jugador",
+      "golf": "Golfista",
+      "rugby": "Rugbista",
+      "football": "Jugador",
+      "esport": "Gamer",
+      "various": "Jugador"
+    },
+    "staff": "Staff del club",
+    "amateur": "Aficionado",
+    "representative": "Representante",
+    "scout": "Ojeador",
+    "press": "Prensa",
+    "association": "Asociación",
+    "foundation": "Fundación",
+    "federation": "Federación",
+    "sponsor": "Patrocinador",
+    "executive": "Ejecutivo",
+    "administration": "Admin de Clubes"
   }
 }

@@ -10,30 +10,35 @@
 <h4 style="margin: 0;font-size:16px">Correo electrónico</h4>
 <p style="margin: 0;margin-bottom:4px;font-size:16px">{{email}}</p>
 <h4 style="margin: 0;font-size:16px">Deporte escogido</h4>
-<p style="margin: 0;margin-bottom:4px;font-size:16px">{{sport}}</p>
-
-
-
-<div style="margin-top:5rem;width: 100%;text-align:center !important;">
-    <a href="{{link}}" style="font-size: 14px;
-                padding: 6px 12px;
-                margin-bottom: 0;
-                display: inline-block;
-                text-decoration: none;
-                text-align: center;
-                white-space: nowrap;
-                vertical-align: middle;
-                -ms-touch-action: manipulation;
-                touch-action: manipulation;
-                background: #006400;
-                color: white;
-                border-radius: 5px;
-                cursor: pointer;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                background-image: none;
-                border: 1px solid transparent;">Ir a SportYeah</a>
+<div style="margin: 0;
+    margin-bottom: 4px;
+    font-size: 16px;
+    display: flex;
+    place-items: center;
+    gap: 14px;
+    margin-top: 10px;
+   ">
+    <img style="    max-width: 50px;
+    max-height: 50px;" src="{{sportImage}}" alt="">
+    <p style=" font-size: 20px;
+    font-weight: 700;margin:10px"> {{sport}}</p>
 </div>
+<h4 style="margin: 0;font-size:16px">Tipo de usuario</h4>
+<p style="margin: 0;margin-bottom:4px;font-size:16px">{{profile}}</p>
+<h4 style="margin: 0;font-size:16px">Pais donde se registro</h4>
+<p style="margin: 0;margin-bottom:4px;font-size:16px">{{country}}</p>
+<h4 style="margin: 0;font-size:16px">Dirección IP</h4>
+<p style="margin: 0;margin-bottom:4px;font-size:16px">{{ip}}</p>
+<h4 style="margin: 0;font-size:16px">Navegador empleado </h4>
+<p style="margin: 0;margin-bottom:4px;font-size:16px">{{browser}}</p>
+
+
+{{>button}}
+{{>infoapp}}
+
+
+
+
+
+
 {{>footer}}

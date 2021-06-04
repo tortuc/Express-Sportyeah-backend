@@ -149,26 +149,17 @@ export class MailController {
    */
   public static async newAccountCreated(
     user: any,
-    link: string
+    link: string,
+    geo: any
   ): Promise<void> {
-    /**
-     * Aqui obtenemos el texto que necesitamos, en el idioma que indiquemos
-     */
-    let title = await Translate.get("email.new_user.title", "es");
-    let sport = await Translate.get(`sports.${user.sport}`,'es')
+    let context = await Mail.getContextNewUser(user, link, geo);
+    const appInfo = await Mail.appInfo();
+    context.appInfo = appInfo;
     Mail.send({
       to: Config.get("app.admin"),
       subject: `Nuevo usuario`,
       template: "newUser",
-      context: {
-        name: user.name,
-        last_name: user.last_name || "",
-        email: user.email,
-        username: user.username,
-        link,
-        title,
-        sport
-      },
+      context,
     })
       .then((result) => {
         console.info(
