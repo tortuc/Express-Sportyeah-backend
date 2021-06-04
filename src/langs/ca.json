@@ -6,5 +6,15 @@
   "sports": {
     "baseball": "Beisbol",
     "soccer": "Futbol"
+  },
+  "email": {
+    "unknow_access": {
+        "title": "Accés desconegut",
+        "greeting_begin": "Salutacions, Sr@",
+        "greeting_end":"s'ha accedit al compte de SportYeah amb una adreça IP no habitual.",
+        "message_begin": "L'accés es va donar mitjançant l'adreça IP",
+        "message_middle": "a",
+        "go_to": "Anar a SportYeah"
+      }
   }
 }

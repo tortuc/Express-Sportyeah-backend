@@ -10,6 +10,14 @@
   "email": {
     "new_user": {
       "title": "قام مستخدم بالتسجيل في SportYeah!"
+    },
+    "unknow_access": {
+      "title": "وصول غير معروف",
+      "greeting_begin": "تحية سيدي",
+      "greeting_end":"تم الوصول إلى حساب SportYeah الخاص بك بعنوان IP غير عادي.",
+      "message_begin": "تم منح الوصول عن طريق عنوان IP",
+      "message_middle": "على",
+      "go_to": "اذهب إلى SportYeah"
     }
   }
 }

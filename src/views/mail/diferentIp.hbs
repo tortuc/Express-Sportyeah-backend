@@ -1,12 +1,12 @@
 {{> header}}
-            <h1>Acceso desconocido</h1>
+            <h1>{{title}}</h1>
 
             <p>
               
-                Saludos, Sr@ <span style="font-weight: 600;">{{name}}</span> <span style="font-weight: 600;">{{last_name}}</span>, Se ha accedido a tu cuenta de SportYeah con una dirección IP no habitual.
+                {{greetingBegin}} <span style="font-weight: 600;">{{name}}</span> <span style="font-weight: 600;">{{last_name}}</span>, {{greetingEnd}}
             </p>
             <p>
-                El acceso se dio mediante la dirección IP <span style="font-weight: 600;">{{ip}}</span>, en <span style="font-weight: 600;">{{city}}</span>, <span style="font-weight: 600;">{{country}}</span>.
+                {{messageBegin}} <span style="font-weight: 600;">{{ip}}</span>, {{messageMiddle}} <span style="font-weight: 600;">{{city}}</span>, <span style="font-weight: 600;">{{country}}</span>.
             </p>
          
             <iframe 
@@ -38,7 +38,7 @@
                 -ms-user-select: none;
                 user-select: none;
                 background-image: none;
-                border: 1px solid transparent;">Ir a SportYeah</a>
+                border: 1px solid transparent;">{{goTo}}</a>
          </div>
           
          

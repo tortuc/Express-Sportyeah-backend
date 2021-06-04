@@ -82,7 +82,14 @@ export class MailController {
    *
    * @return {void}
    */
-  public static unknowAccess(user: any, geo: any, link: string): void {
+  public static async unknowAccess(user: any, geo: any, link: string): Promise<void> {
+    // SeOb tiene las traducciones para este email 
+    const title = await Translate.get('email.unknow_access.title',user.lang);
+    const greetingBegin = await Translate.get('email.unknow_access.greeting_begin', user.lang);
+    const greetingEnd = await Translate.get('email.unknow_access.greeting_end', user.lang);
+    const messageBegin = await Translate.get('email.unknow_access.message_begin', user.lang);
+    const messageMiddle = await Translate.get('email.unknow_access.message_middle', user.lang);
+    const goTo = await Translate.get('email.unknow_access.go_to', user.lang);
     Mail.send({
       to: user.email,
       subject: "Acceso desconocido",
@@ -90,10 +97,16 @@ export class MailController {
       context: {
         name: user.name,
         last_name: user.last_name || "",
-        link: link,
+        link,
         ip: geo.ip,
         city: geo.city,
         country: geo.country,
+        title,
+        greetingBegin,
+        greetingEnd,
+        messageBegin,
+        messageMiddle,
+        goTo,
       },
     })
       .then((result) => {

@@ -6,5 +6,15 @@
   "sports": {
     "baseball": "Baseball",
     "soccer": "Fooball"
+  },
+  "email": {
+    "unknow_access": {
+        "title": "अज्ञात पहुंच",
+        "greeting_begin": "नमस्ते, सर",
+        "greeting_end":"आपके SportYeah खाते को एक असामान्य IP पते से एक्सेस किया गया था।",
+        "message_begin": "एक्सेस आईपी एड्रेस द्वारा दिया गया था",
+        "message_middle": "पर",
+        "go_to": "नफरत SportYeah"
+      }
   }
 }

@@ -6,5 +6,15 @@
   "sports": {
     "baseball": "Baseball",
     "soccer": "Fooball"
+  },
+  "email": {
+    "unknow_access": {
+        "title": "不明なアクセス",
+        "greeting_begin": "さん、初めまして。",
+        "greeting_end":"あなたの SportYeah アカウントが通常とは異なる IP アドレスでアクセスされました。",
+        "message_begin": "アクセスはIPアドレスによって与えられました",
+        "message_middle": "オン",
+        "go_to": "SportYeah に行く"
+      }
   }
 }
