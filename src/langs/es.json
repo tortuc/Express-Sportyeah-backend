@@ -1,0 +1,23 @@
+{
+  "testbasic": "Funciona!!",
+  "test": {
+    "hello": "Holaa!"
+  },
+  "sports": {
+    "baseball": "Beisbol",
+    "soccer": "Futbol"
+  },
+  "email": {
+    "new_user": {
+      "title": "Se ha registrado un usuario en SportYeah!"
+    },
+    "unknow_access": {
+      "title": "Acceso desconocido",
+      "greeting_begin": "Saludos, Sr@",
+      "greeting_end":"Se ha accedido a tu cuenta de SportYeah con una dirección IP no habitual.",
+      "message_begin": "El acceso se dio mediante la dirección IP",
+      "message_middle": "en",
+      "go_to": "Ir a SportYeah"
+    }
+  }
+}
