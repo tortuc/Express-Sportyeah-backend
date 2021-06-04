@@ -1,17 +1,19 @@
 {{> header}}
 
-<h1>Nuevo usuario</h1>
+<h1 style="text-align: center;">{{title}}</h1>
+<h2>Información del usuario</h2>
 
-<p>
-    
-    El usuario <span style="font-weight: 600;">{{name}}</span> <span style="font-weight: 600;">{{last_name}}</span>, Se ha unido a SportYeah!!.
-</p>
-<p>
-    con el correo <span style="font-weight: 600;">{{email}}</span>.
-</p>
-          
-   <div style="margin-top:5rem;width: 100%;text-align:center !important;">
-            <a href="{{link}}" style="font-size: 14px;
+<h4 style="margin: 0;font-size:16px">Nombre</h4>
+<p style="margin: 0;margin-bottom:4px;font-size:16px">{{name}} {{last_name}}</p>
+<h4 style="margin: 0;font-size:16px">Nombre de usuario</h4>
+<p style="margin: 0;margin-bottom:4px;font-size:16px">@{{username}}</p>
+<h4 style="margin: 0;font-size:16px">Correo electrónico</h4>
+<p style="margin: 0;margin-bottom:4px;font-size:16px">{{email}}</p>
+
+
+
+<div style="margin-top:5rem;width: 100%;text-align:center !important;">
+    <a href="{{link}}" style="font-size: 14px;
                 padding: 6px 12px;
                 margin-bottom: 0;
                 display: inline-block;
@@ -31,5 +33,5 @@
                 user-select: none;
                 background-image: none;
                 border: 1px solid transparent;">Ir a SportYeah</a>
-         </div>
+</div>
 {{>footer}}

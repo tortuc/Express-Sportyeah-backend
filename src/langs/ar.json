@@ -1,0 +1,15 @@
+{
+  "testbasic": "يعمل !!",
+  "test": {
+    "hello": "مرحبا!"
+  },
+  "sports": {
+    "baseball": "البيسبول",
+    "soccer": "فوبال"
+  },
+  "email": {
+    "new_user": {
+      "title": "قام مستخدم بالتسجيل في SportYeah!"
+    }
+  }
+}
