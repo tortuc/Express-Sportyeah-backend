@@ -100,10 +100,14 @@ export class TestController extends BaseController {
   }
 
   async emailAdmin(request: Request, response: Response) {
-    const user = await User.findByUsername(request.params.username);
-    let geo = Net.geoIp(Net.ip(request));
-    MailController.newAccountCreated(user, Web.getUrl(), geo);
-    response.status(HttpResponse.Ok).json("Probando correo");
+    try {
+      const user = await User.findByUsername(request.params.username);
+      let geo = Net.geoIp(Net.ip(request));
+      MailController.newAccountCreated(user, Web.getUrl(), geo);
+      response.status(HttpResponse.Ok).json("Probando correo");
+    } catch (error) {
+      response.status(HttpResponse.BadRequest).send("No existe el usuario, o algo");
+    }
   }
   async transalte(request: Request, response: Response) {
     const { text } = request.params;
