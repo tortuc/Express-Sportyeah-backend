@@ -1,3 +1,4 @@
+import moment = require("moment");
 import { createSchema, Type, typedModel } from "ts-mongoose";
 import Comment from "./comment";
 import Like from "./like";
@@ -309,6 +310,24 @@ const Post = typedModel("Post", schema, undefined, undefined, {
    */
   findViewIp(id, ip) {
     return Post.findOne({ _id: id, views: { $elemMatch: { $eq: ip } } });
+  },
+  totalPostToday() {
+    let start = new Date(
+      moment()
+        .startOf("day")
+        .format("YYYY-MM-DD HH:ss")
+    );
+    let end = new Date(
+      moment()
+        .add(1, "day")
+        .startOf("day")
+        .format("YYYY-MM-DD HH:ss")
+    );
+
+    return Post.countDocuments({
+      deleted: false,
+      date: { $gte: start, $lte: end },
+    });
   },
 });
 /**

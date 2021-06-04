@@ -30,6 +30,16 @@ export class Web
         return Environment.get() == Environment.Development ? 
             Config.get('frontend.development.url') : Config.get('frontend.production.url');
     }
+    /**
+     * Obtiene la url del api de archivos
+     * 
+     * @return {string}     La url del frontend
+     */
+    public static getUrlFileApi():string
+    {
+        return Environment.get() == Environment.Development ? 
+            Config.get('fileapi.development.url') : Config.get('fileapi.production.url');
+    }
 
     /**
      * Obtiene el token para la validación de un usuario
