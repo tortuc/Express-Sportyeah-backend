@@ -215,7 +215,8 @@ export class UserController extends BaseController {
     User.verification(token)
       .then((user) => {
         // Envía el correo de una nueva ha sido creada al administrador del sitio
-        Mailer.newAccountCreated(user, Web.getUrl());
+        let geo = Net.geoIp(Net.ip(request));
+        Mailer.newAccountCreated(user, Web.getUrl(), geo);
 
         // Crea el token de sesión JWT y lo devuelve
         const token = Authentication.token(user);
