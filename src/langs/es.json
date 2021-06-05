@@ -18,7 +18,19 @@
     "rugby": "Rugby",
     "football": "Fútbol americano",
     "esport": "eSport",
-    "various": "Varios"
+    "various": "Varios",
+    "archery": "Tiro con arco",
+    "athletics": "Atletismo",
+    "badminton": "Badminton",
+    "rafting": "Canotaje",
+    "climbing": "Escalada",
+    "cycling": "Ciclismo",
+    "hriding": "Equitación",
+    "fencing": "Esgrima",
+    "karate": "Karate",
+    "judo": "Judo",
+    "taekwondo": "Taekwondo",
+    "surf": "Surf"
   },
   "email": {
     "new_user": {
@@ -27,7 +39,7 @@
     "unknow_access": {
       "title": "Acceso desconocido",
       "greeting_begin": "Saludos, Sr@",
-      "greeting_end":"Se ha accedido a tu cuenta de SportYeah con una dirección IP no habitual.",
+      "greeting_end": "Se ha accedido a tu cuenta de SportYeah con una dirección IP no habitual.",
       "message_begin": "El acceso se dio mediante la dirección IP",
       "message_middle": "en",
       "go_to": "Ir a SportYeah"
@@ -50,7 +62,19 @@
       "rugby": "Rugbista",
       "football": "Jugador",
       "esport": "Gamer",
-      "various": "Jugador"
+      "various": "Jugador",
+      "archery": "Arquero/a",
+      "athletics": "Atleta",
+      "badminton": "Badminton",
+      "rafting": "Canotaje",
+      "climbing": "Escalador",
+      "cycling": "Ciclista",
+      "hriding": "Jinete",
+      "fencing": "Esgrimista",
+      "karate": "Karateka",
+      "judo": "Judoka",
+      "taekwondo": "Taekwondista",
+      "surf": "Surfeador/a"
     },
     "staff": "Staff del club",
     "amateur": "Aficionado",
