@@ -72,7 +72,6 @@ export class UserController extends BaseController {
   public async create(request: Request, response: Response) {
     // Crea el usuario
 
-    console.log(request.body);
 
     let newUser = new User(request.body);
 
@@ -85,6 +84,8 @@ export class UserController extends BaseController {
     // Crea un nuevo usuario
     await User.create(newUser)
       .then((user) => {
+        console.log("creado",user);
+        
         const validationLink: string = `${Web.getUrl()}/verification?token=${
           user.verification_token
         }`;
@@ -102,6 +103,8 @@ export class UserController extends BaseController {
         response.status(HttpResponse.Ok).json(user);
       })
       .catch((error) => {
+        console.log(error);
+        
         response.status(HttpResponse.BadRequest).json(error);
       });
   }
