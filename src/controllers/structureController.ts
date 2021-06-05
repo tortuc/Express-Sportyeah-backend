@@ -61,8 +61,13 @@ export class StructureController extends BaseController {
     try {
       const { username } = request.params;
       const user = await User.findByUsername(username);
-      if (["club"].includes(user.profile_user)) {
+      if (
+        ["club", "association", "foundation", "federation"].includes(
+          user.profile_user
+        )
+      ) {
         const structure = await Structure.findByUSer(user._id);
+        await User.populate(structure,{path:'user'})
         response.status(HttpResponse.Ok).json(structure);
       } else {
         response.status(HttpResponse.Unauthorized).send("profile invalid");
@@ -113,7 +118,11 @@ export class StructureController extends BaseController {
       // Obtenemos el usuario
       const user = await User.findByUsername(username);
       // si el perfil del usuario coincide con los que tienen estructura, obtenemos la estrucura de ese usuario
-      if (["club"].includes(user.profile_user)) {
+      if (
+        ["club", "association", "foundation", "federation"].includes(
+          user.profile_user
+        )
+      ) {
         const structure = await Structure.findByUSer(user._id);
         // con la estructura, buscamos el organigrama
 
