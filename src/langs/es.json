@@ -86,6 +86,8 @@
     "federation": "Federación",
     "sponsor": "Patrocinador",
     "executive": "Ejecutivo",
-    "administration": "Admin de Clubes"
+    "administration": "Admin de Clubes",
+    "referee":"Árbitro"
+
   }
 }
