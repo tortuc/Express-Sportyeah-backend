@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import  TicketEvent  from '../models/ticketEvent'
 import { ticketEvent } from '../helpers/ticketHelper'
 import { exit } from 'node:process';
+import { Alert } from '../helpers/alert';
 /**
  * EventController
  * 
@@ -37,6 +38,9 @@ export class TicketEventController extends BaseController
            if(!exist) {
             TicketEvent.create(request.body)
             .then((resp)=>{
+                if(resp.invited){
+                    Alert.invitationEventAlert(resp)
+                }
                 response.status(HttpResponse.Ok).json(resp);
             })
             .catch((err)=>{
@@ -63,6 +67,24 @@ export class TicketEventController extends BaseController
                response.status(HttpResponse.BadRequest).json(err);
            })
        }
+
+       
+
+ /**
+     * Encuentra los ticketEvento por evento
+     * 
+     * @route /ticketEvent/invited/:id
+     * @method post
+     */
+  public findTicketEventInvited(request:Request, response:Response)
+  {
+   TicketEvent.findTicketEventInvited(request.params.id).then((resp)=>{
+          response.status(HttpResponse.Ok).json(resp);
+      })
+      .catch((err)=>{
+          response.status(HttpResponse.BadRequest).json(err);
+      })
+  }
 
     /**
      * Encuentra un ticketEvento
@@ -166,4 +188,37 @@ export class TicketEventController extends BaseController
                response.status(HttpResponse.BadRequest).json(err);
            })
        }
+
+       
+    /**
+     * Acepta la invitacion a un evento 
+     * 
+     * @route /ticketEvent/devolution
+     * @method put
+     */
+       public acceptInvitation(request:Request, response:Response)
+       {
+         TicketEvent.acceptInvitation(request.params.id).then((resp)=>{
+               response.status(HttpResponse.Ok).json(resp);
+           })
+           .catch((err)=>{
+               response.status(HttpResponse.BadRequest).json(err);
+           })
+       }
+
+     /**
+     * Rechaza la invitacion a un evento 
+     * 
+     * @route /ticketEvent/devolution
+     * @method put
+     */
+         public deniesInvitation(request:Request, response:Response)
+         {
+           TicketEvent.deniesInvitation(request.params.id).then((resp)=>{
+                 response.status(HttpResponse.Ok).json(resp);
+             })
+             .catch((err)=>{
+                 response.status(HttpResponse.BadRequest).json(err);
+             })
+         }
 }
