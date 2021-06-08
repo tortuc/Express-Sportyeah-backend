@@ -20,6 +20,9 @@ const schema = createSchema({
     register    : Type.boolean({default:false}),
     importPrice:Type.string({default:null}),
     devolution : Type.boolean({default:false}),
+    invited : Type.boolean({default:false}),
+    accepted : Type.boolean({default:false}),
+    decision : Type.boolean({default:false}),
     date        : Type.date({default:Date.now}),
     deleted : Type.boolean({default:false}),
     edited  : Type.date({defualt:null}),
@@ -39,6 +42,15 @@ const TicketEvent = typedModel('TicketEvent', schema, undefined, undefined, {
     findTicketEvent(id){
         return TicketEvent
             .find({event:id,deleted:false})
+            .populate('user')
+            .sort({date:-1})
+            //.skip(skip)
+            .limit(10)
+    },
+
+    findTicketEventInvited(id){
+        return TicketEvent
+            .find({event:id,invited:true,deleted:false})
             .populate('user')
             .sort({date:-1})
             //.skip(skip)
@@ -92,19 +104,6 @@ const TicketEvent = typedModel('TicketEvent', schema, undefined, undefined, {
     },
 
 
-        /**
-     * Obtiene los ticketEvent de un usuario que han sido programados
-     * @param user Id del usuario
-     */
-    findMyTicketEventProgramated(user){
-        
-        return TicketEvent.find({user,programated:true})
-        .populate('user')
-        .sort({date:-1})
-        //.skip(skip)
-        .limit(10)
-    },
-
     /**
      * Elimina un ticketEvent  
      * @param id ID del ticketEvent a eliminar
@@ -134,29 +133,21 @@ const TicketEvent = typedModel('TicketEvent', schema, undefined, undefined, {
         return TicketEvent.findByIdAndUpdate(id,{devolution:!devolution})
     },
 
-
-    /* getCountEventByUser(user){
-        return Event.countDocuments({deleted:false,user})
-    } */
-
-    getSharedsByTicketEvent(id){
-        return TicketEvent.find({ticketEvent:id}).populate('user event').populate({path:'event',populate:{path:'user'}}).sort({date:-1})
+    /**
+     * Acepta la initación a un evento
+     * @param id ID del ticketEvent a editar
+     */
+    acceptInvitation(id){
+        return TicketEvent.findByIdAndUpdate(id,{decision:true,accepted:true})
     },
 
-    newView(id,ip){
-      return  TicketEvent.findByIdAndUpdate(id,{$push:{views:ip}})
+    /**
+     * Acepta la initación a un evento
+     * @param id ID del ticketEvent a editar
+     */
+     deniesInvitation(id){
+        return TicketEvent.findByIdAndUpdate(id,{decision:true,accepted:false,devolution:true})
     },
-    findViewIp(id,ip){
-        return TicketEvent.findOne({_id:id,views:{$elemMatch:{$eq:ip}}})
-    },
-
-    rescheduleTicketEvent(id,date){
-        return TicketEvent.findByIdAndUpdate(id,{programatedDate:date})
-    },
-
-    published(id){
-        return TicketEvent.findByIdAndUpdate(id,{programated:false})
-    }
 
 });
 
