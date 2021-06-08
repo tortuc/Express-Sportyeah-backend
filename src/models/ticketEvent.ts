@@ -146,7 +146,7 @@ const TicketEvent = typedModel('TicketEvent', schema, undefined, undefined, {
      * @param id ID del ticketEvent a editar
      */
      deniesInvitation(id){
-        return TicketEvent.findByIdAndUpdate(id,{decision:true,accepted:false})
+        return TicketEvent.findByIdAndUpdate(id,{decision:true,accepted:false,devolution:true})
     },
 
 });
