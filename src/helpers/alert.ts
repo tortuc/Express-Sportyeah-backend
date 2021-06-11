@@ -18,6 +18,7 @@ import { Config } from "./config";
 import { Environment } from "./environment";
 import { Socket } from "./socket";
 import  Question from "../models/question"
+import Event from "../models/event";
 export class Alert
 {
     /**
@@ -274,4 +275,26 @@ export class Alert
       }
     });
   }
+
+
+  public static invitationEventAlert(ticket){
+      Event.findOneEvent(ticket.event).then((event:any)=>{
+        if(event._id+'' != event.user._id+''){
+            Notification.newNotification({
+                user:ticket.user,
+                event:event._id,
+                friend:event.user,
+                action:'invited_event',
+                routerlink:`/event/read/${event._id}`
+
+            }).then(()=>{
+                this.notification(ticket.user)
+            })
+            .catch((err)=>{
+            })
+        }
+      })
+          
+}
+
 }

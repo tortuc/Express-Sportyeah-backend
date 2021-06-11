@@ -37,6 +37,15 @@ const TicketEventRouter:any = ticketEventController.router();
  */
   TicketEventRouter.get('/:id', ticketEventController.findTicketEvent);
 
+  /**
+ * encuentra todos los ticketevent de un evento por id
+ * 
+ * 
+ * @route /v1/ticketevent/invited/:id
+ * @method get
+ */
+   TicketEventRouter.get('/invited/:id', ticketEventController.findTicketEventInvited);
+
 
  /**
  * encuentra un ticketevent 
@@ -93,6 +102,23 @@ const TicketEventRouter:any = ticketEventController.router();
  */
  TicketEventRouter.put('/devolution/:id', ticketEventController.devolutionOneById);
 
-    
+ /**
+ * Acepta un evento 
+ * 
+ * 
+ * @route /v1/event/accept
+ * @methodp put
+ */
+ TicketEventRouter.put('/accept/:id', ticketEventController.acceptInvitation);
+
+ /**
+ * cambia de devolution a un ticketevent
+ * 
+ * 
+ * @route /v1/event/denies
+ * @methodp put
+ */
+  TicketEventRouter.put('/denies/:id', ticketEventController.deniesInvitation);
+
 
 module.exports = TicketEventRouter;
