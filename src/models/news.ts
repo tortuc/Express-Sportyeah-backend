@@ -61,7 +61,16 @@ const News = typedModel('News', schema, undefined, undefined, {
 
     findNews(){
         return News
-            .find({deleted:false,programated:false})
+            .find({deleted:false,programated:false,stream:false})
+            .populate('user')
+            .sort({date:-1})
+            //.skip(skip)
+            .limit(10)
+    },
+
+    findNewsStreaming(){
+        return News
+            .find({deleted:false,programated:false,stream:true})
             .populate('user')
             .sort({date:-1})
             //.skip(skip)
