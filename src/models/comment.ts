@@ -4,7 +4,7 @@ import { createSchema, Type, typedModel } from "ts-mongoose";
  * Modelo de Like
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  *
  * @link https://www.npmjs.com/package/ts-mongoose
  */
@@ -78,6 +78,15 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
       .sort({ date: -1 });
   },
   /**
+   * Obtiene la cantidad de comentarios en un news
+   * @param news id del news
+   */
+   getCountOfCommentsByNews(news) {
+    return Comment.countDocuments({ news, deleted: false })
+      .populate("user")
+      .sort({ date: -1 });
+  },
+  /**
    * Borrar un comentario
    * @param id  id del comentario
    */
@@ -103,14 +112,21 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
   userCommentPost(user,post){
     return Comment.findOne({user,post})
   },
+
+  userCommentNews(user,news){
+    return Comment.findOne({user,news})
+  },
+
   /** PRUEBA NEWS con comentarios
    * Obtiene todos los comentarios de un news
    * @param news id del news
    */
-  getCommentsByNews(news) {
+  getCommentsByNews(news, skip = 0) {
     return Comment.find({ news, deleted: false })
-      .populate("user question")
-      .sort({ date: -1 });
+    .populate("user")
+    .sort({ date: -1 })
+    .skip(skip)
+    .limit(15)
   },
   getCommentAllTime() {
     return Comment.aggregate([

@@ -5,7 +5,7 @@
  * Obtención de informacion de paginas web con Open Graph
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  *
  * @link https://www.npmjs.com/package/open-graph
  */

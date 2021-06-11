@@ -11,7 +11,7 @@ import * as path from "path";
  * Explica el objeto de este controlador
  *
  * @author David Valor <davidvalorwork@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 export class LandingController extends BaseController {

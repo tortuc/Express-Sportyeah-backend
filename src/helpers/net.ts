@@ -5,7 +5,7 @@
  * Obtención de direcciones ip
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  *
  * @link https://www.npmjs.com/package/bcrypt
  */
@@ -58,7 +58,9 @@ export class Net
             ip          : ip,
             city        : geo ? geo.city    : null,
             country     : geo ? geo.country : null,
-            user        : null
+            user        : null,
+            latitud: geo ? geo.ll[0] : null,
+            longitud: geo ? geo.ll[1] : null
         };
     }
 }

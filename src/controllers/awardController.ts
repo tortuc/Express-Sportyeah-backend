@@ -9,7 +9,7 @@ import { BaseController } from "./baseController";
  * Explica el objeto de este controlador
  *
  * @author David Valor <davidvalorwork@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 export class AwardController extends BaseController {

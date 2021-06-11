@@ -1,0 +1,93 @@
+{
+  "testbasic": "Funciona!!",
+  "test": {
+    "hello": "Holaa!"
+  },
+  "sports": {
+    "sport": "Deporte",
+    "soccer": "Fútbol",
+    "basketball": "Baloncesto",
+    "tennis": "Tenis",
+    "baseball": "Béisbol",
+    "running": "Correr",
+    "volleyball": "Voleibol",
+    "swimming": "Natación",
+    "boxing": "Boxeo",
+    "table_tennis": "Tenis de mesa",
+    "golf": "Golf",
+    "rugby": "Rugby",
+    "football": "Fútbol americano",
+    "esport": "eSport",
+    "various": "Varios",
+    "archery": "Tiro con arco",
+    "athletics": "Atletismo",
+    "badminton": "Badminton",
+    "rafting": "Canotaje",
+    "climbing": "Escalada",
+    "cycling": "Ciclismo",
+    "hriding": "Equitación",
+    "fencing": "Esgrima",
+    "karate": "Karate",
+    "judo": "Judo",
+    "taekwondo": "Taekwondo",
+    "surf": "Surf"
+  },
+  "email": {
+    "new_user": {
+      "title": "Se ha registrado un usuario en SportYeah!"
+    },
+    "unknow_access": {
+      "title": "Acceso desconocido",
+      "greeting_begin": "Saludos, Sr@",
+      "greeting_end": "Se ha accedido a tu cuenta de SportYeah con una dirección IP no habitual.",
+      "message_begin": "El acceso se dio mediante la dirección IP",
+      "message_middle": "en",
+      "go_to": "Ir a SportYeah"
+    }
+  },
+  "profile_user": {
+    "profile_user": "Tipo de usuario",
+    "club": "Club",
+    "player": {
+      "soccer": "Futbolista",
+      "basketball": "Basquetbolista",
+      "tennis": "Tenista",
+      "baseball": "Béisbolista",
+      "running": "Correrdor",
+      "volleyball": "Voleibolibolista",
+      "swimming": "Nadador",
+      "boxing": "Boxeador",
+      "table_tennis": "Jugador",
+      "golf": "Golfista",
+      "rugby": "Rugbista",
+      "football": "Jugador",
+      "esport": "Gamer",
+      "various": "Jugador",
+      "archery": "Arquero/a",
+      "athletics": "Atleta",
+      "badminton": "Badminton",
+      "rafting": "Canotaje",
+      "climbing": "Escalador",
+      "cycling": "Ciclista",
+      "hriding": "Jinete",
+      "fencing": "Esgrimista",
+      "karate": "Karateka",
+      "judo": "Judoka",
+      "taekwondo": "Taekwondista",
+      "surf": "Surfeador/a"
+    },
+    "staff": "Staff del club",
+    "amateur": "Aficionado",
+    "representative": "Representante",
+    "scout": "Ojeador",
+    "press": "Prensa",
+    "association": "Asociación",
+    "foundation": "Fundación",
+    "federation": "Federación",
+    "sponsor": "Patrocinador",
+    "executive": "Ejecutivo",
+    "administration": "Admin de Clubes",
+    "referee":"Árbitro"
+
+  }
+}

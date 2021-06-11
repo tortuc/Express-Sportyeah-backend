@@ -11,7 +11,7 @@ import AnalyticExternalShared from "../models/analyticsExternalShared";
 import Friend from "../models/friend";
 import AnalyticProfile from "../models/analyticsProfile";
 import Post from "../models/post";
-// import AnalyticStore from "../models/analyticsStores";
+import AnalyticStore from "../models/analyticsStores";
 // import AnalyticTodoListView from "../models/analyticsTodoListView";
 // import AnalyticListGiftView from "../models/analyticsListGiftView";
 // import AnalyticGiverTodoList from "../models/analyticsGiverTodoList";
@@ -23,7 +23,7 @@ import { PostFilter } from "../helpers/postFilter";
  * Explica el objeto de este controlador
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  */
 
 export class AnalyticsController extends BaseController {
@@ -73,35 +73,35 @@ export class AnalyticsController extends BaseController {
       /**
        * Este evento, es para guardar en las analiticas, desde donde se clickeo a las tiendas de apps
        */
-      // socket.on("click-on-store", (data) => {
-      //   console.log(data);
-      //   switch (data.place) {
-      //     case "gift-list":
-      //       AnalyticStore.giftlist(data.type).then();
-      //       break;
-      //     case "profile":
-      //       AnalyticStore.profile(data.type).then();
-      //       break;
-      //     case "post":
-      //       AnalyticStore.post(data.type).then();
-      //       break;
-      //     case "login":
-      //       AnalyticStore.login(data.type).then();
-      //       break;
-      //     case "landing":
-      //       AnalyticStore.landing(data.type).then();
-      //       break;
-      //     case "event":
-      //       AnalyticStore.event(data.type).then();
-      //       break;
-      //     case "verification":
-      //       AnalyticStore.verification(data.type).then();
-      //       break;
+      socket.on("click-on-store", (data) => {
+        console.log(data);
+        switch (data.place) {
+          case "gift-list":
+            AnalyticStore.giftlist(data.type).then();
+            break;
+          case "profile":
+            AnalyticStore.profile(data.type).then();
+            break;
+          case "post":
+            AnalyticStore.post(data.type).then();
+            break;
+          case "login":
+            AnalyticStore.login(data.type).then();
+            break;
+          case "landing":
+            AnalyticStore.landing(data.type).then();
+            break;
+          case "event":
+            AnalyticStore.event(data.type).then();
+            break;
+          case "verification":
+            AnalyticStore.verification(data.type).then();
+            break;
 
-      //     default:
-      //       break;
-      //   }
-      // });
+          default:
+            break;
+        }
+      });
 
       /**
        * Este evento escucha cuando alguien comparte un enlace al exterior, y desde que medio se hizo
@@ -183,6 +183,8 @@ export class AnalyticsController extends BaseController {
   public getDataLanding(request: Request, response: Response) {
     AnalyticLanding.getData()
       .then((data) => {
+        console.log("esta es la data landing",data);
+        
         let landing = data[0];
         response.status(HttpResponse.Ok).json(landing);
       })
@@ -262,7 +264,7 @@ export class AnalyticsController extends BaseController {
   // }
 
   /**
-   * Retorna el usuario con mas seguidores en kecuki
+   * Retorna el usuario con mas seguidores en sportyeah
    */
 
   public mostPopularUser(request: Request, response: Response) {
@@ -300,13 +302,14 @@ export class AnalyticsController extends BaseController {
    */
 
   public async getAnaliticProfile(request: Request, response: Response) {
-    
     try {
       let analitic = {
-        reactions: await PostFilter.getCountPostReaction(request.body.decoded.id),
+        reactions: await PostFilter.getCountPostReaction(
+          request.body.decoded.id
+        ),
         visits: await AnalyticProfile.getCountOfVisits(request.body.decoded.id),
       };
-      
+
       response.status(HttpResponse.Ok).json(analitic);
     } catch (error) {
       response.status(HttpResponse.BadRequest).send("cannot get analytic");
@@ -329,18 +332,18 @@ export class AnalyticsController extends BaseController {
     }
   }
 
-  // /**
-  //  * Retorna la analitica de las veces que se clickeo en los botones de la appstore y playstore
-  //  */
-  // public getStoreClics(request: Request, response: Response) {
-  //   AnalyticStore.getAllData()
-  //     .then((data) => {
-  //       response.status(HttpResponse.Ok).json(data);
-  //     })
-  //     .catch((err) => {
-  //       response.status(HttpResponse.BadRequest).send("cannot find data");
-  //     });
-  // }
+  /**
+   * Retorna la analitica de las veces que se clickeo en los botones de la appstore y playstore
+   */
+  public getStoreClics(request: Request, response: Response) {
+    AnalyticStore.getAllData()
+      .then((data) => {
+        response.status(HttpResponse.Ok).json(data);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).send("cannot find data");
+      });
+  }
 
   // /**
   //  * Retorna la cantidad de visitas o clis, a un regalo en una lista de regalos compartida al exterior

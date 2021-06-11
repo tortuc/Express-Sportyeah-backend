@@ -1,20 +1,19 @@
+import { Net } from './net';
 /**
  * App
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 import * as express from "express";
-import * as body_parser from "body-parser";
 import * as cors from "cors";
 
 import { Environment } from "./environment";
 import { Config } from "./config";
 import { Router } from "../routes/router";
-import { Mongoose } from "./mongoose";
 import { Socket } from "./socket";
-import { UserController } from "../controllers/userController";
+import { Mongoose } from "./mongoose";
 
 export class App {
   /**
@@ -54,7 +53,19 @@ export class App {
     this.app.use(express.json());
 
     // Usamos CORS
-    this.app.use(cors({origin:['http://localhost:4200','https://app.sportyeah.com','https://www.sportyeah.com','http://localhost:8100']}));
+    this.app.use(
+      cors({
+        origin: [
+          "http://localhost:4200",
+          "https://app.sportyeah.com",
+          "https://www.sportyeah.com",
+          "http://localhost:8100",
+          "https://admin.sportyeah.com",
+           "capacitor://localhost",
+          "http://localhost",
+        ],
+      })
+    );
   }
 
   /**
@@ -129,6 +140,10 @@ export class App {
    * @return {void}
    */
   public static run(): void {
+    
+    
+    
+    
     // Obtiene la aplicación
     let application: App = App.get();
 
@@ -152,7 +167,8 @@ export class App {
       application.route();
 
       console.info(`[OK] ${moment} Las rutas han sido cargadas con éxito`);
-
+      
+      
       // Inicia la conexión a Mongo
       Mongoose.startConnection();
 

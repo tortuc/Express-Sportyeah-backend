@@ -6,7 +6,7 @@ import * as express from "express";
  * Maneja las rutas de la aplicación
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 export class Router {
@@ -138,32 +138,87 @@ export class Router {
      *
      * @route /v1/question/...
      */
-     this.route.use("/v1/question", require("./questionRoute"));
+    this.route.use("/v1/question", require("./questionRoute"));
 
     /**
      * Iniciao de rutas para creación del torneo
      * @route /v1/tournament/
-    */ 
-     this.route.use("/v1/tournament", require("./tournamentRoute"));
+     */
 
-     this.route.use("/v1/category/tournament", require("./categorytournamentRoute"));
+    this.route.use("/v1/tournament", require("./tournamentRoute"));
 
-     
-    
-     /**
+    this.route.use(
+      "/v1/category/tournament",
+      require("./categorytournamentRoute")
+    );
+
+    this.route.use("/v1/porra/tournament", require("./porraRoute"));
+
+    /**
      * Manejador de rutas de las Vistas a los Sponsor
      *
      * @route /v1/viewsSponsor/...
      */
-      this.route.use("/v1/viewsSponsor", require("./viewsSponsorRoutes"));
-
+    this.route.use("/v1/viewsSponsor", require("./viewsSponsorRoutes"));
 
     /**
      * Manejador de rutas de las analiticas
+     *
      * @route /v1/analytics/...
      */
     this.route.use("/v1/analytics", require("./analyticsRoute"));
 
-   
-    }
+    this.route.use("/v1/viewsSponsor", require("./viewsSponsorRoutes"));
+
+    /**
+     * Manejador de rutas de el juego de los amigos invisibles
+     *
+     * @route /v1/roles/...
+     */
+    this.route.use("/v1/roles", require("./rolesRoute"));
+
+    /**
+     * Manejador de rutas de livescore
+     *
+     * @route /v1/livescore/...
+     */
+    this.route.use('/v1/livescore', require('./livescoreRoute'));
+ 
+ 
+  /**
+     * Manejador de rutas de event
+     *
+     * @route /v1/event/...
+     */
+   this.route.use('/v1/event', require('./eventRoute'));
+
+
+    /**
+     * Manejador de rutas de event
+     *
+     * @route /v1/ticketevent/...
+     */
+     this.route.use('/v1/ticketevent', require('./ticketEventRoute'));
+
+    /**
+     * Manejador de rutas de sponsor (patrocinadores)
+     *
+     * @route /v1/sponsor/...
+     */
+    this.route.use("/v1/sponsor", require("./sponsorRoute"));
+    /**
+     * Manejador de rutas de Gallery (Galeria)
+     *
+     * @route /v1/gallery/...
+     */
+    this.route.use("/v1/gallery", require("./galleryRoute"));
+    /**
+     * Manejador de rutas de Structure (Estructura de club)
+     *
+     * @route /v1/structure/...
+     */
+    this.route.use("/v1/structure", require("./structureRoute"));
+  }
+
+ 
 }

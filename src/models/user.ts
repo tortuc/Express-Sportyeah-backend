@@ -1,46 +1,120 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
-import Experience from "./experience";
+import { userHelper } from "../helpers/userHelper";
 /**
  * Esquema de Usuario
  */
 const schema = createSchema({
+  /**
+   * Nombre del usuario
+   */
   name: Type.string({ required: true }),
+  /**
+   * Apellido del usuario
+   */
   last_name: Type.string({ required: true }),
+  /**
+   * Correo electronico del usuario
+   */
   email: Type.string({ required: true, unique: true }),
+  /**
+   * Nombre de usuario, del usuario (unico)
+   */
   username: Type.string({ required: true, unique: true }),
+  /**
+   * Fecha de nacimiento del usuario
+   */
   birth_date: Type.date({ default: null }),
+  /**
+   * Ultima conexion del usuario
+   */
   lastConection: Type.date({ default: null }),
+  /**
+   * Si el usuario esta conectado
+   */
   connected: Type.boolean({ default: false }),
+  /**
+   * Password del usuario
+   */
   password: Type.string(),
-  lang: Type.string({default:'es'}),
+  /**
+   * Idioma que ha seleccionado el usuario
+   */
+  lang: Type.string({ default: "es" }),
+  /**
+   * Fecha en que se creo el usuario
+   */
   create: Type.date({ default: Date.now }),
+  /**
+   * Role del usuario (administrador o usuario comun)
+   */
   role: Type.string({ enum: ["user", "admin"], default: "user" }),
+  /**
+   * Si el usuario verifico su cuenta
+   */
   verified: Type.boolean({ default: false }),
+  /**
+   * Intentos fallidos al intentar entrar en la cuenta
+   */
   attempts: Type.number({ default: 0 }),
+  /**
+   * Imagen de perfil del usuario
+   */
   photo: Type.string({
-    default:
-      "https://files.sportyeah.com/v1/image/get/1616530480396",
+    default: "https://files.sportyeah.com/v1/image/get/1616530480396",
   }),
+  /**
+   * banner del usuario (portada)
+   */
   photoBanner: Type.string({
-    default:
-      "https://trello-attachments.s3.amazonaws.com/5ff9d47572424648014190dc/700x422/29f3e5ed0cea0a6b7439bfb986a090cd/original.jpg",
+    default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
   }),
+  /**
+   * Slider (esto no puede ser asi)
+   */
   slider: [
     Type.string({
-      default:
-        "https://trello-attachments.s3.amazonaws.com/5ff9d47572424648014190dc/700x422/29f3e5ed0cea0a6b7439bfb986a090cd/original.jpg",
+      default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
     }),
   ],
-  experiences: [Type.objectId({ ref: Experience, default: null })],
+  /**
+   * Estado del usuario, mensaje que se muestra abajo del nombre
+   */
   estado: Type.string({ default: "Hey there I'm in SportYeah." }),
+  /**
+   * Si la cuenta fue eliminada
+   */
   deleted: Type.boolean({ default: false }),
+  /**
+   * Token de verificacion, se usa la primera vez para verificar el usuario por un token
+   */
   verification_token: Type.string({ default: null }),
+  /**
+   * Token para recuperar la password
+   */
   recover_password_token: Type.string({ default: null }),
+  /**
+   * Email de los padres
+   */
   parents_email: Type.string(),
+  /**
+   * Nombre de los padres
+   */
   parents_name: Type.string(),
+  /**
+   * Apellido de los padres
+   */
   parents_last_name: Type.string(),
+  /**
+   * Si el usuario es super administrador
+   */
   supera: Type.boolean({ default: false }),
+  /**
+   * Roles de administrador
+   */
   roles: Type.string(),
+  /**
+   * Deporte del usuario
+   */
   sport: Type.string({
     enum: [
       "soccer",
@@ -57,8 +131,23 @@ const schema = createSchema({
       "football",
       "esport",
       "various",
+      "archery",
+      "athletics",
+      "badminton",
+      "rafting",
+      "climbing",
+      "cycling",
+      "hriding",
+      "fencing",
+      "karate",
+      "judo",
+      "taekwondo",
+      "surf",
     ],
   }),
+  /**
+   * tipo de perfil del usuario
+   */
   profile_user: Type.string({
     enum: [
       "club",
@@ -74,19 +163,63 @@ const schema = createSchema({
       "sponsor",
       "executive",
       "administration",
+      "referee",
     ],
     default: null,
   }),
+  /**
+   * Sub_profile del usuario
+   */
   sub_profile: Type.string(),
+  /**
+   * Si fue authorizado por los padres
+   */
   authorize: Type.boolean({ default: true }),
-  sponsors: [Type.mixed()],
+  /**
+   * Si el usuario es un patrocinador, podra editar su tarjeta
+   */
+  sponsor_info: Type.object().of({
+    name: Type.string({ default: "SportYeah" }),
+    miniature: Type.string({ default: "assets/sponsors/default_mini.jpg" }),
+    profile_image: Type.string({
+      default: "assets/sponsors/default_profile.jpg",
+    }),
+  }),
+  /**
+   * Estructura, muchisimo menos puede ir asi
+   */
   structure: Type.mixed(),
-  geo:Type.object({ default: null }).of({
-    ip : Type.string(),
-    country : Type.string(),
-    city : Type.string(),
-    flag: Type.string({default: null})
-  }) 
+  /**
+   * Pais del usuario (countryCode)
+   */
+  country: Type.string({ default: null }),
+  /**
+   * Bandera del pais, aplica para usuarios espanioles que quieran cambiar entre sus 3 banderas
+   */
+  flag: Type.string({
+    default: null,
+    enum: ["catalunya", "euskal", "andalucia", null],
+  }),
+  /**
+   * Token del FCM para las Push Notifications
+   */
+  fcmtoken: Type.string({ default: null }),
+  /**
+   * Variable de control para saber si el usuario leyo el mensaje de el perfil
+   */
+  msgProfile: Type.boolean({ default: false }),
+
+  socialNetworks: Type.object().of({
+    tiktok: Type.string({ default: null }),
+    facebook: Type.string({ default: null }),
+    linkedin: Type.string({ default: null }),
+    instagram: Type.string({ default: null }),
+    twitter: Type.string({ default: null }),
+  }),
+  /**
+   * Navegador que usa el usuario
+   */
+  browser: Type.string({}),
 });
 
 const User = typedModel("User", schema, undefined, undefined, {
@@ -95,8 +228,16 @@ const User = typedModel("User", schema, undefined, undefined, {
    *
    * @param {string} id   El id del usuario
    */
+  async getAllUsers(skip = 0) {
+    return User.find();
+  },
+  /**
+   * Obtiene el usuario por su id
+   *
+   * @param {string} id   El id del usuario
+   */
   async findByUserId(id: string) {
-    return await User.findById(id).populate({ path: "experiences" });
+    return await User.findById(id);
   },
 
   /**
@@ -105,7 +246,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @param {string} email   El email del usuario
    */
   findByEmail(email: string) {
-    return User.findOne({ email: email }).populate({ path: "experiences" });
+    return User.findOne({ email: email });
   },
   /**
    * Obtiene el usuario por su username
@@ -113,7 +254,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @param {string} username   El username del usuario
    */
   findByUsername(username: string) {
-    return User.findOne({ username }).populate({ path: "experiences" });
+    return User.findOne({ username });
   },
 
   /**
@@ -277,11 +418,11 @@ const User = typedModel("User", schema, undefined, undefined, {
    * @param {User} newData
    */
   updateOne(id: string, newData) {
-    return User.findByIdAndUpdate(id, newData,{new:true});
+    return User.findByIdAndUpdate(id, newData, { new: true });
   },
 
   listUsers() {
-    return User.find().populate({ path: "experiences" });
+    return User.find();
   },
 
   /** Editar marcas
@@ -293,15 +434,40 @@ const User = typedModel("User", schema, undefined, undefined, {
     return User.findByIdAndUpdate(id, { sponsors });
   },
 
-  searchQueryUsers(query:string, limit = 5, skip = 0) {
-  
-    let regex = new RegExp(query.replace(/ /g,''),'i') ;
-    
+  searchQueryUsers(query: string, limit = 5, skip = 0) {
+    let regex = new RegExp(query.replace(/ /g, ""), "i");
+
     return User.aggregate([
       {
         $project: { search: { $concat: ["$name", "$last_name", "$username"] } },
       },
-      { $match: { search: { $regex: regex } }},
+      { $match: { search: { $regex: regex } } },
+      { $sort: { search: 1 } },
+      { $skip: skip },
+      { $limit: limit },
+    ]);
+  },
+  /**
+   * Busca patrocinadores por nombre, apellido o usuario
+   * @param query
+   * @param limit
+   * @param skip
+   * @returns
+   */
+  searchQuerySponsors(query: string, limit = 5, skip = 0) {
+    let regex = new RegExp(query.replace(/ /g, ""), "i");
+    console.log(regex);
+
+    return User.aggregate([
+      {
+        $project: {
+          search: { $concat: ["$name", "$last_name", "$username"] },
+          profile_user: "$profile_user",
+        },
+      },
+      {
+        $match: { profile_user: "sponsor", search: { $regex: regex } },
+      },
       { $sort: { search: 1 } },
       { $skip: skip },
       { $limit: limit },
@@ -312,7 +478,7 @@ const User = typedModel("User", schema, undefined, undefined, {
    *
    * @param date Fecha desde cual consultar
    */
-   getUsersByDate(date) {
+  getUsersByDate(date) {
     // se crea la fecha como Date
     let day = new Date(date);
     // se crea otra fecha
@@ -322,18 +488,67 @@ const User = typedModel("User", schema, undefined, undefined, {
 
     return User.countDocuments({ create: { $gte: day, $lte: dayAfter } });
   },
-   /**
+  /**
    * Devuelve la cantidad de usuarios registrados o creados
    */
-    countOfUsers() {
-      return User.countDocuments();
-    },
-    /**
-     * Devuelve la cantidad de usuarios conectados
-     */
-    countOfUsersOnlines(){
-      return User.countDocuments({ connected: true });
-    },
+  countOfUsers() {
+    return User.countDocuments();
+  },
+  /**
+   * Devuelve la cantidad de usuarios conectados
+   */
+  countOfUsersOnlines() {
+    return User.countDocuments({ connected: true });
+  },
+  setFCMTOken(user, fcmtoken) {
+    return User.findByIdAndUpdate(user, { fcmtoken }, { new: true });
+  },
+  /**
+   * Crea un nuevo usuario
+   *
+   * @param  {User}    user   El usuario a crear
+   *
+   * @return {User}           El usuario guardado
+   * @throws {Error}          El usuario ya está registrado
+   */
+  async createAdmin(user: any, password) {
+    // le generamos un nombre de usuario
+    user.username = await userHelper.generateUsername(user);
+    // le generamos un password
+    user.password = password;
+    // Indicamos que es un usuario tipo admin
+    user.role = "admin";
+    // indicamos que ya este usuario se encuentra verificado
+    user.verified = true;
+
+    user.sport = "football";
+    user.profile_user = "administration";
+    // Comprueba si la dirección de correo suministrada ya está registrada
+    let emailExist = await User.findByEmail(user.email);
+    let userExist = await User.findByUsername(user.username);
+
+    if (emailExist) {
+      // El usuario ya existe
+      console.warn(
+        `[WARN] El usuario con el email ${user.email} ya está registrado. No se creará una nueva cuenta`
+      );
+      throw "email-already-exists";
+    } else if (userExist) {
+      console.warn(
+        `[WARN] El usuario con el username ${user.username} ya está registrado. No se creará una nueva cuenta`
+      );
+      throw "user-already-exists";
+    } else {
+      // Guarda el nuevo usuario
+      return new User(user).save();
+    }
+  },
+  /**
+   * Obtiene todos los administradores
+   */
+  getAdmins() {
+    return User.find({ role: "admin" });
+  },
 });
 
 /**

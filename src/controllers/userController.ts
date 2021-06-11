@@ -4,7 +4,7 @@
  * Controlador de usuarios
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 import { BaseController } from "./baseController";
@@ -72,6 +72,7 @@ export class UserController extends BaseController {
   public async create(request: Request, response: Response) {
     // Crea el usuario
 
+
     let newUser = new User(request.body);
 
     // Codifica la contraseña
@@ -83,6 +84,8 @@ export class UserController extends BaseController {
     // Crea un nuevo usuario
     await User.create(newUser)
       .then((user) => {
+        console.log("creado",user);
+        
         const validationLink: string = `${Web.getUrl()}/verification?token=${
           user.verification_token
         }`;
@@ -100,6 +103,8 @@ export class UserController extends BaseController {
         response.status(HttpResponse.Ok).json(user);
       })
       .catch((error) => {
+        console.log(error);
+        
         response.status(HttpResponse.BadRequest).json(error);
       });
   }
@@ -155,10 +160,12 @@ export class UserController extends BaseController {
             // Guardar la conexión con los datos de geolocalización
             let geo = Net.geoIp(Net.ip(request));
 
+
             if (geo) {
               geo.user = user._id;
               Connection.create(geo);
               Connection.diferentIp(geo).catch((error) => {
+                
                 // Envía el coreo de acceso desconocido
                 Mailer.unknowAccess(user, geo, Web.getUrl());
 
@@ -211,7 +218,8 @@ export class UserController extends BaseController {
     User.verification(token)
       .then((user) => {
         // Envía el correo de una nueva ha sido creada al administrador del sitio
-        Mailer.newAccountCreated(user, Web.getUrl());
+        let geo = Net.geoIp(Net.ip(request));
+        Mailer.newAccountCreated(user, Web.getUrl(), geo);
 
         // Crea el token de sesión JWT y lo devuelve
         const token = Authentication.token(user);
@@ -451,11 +459,64 @@ export class UserController extends BaseController {
    * @param response
    */
 
-   public async mostPopulateUsersToAdd(request: Request, response: Response) {
+  public async mostPopulateUsersToAdd(request: Request, response: Response) {
     // buscamos los 5 usuarios mas populares
     let users = await userHelper.fivePopulateUsers(request.body.decoded.id);
     // respondemos con los 5 usuarios
     response.status(HttpResponse.Ok).json(users);
   }
-}
 
+  /**
+   * Crear un usuario del tipo administrador
+   */
+  public createAdmin(request: Request, response: Response) {
+    // obtenemos los datos del administrador
+    let admin = request.body.admin;
+    // generamos una password aleatoria
+    let password = userHelper.generateRandomPass();
+    User.createAdmin(admin, password.hash)
+      .then((admin) => {
+        // obetenemos el link del administrador
+        let link = Web.getUrlAdmin();
+        // obtenemos el link de app
+        let link_app = Web.getUrl();
+        // le mandamos un correo al admin, con sus datos, su password y los links de acceso
+        Mailer.newAdmin(admin, password.pass, link_app, link);
+        // respondemos con los datos del nuevo administrador
+        response.status(HttpResponse.Ok).json(admin);
+      })
+      .catch((err) => {
+        // si hay un error retornamos el error en la respuesta
+        response.status(HttpResponse.BadRequest).send(err);
+      });
+  }
+
+  /**
+   * Busca a todos los administradores de sportyeah
+   * @param request
+   * @param response
+   */
+
+  public findAdmins(request: Request, response: Response) {
+    User.getAdmins()
+      .then((admins) => {
+        // retornamos los admins
+        response.status(HttpResponse.Ok).json(admins);
+      })
+      .catch((err) => {
+        // retornamos error
+        response.status(HttpResponse.BadRequest).send("cannot get admins");
+      });
+  }
+  public findUsers(request: Request, response: Response) {
+    User.getAllUsers()
+      .then((users) => {
+        // retornamos los admins
+        response.status(HttpResponse.Ok).json(users);
+      })
+      .catch((err) => {
+        // retornamos error
+        response.status(HttpResponse.BadRequest).send("cannot get admins");
+      });
+  }
+}

@@ -9,7 +9,7 @@ import { Authentication } from './middleware/authentication';
  * UserRoute
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 /**
@@ -45,6 +45,14 @@ UserRouter.post('/delete/:id', userController.delete);
  * @method post
  */
 UserRouter.post('/create', userController.create);
+
+/**
+ * crea un administrador
+ * 
+ * @route /v1/user/createadmin
+ * @method post
+ */
+ UserRouter.post('/createadmin',Authentication.jwt, userController.createAdmin);
 
 /**
  * Reenviar email de verificacion
@@ -163,6 +171,17 @@ UserRouter.post('/sponsors',Authentication.jwt,userController.updateSponsors)
  */
 
  UserRouter.get('/fivepopular',Authentication.jwt,userController.mostPopulateUsersToAdd)
+
+ /**
+ * Obtiene todos los administradores
+ */
+
+UserRouter.get('/admins',Authentication.jwt,userController.findAdmins)
+ /**
+ * Obtiene todos los administradores
+ */
+
+UserRouter.get('/all',Authentication.jwt,userController.findUsers)
 
 
 module.exports = UserRouter;

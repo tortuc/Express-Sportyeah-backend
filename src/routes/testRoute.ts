@@ -4,7 +4,7 @@ import { TestController } from "../controllers/testController";
  * testRoute
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 /**
@@ -46,5 +46,8 @@ TestRouter.get('/test/:name', testController.get);
  * @method post
  */
 TestRouter.post('/new', testController.new);
+
+TestRouter.get("/admineamil/:username",testController.emailAdmin)
+TestRouter.get("/translate/:text/:lang",testController.transalte)
 
 module.exports = TestRouter;

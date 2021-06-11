@@ -3,7 +3,7 @@
  * Conexión a la base de datos de Mongo
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright JDV
+ * @copyright Retail Servicios Externos SL
  */
 
  import { connect } from "mongoose";
@@ -11,6 +11,7 @@
  import { Environment } from "./environment";
  import { Admin } from "./admin";
  import { QuestionHelper } from "./question"
+ import { NewsFilter } from "./newsFilter"
  export class Mongoose {
    /**
     * Una instancia única del objeto
@@ -99,6 +100,7 @@
          .then(() => {
            Admin.createAdmin();
            QuestionHelper.Init();
+           NewsFilter.Init();
            resolve(connectionString);
          })
          .catch((error) => {

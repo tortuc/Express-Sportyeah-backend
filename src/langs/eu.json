@@ -1,0 +1,20 @@
+{
+  "testbasic":"Is Working!!",
+  "test": {
+    "hello": "Hello!"
+  },
+  "sports": {
+    "baseball": "Baseball",
+    "soccer": "Fooball"
+  },
+  "email": {
+    "unknow_access": {
+        "title": "Sarbide ezezaguna",
+        "greeting_begin": "Agurrak, sr@",
+        "greeting_end":"Ezohiko IP helbide batekin sartu duzu zure SPORTEAH kontua",
+        "message_begin": "Sarbidea IP helbidearen bidez gertatu da",
+        "message_middle": "en",
+        "go_to": "Joan Sportyeah-ra"
+      }
+  }
+}

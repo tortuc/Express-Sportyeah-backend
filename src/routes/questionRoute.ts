@@ -5,7 +5,7 @@ import { Authentication } from './middleware/authentication';
  * questionleRoute
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 /**

@@ -4,7 +4,7 @@
  * Contiene métodos útiles para mandar notificaciones a usuarios
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  * 
  */
 

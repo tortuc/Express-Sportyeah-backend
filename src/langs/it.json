@@ -1,0 +1,20 @@
+{
+  "testbasic":"Is Working!!",
+  "test": {
+    "hello": "Hello!"
+  },
+  "sports": {
+    "baseball": "Baseball",
+    "soccer": "Fooball"
+  },
+  "email": {
+    "unknow_access": {
+        "title": "Accesso sconosciuto",
+        "greeting_begin": "Saluti, signor@",
+        "greeting_end":"È stato effettuato l'accesso al tuo account SportYeah con un indirizzo IP insolito.",
+        "message_begin": "L'accesso è stato dato dall'indirizzo IP",
+        "message_middle": "sopra",
+        "go_to": "Vai a SportSì"
+      }
+  }
+}

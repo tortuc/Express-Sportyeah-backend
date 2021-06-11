@@ -4,7 +4,7 @@
  * Contiene métodos útiles
  * 
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  * 
  */
 
@@ -30,6 +30,16 @@ export class Web
         return Environment.get() == Environment.Development ? 
             Config.get('frontend.development.url') : Config.get('frontend.production.url');
     }
+    /**
+     * Obtiene la url del api de archivos
+     * 
+     * @return {string}     La url del frontend
+     */
+    public static getUrlFileApi():string
+    {
+        return Environment.get() == Environment.Development ? 
+            Config.get('fileapi.development.url') : Config.get('fileapi.production.url');
+    }
 
     /**
      * Obtiene el token para la validación de un usuario
@@ -46,4 +56,15 @@ export class Web
             return v.toString(16);
         });
     }
+
+     /**
+     * Obtiene la url del admin
+     * 
+     * @return {string}     La url del administrador
+     */
+      public static getUrlAdmin():string
+      {
+          return Environment.get() == Environment.Development ? 
+              Config.get('frontend.development.url_admin') : Config.get('frontend.production.url_admin');
+      }
 }

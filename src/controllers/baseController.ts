@@ -6,7 +6,7 @@ import * as express from 'express';
  * Controlador Base, todos los controladores heredan de él
  *  
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
  
 export class BaseController

@@ -4,7 +4,7 @@ import { createSchema, Type, typedModel } from 'ts-mongoose';
  * Modelo de Experiences
  *
  * @author David Valor  <davidvalorwork@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  *
  * @link https://www.npmjs.com/package/ts-mongoose
  */

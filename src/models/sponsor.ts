@@ -1,206 +1,84 @@
-import { create } from 'domain';
-import { createSchema, Type, typedModel } from 'ts-mongoose';
+import { createSchema, Type, typedModel } from "ts-mongoose";
 
+/**
+ * Modelo de Sponsor
+ *
+ * @author Jogeiker L <jogeiker1999@gmail.com>
+ * @copyright Retail Servicios Externos SL
+ *
+ * @link https://www.npmjs.com/package/ts-mongoose
+ */
 
 /**
  * Define el esquema del modelo
  */
-
 const schema = createSchema({
-    user        : Type.objectId({ required:true, ref: "User" }),
-    visitor     : Type.objectId({required:true, ref:"User"}),
-    date        : Type.date({ default: Date.now }),
-    from        : Type.string({required:true,enum:['post', 'chat','search','profile','reaction','comment','ranking','news']}),
-    link        : Type.string({}),
-    urlSponsor  : Type.string({})
-  });
-
-
-  const ViewsSponsor = typedModel("ViewsSponsor",schema,undefined,undefined,{
-        /**
-   * Crea una vista
-   * @param view
+  /**
+   * Usuario que ha creado el patrocinador
    */
-  createSponsorView(view) {
-    return new ViewsSponsor(view).save();
+  user: Type.objectId({ required: true, ref: "User" }),
+  /**
+   * Id del usuario patrocinador en sportyeah
+   */
+  idSponsor: Type.objectId({ required: false, ref: "User", default: null }),
+  /**
+   * Sponsor personalizado
+   */
+  customSponsor: Type.object({ required: false}).of({
+    name: Type.string({ default: "SportYeah" }),
+    url: Type.string({ default: "app.sportyeah.com" }),
+    miniature: Type.string({ default: "assets/sponsors/default_mini.jpg" }),
+    profile_image: Type.string({
+      default: "assets/sponsors/default_profile.jpg",
+    })
+  }),
+ 
+  /**
+   * Indica si este patrocinador ha sido borrado
+   */
+  deleted: Type.boolean({ default: false }),
+});
+
+const Sponsor = typedModel("Sponsor", schema, undefined, undefined, {
+  /**
+   * Crea un patrocinador
+   * @param {Sponsor} sponsor cuerpo del sponsor
+   */
+  createOne(sponsor) {
+    return new Sponsor(sponsor).save();
   },
+  /**
+   * Retorna todos los patrocinadores creados por un usuario
+   * @param user _id del usuario
+   */
+  getSponsorsByUser(user) {
+    return Sponsor.find({ deleted: false, user }).populate("idSponsor");
+  },
+  /**
+   * Editar o modificar un patrocinador
+   * @param id _id del patrocinador
+   * @param sponsor Nueva data del patrocinador
+   */
+  updateSponsor(id, sponsor) {
+    return Sponsor.findByIdAndUpdate(id, sponsor, { new: true }).populate(
+      "idSponsor"
+    );
+  },
+  /**
+   * Editar o modificar un patrocinador
+   * @param id _id del patrocinador
+   * @param sponsor Nueva data del patrocinador
+   */
+  deleteSponsor(id) {
+    return Sponsor.findByIdAndUpdate(id, { deleted: true }, { new: true });
+  },
+
+  getUsersBySponsorID(sponsor){
+    return Sponsor.find({idSponsor:sponsor,deleted:false})
+  }
+});
 
 /**
-   * Obtiene una vista por el id del usuario
-   * @param id 
-   */
-  getSponsorView(id) {
-    return ViewsSponsor.find({user:id})
-    .populate("user")
-    // .populate({path:'visits',populate:'user'})
-
-  },
-
-  
-
-  /**
-   * Busca a las vistas por fecha
-   * 
-   */
-   getPostViewsByDay(id,start,end) {
-
-    let startTime = new Date(start)
-    let endTime = new Date(end);
-    
-
-  return  ViewsSponsor.find(
-    { user:id,date: { $gte: startTime, $lt: endTime } }
-    )
-  },
-  /**
-   * Busca a las vistas por fecha
-   * 
-   */
-  getPostViewsByTime(id,start, end) {
-    let startTime = new Date(start);
-    let endTime = new Date(end);
-    
-  return  ViewsSponsor.find(
-    { user:id,date: { $gte: startTime, $lte: endTime } }
-    )
-  },
-
-
-
-
-  /**
-   * Busca a las vistas  por busqueda  usuario
-   * 
-   */
-   getViewsSponsorAllSearchTime() {
-    return ViewsSponsor.aggregate([
-        { $match: { from:"search" } },
-        {
-          $group: {
-            _id:{user:"$user"},
-            count: { $sum: 1 },
-          },
-        },
-        { $sort: { count: -1 } },
-        { $limit: 5 },
-      ]);
-  },
-   /**
-   * Busca a las vistas por busqueda de fecha useario 
-   * 
-   */
-    getViewsSponsorSearchByTime(start, end) {
-      let startTime = new Date(start);
-      let endTime = new Date(end);
-
-      return ViewsSponsor.aggregate([
-          { $match: { from:"search", date: { $gte: startTime, $lte: endTime }}  },
-          {
-            $group: {
-              _id:{user:"$user"},
-              count: { $sum: 1 },
-            },
-          },
-          { $sort: { count: -1 } },
-          { $limit: 5 },
-        ]);
-    },
-
-
-    /**
-   * Busca a las vistas  por rebote  usuario
-   * 
-   */
- getViewsSponsorReboundAllTime() {
-  return ViewsSponsor.aggregate([
-      { $match: { from:{$ne:"search"} } },
-      {
-        $group: {
-          _id:{user:"$user"},
-          count: { $sum: 1 },
-        },
-      },
-      { $sort: { count: -1 } },
-      { $limit: 5 },
-    ]);
-},
- /**
- * Busca a las vistas por rebote de fecha useario 
- * 
- */
-  getViewsSponsorReboundByTime(start, end) {
-    let startTime = new Date(start);
-    let endTime = new Date(end);
-
-    return ViewsSponsor.aggregate([
-        { $match: {from:{$ne:"search"} , date: { $gte: startTime, $lte: endTime }}  },
-        {
-          $group: {
-            _id:{user:"$user"},
-            count: { $sum: 1 },
-          },
-        },
-        { $sort: { count: -1 } },
-        { $limit: 5 },
-      ]);
-  },
-
- /**
-     * Retorna un conteo de las visitas que han hecho al sponsor, por dia indicado
-     * @param user _id del perfil
-     * @param date fecha de inicio de la busqueda, se agregara un dia mas para completar el rango de 24 horas
-     * @returns 
-     */
-  async getVisitsByDate(user,date,from){
-    // dia donde empieza la busqueda
-    let day = new Date(date)
-    // dia final
-    let dayAfter = new Date(day)
-    // se agrega un dia para completar el rango de 24 horas
-    dayAfter.setDate(day.getDate() + 1)
-    
-    return ViewsSponsor.countDocuments({user,from,date:{$gte:day,$lte:dayAfter}})
-  },
-
-  
- /**
-     * Retorna un conteo de las visitas que han hecho al sponsor, por dia indicado
-     * @param user _id del perfil
-     * @param date fecha de inicio de la busqueda, se agregara un dia mas para completar el rango de 24 horas
-     * @returns 
-     */
-  async getVisitsByMonth(user,date,from){
-    // dia donde empieza la busqueda
-    let month = new Date(date)
-    
-    // dia final
-    let monthAfter = new Date(month)
-    // se agrega un dia para completar el rango de 24 horas
-    monthAfter.setMonth(month.getMonth() + 1)
-
-    return ViewsSponsor.countDocuments({user,from,date:{$gte:month,$lte:monthAfter}})
-  },
-
-   /**
-     * Retorna un conteo de las visitas que han hecho al sponsor, En un dia indicado
-     * @param user _id del perfil
-     * @param date fecha de inicio de la busqueda, se agregara un dia mas para completar el rango de 24 horas
-     * @returns 
-     */
-  async getVisitsByHour(user,date,from){
-    // dia donde empieza la busqueda
-    let hour = new Date(date)
-    
-    // dia final
-    let hoursAfter = new Date(hour)
-    // se agrega un dia para completar el rango de 24 horas
-    hoursAfter.setHours(hour.getHours() + 1)
-    return ViewsSponsor.countDocuments({user,from,date:{$gte:hour,$lte:hoursAfter}})
-  },
-
-  })
-
-  /**
  * Exporta el modelo
  */
-export default ViewsSponsor;
+export default Sponsor;
