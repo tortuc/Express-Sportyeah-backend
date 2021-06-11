@@ -67,58 +67,67 @@ const schema = createSchema({
   views: [Type.string({ default: 0 })],
 });
 
-const News = typedModel("News", schema, undefined, undefined, {
-  /**
-   * Crea un news
-   * @param {News} news
-   *
-   */
-  create(news) {
-    return new News(news).save();
-  },
+const News = typedModel('News', schema, undefined, undefined, {
+    /**
+     * Crea un news
+     * @param {News} news  
+     *  
+     */
+    create(news){
+        return new News(news).save()
+    },
 
-  findNews() {
-    return (
-      News.find({ deleted: false, programated: false })
-        .populate("user")
-        .sort({ date: -1 })
+    findNews(){
+        return News
+            .find({deleted:false,programated:false,stream:false})
+            .populate('user')
+            .sort({date:-1})
+            //.skip(skip)
+            .limit(10)
+    },
+
+    findNewsStreaming(){
+        return News
+            .find({deleted:false,programated:false,stream:true})
+            .populate('user')
+            .sort({date:-1})
+            //.skip(skip)
+            .limit(10)
+    },
+
+    findOneNews(id){
+        return News.findById(id).populate('user question')
+    },
+
+
+    /**
+     * Obtiene los News de un deporte
+     * 
+     * @param sport deporte
+     */
+
+    findBySport(sport){
+        return News
+            .find({sport,deleted:false,programated:false})
+            .populate('user')
+            .sort({date:-1})
+            //.skip(skip)
+            .limit(10)
+    },
+    /**
+     * Obtiene los News de un usuario
+     * @param user Id del usuario
+     */
+    findMyNewss(user){
+        
+        return News.find({user,deleted:false,programated:false})
+        .populate('user')
+        .sort({date:-1})
         //.skip(skip)
         .limit(10)
-    );
+    
   },
 
-  findOneNews(id) {
-    return News.findById(id).populate("user question");
-  },
-
-  /**
-   * Obtiene los News de un deporte
-   *
-   * @param sport deporte
-   */
-
-  findBySport(sport) {
-    return (
-      News.find({ sport, deleted: false, programated: false })
-        .populate("user")
-        .sort({ date: -1 })
-        //.skip(skip)
-        .limit(10)
-    );
-  },
-  /**
-   * Obtiene los News de un usuario
-   * @param user Id del usuario
-   */
-  findMyNewss(user) {
-    return (
-      News.find({ user, deleted: false, programated: false })
-        .populate("user")
-        .sort({ date: -1 })
-        //.skip(skip)
-        .limit(10)
-    );
-  },
   /**
    * Obtiene los News de un usuario que han sido borradas
    * @param user Id del usuario

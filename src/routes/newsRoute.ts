@@ -36,6 +36,17 @@ NewsRouter.post('/create', newsController.create);
  */
 NewsRouter.get('/', newsController.findNews);
 
+
+/**
+ * Obtiene todas los streaming
+ * 
+ * 
+ * @route /v1/news/streaming
+ * @method get
+ */
+ NewsRouter.get('/streaming', newsController.findNewsStreaming);
+
+
 /**
  * Obtiene una noticia por id
  * 
