@@ -14,15 +14,16 @@ import { Alert } from '../helpers/alert';
  * @copyright Sapviremoto
  */
 
+export class TicketEventController extends BaseController {
+  /**
+   * El constructor
+   */
+  public constructor() {
+    // Llamamos al constructor padre
+    super();
+  }
 
- export class TicketEventController extends BaseController {
-    /**
-     * El constructor
-     */
-    public constructor() {
-      // Llamamos al constructor padre
-      super();
-    }
+
     /**
      * Crea un ticketEvento
      * 
@@ -50,23 +51,6 @@ import { Alert } from '../helpers/alert';
           }) 
     }
 
-      /**
-     * Encuentra los ticketEvento por evento
-     * 
-     * @route /ticketEvent/
-     * @method post
-     */
-       public findTicketEvent(request:Request, response:Response)
-       {
-        TicketEvent.findTicketEvent(request.params.id).then((resp)=>{
-               response.status(HttpResponse.Ok).json(resp);
-           })
-           .catch((err)=>{
-               response.status(HttpResponse.BadRequest).json(err);
-           })
-       }
-
-       
 
  /**
      * Encuentra los ticketEvento por evento
@@ -84,21 +68,38 @@ import { Alert } from '../helpers/alert';
       })
   }
 
-    /**
-     * Encuentra un ticketEvento
-     * 
-     * @route /ticketEvent/
-     * @method post
-     */
-        public findOneTicketEvent(request:Request, response:Response)
-        {
-            TicketEvent.findOneTicketEvent(request.params.id).then((resp)=>{
-                response.status(HttpResponse.Ok).json(resp);
-            })
-            .catch((err)=>{
-                response.status(HttpResponse.BadRequest).json(err);
-            })
-        }
+
+  /**
+   * Encuentra los ticketEvento por evento
+   *
+   * @route /ticketEvent/
+   * @method post
+   */
+  public findTicketEvent(request: Request, response: Response) {
+    TicketEvent.findTicketEvent(request.params.id)
+      .then((resp) => {
+        response.status(HttpResponse.Ok).json(resp);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).json(err);
+      });
+  }
+
+  /**
+   * Encuentra un ticketEvento
+   *
+   * @route /ticketEvent/
+   * @method post
+   */
+  public findOneTicketEvent(request: Request, response: Response) {
+    TicketEvent.findOneTicketEvent(request.params.id)
+      .then((resp) => {
+        response.status(HttpResponse.Ok).json(resp);
+      })
+      .catch((err) => {
+        response.status(HttpResponse.BadRequest).json(err);
+      });
+  }
 
   /**
    * Encuentra los ticketEvento de un usuario
