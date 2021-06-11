@@ -48,7 +48,7 @@ export class NewsController extends BaseController
   }
 
   /**
-   * Encontrar Noticias
+   * Encontrar Noticias 
    *
    * @route /v1/news
    * @method news
@@ -62,6 +62,23 @@ export class NewsController extends BaseController
         response.status(HttpResponse.BadRequest).send("cannot-find-news");
       });
   }
+
+
+    /**
+   * Encontrar los streaming
+   *
+   * @route /v1/news/streaming
+   * @method news
+   */
+     public findNewsStreaming(request: Request, response: Response) {
+      News.findNewsStreaming()
+        .then((resp) => {
+          response.status(HttpResponse.Ok).json(resp);
+        })
+        .catch((err) => {
+          response.status(HttpResponse.BadRequest).send("cannot-find-news");
+        });
+    }
 
 
 /**
