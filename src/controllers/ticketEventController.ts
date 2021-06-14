@@ -3,7 +3,6 @@ import { HttpResponse } from '../helpers/httpResponse';
 import { Request, Response } from 'express';
 import  TicketEvent  from '../models/ticketEvent'
 import { ticketEvent } from '../helpers/ticketHelper'
-import { exit } from 'node:process';
 import { Alert } from '../helpers/alert';
 /**
  * EventController
