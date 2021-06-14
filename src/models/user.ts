@@ -60,20 +60,20 @@ const schema = createSchema({
    * Imagen de perfil del usuario
    */
   photo: Type.string({
-    default: "https://files.sportyeah.com/v1/image/get/1616530480396",
+    default: "https://files.sportyeah.com/v1/image/get/1623453149503.jpeg",
   }),
   /**
    * banner del usuario (portada)
    */
   photoBanner: Type.string({
-    default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
+    default: "https://files.sportyeah.com/v1/image/get/1623464740734.jpeg",
   }),
   /**
    * Slider (esto no puede ser asi)
    */
   slider: [
     Type.string({
-      default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
+      default: "https://files.sportyeah.com/v1/image/get/1623464740734.jpeg",
     }),
   ],
   /**
