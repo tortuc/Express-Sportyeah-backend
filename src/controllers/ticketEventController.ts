@@ -2,6 +2,10 @@ import { BaseController } from './baseController';
 import { HttpResponse } from '../helpers/httpResponse';
 import { Request, Response } from 'express';
 import  TicketEvent  from '../models/ticketEvent'
+<<<<<<< HEAD
+=======
+import { ticketEvent } from '../helpers/ticketHelper'
+>>>>>>> df4d543d5aab15610b636b3520ccfc0febbfc2cd
 import { Alert } from '../helpers/alert';
 /**
  * EventController
