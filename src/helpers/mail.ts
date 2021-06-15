@@ -170,6 +170,7 @@ export class Mail {
       country,
       browser,
       appInfo: null,
+      map:null
     };
     return context;
   }

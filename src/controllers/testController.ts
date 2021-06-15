@@ -105,6 +105,7 @@ export class TestController extends BaseController {
       if (!user) throw new Error("No user");
 
       let geo = Net.geoIp(Net.ip(request));
+      console.log(user)
       MailController.newAccountCreated(user, Web.getUrl(), geo);
       response.status(HttpResponse.Ok).json("Probando correo");
     } catch (error) {

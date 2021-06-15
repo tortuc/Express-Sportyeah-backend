@@ -48,6 +48,8 @@ TestRouter.get('/test/:name', testController.get);
 TestRouter.post('/new', testController.new);
 
 TestRouter.get("/admineamil/:username",testController.emailAdmin)
+
+
 TestRouter.get("/translate/:text/:lang",testController.transalte)
 
 module.exports = TestRouter;
