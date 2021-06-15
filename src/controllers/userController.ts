@@ -72,7 +72,6 @@ export class UserController extends BaseController {
   public async create(request: Request, response: Response) {
     // Crea el usuario
 
-
     let newUser = new User(request.body);
 
     // Codifica la contraseña
@@ -84,8 +83,8 @@ export class UserController extends BaseController {
     // Crea un nuevo usuario
     await User.create(newUser)
       .then((user) => {
-        console.log("creado",user);
-        
+        console.log("creado", user);
+
         const validationLink: string = `${Web.getUrl()}/verification?token=${
           user.verification_token
         }`;
@@ -104,7 +103,7 @@ export class UserController extends BaseController {
       })
       .catch((error) => {
         console.log(error);
-        
+
         response.status(HttpResponse.BadRequest).json(error);
       });
   }
@@ -160,12 +159,10 @@ export class UserController extends BaseController {
             // Guardar la conexión con los datos de geolocalización
             let geo = Net.geoIp(Net.ip(request));
 
-
             if (geo) {
               geo.user = user._id;
               Connection.create(geo);
               Connection.diferentIp(geo).catch((error) => {
-                
                 // Envía el coreo de acceso desconocido
                 Mailer.unknowAccess(user, geo, Web.getUrl());
 
