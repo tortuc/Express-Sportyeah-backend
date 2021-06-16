@@ -78,7 +78,14 @@
          )}:${Config.get("mongo.development.port")}/${Config.get(
            "mongo.development.database"
          )}`;
-       } else {
+       } else if (Environment.get() == Environment.Test){
+        connectionString = `mongodb://${Config.get(
+          "mongo.test.server"
+        )}:${Config.get("mongo.test.port")}/${Config.get(
+          "mongo.test.database"
+        )}`;
+       }
+       else {
          connectionString = `mongodb://${Config.get(
            "mongo.production.server"
          )}:${Config.get("mongo.production.port")}/${Config.get(
