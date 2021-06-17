@@ -40,6 +40,9 @@ export class NewsController extends BaseController
   public create(request: Request, response: Response) {
     News.create(request.body)
       .then((resp) => {
+        if(resp.draftCopy == false){
+          NewsFilter.notificationNewNews(resp)
+        }
         response.status(HttpResponse.Ok).json(resp);
       })
       .catch((err) => {
@@ -163,6 +166,23 @@ export class NewsController extends BaseController
     });
 }
 
+
+/**
+   * Encontrar Noticias que son borradores
+   *
+   * @route /v1/news/draft/:id
+   * @method news
+   */
+ public findMyNewsDraft(request: Request, response: Response) {
+  let user = request.params.id
+  News.findMyNewsDraft(user)
+  .then((resp) => {
+    response.status(HttpResponse.Ok).json(resp);
+  })
+  .catch((err) => {
+    response.status(HttpResponse.BadRequest).send("cannot-find-news-by-user");
+  });
+}
 
  /**
    * Encontrar Noticias programadas de un usuario
