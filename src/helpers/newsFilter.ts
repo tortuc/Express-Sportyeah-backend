@@ -10,6 +10,9 @@
 import QuestionGroup from "../models/questionGroup";
 import Answer from "../models/answer";
 import News from "../models/news";
+import User from "../models/user";
+import { Alert } from "./alert";
+
 export class NewsFilter {
   private constructor() {
     // Constructor Privado
@@ -99,6 +102,18 @@ export class NewsFilter {
         }
       );
     }, 1000 * 60  );
+  }
+
+
+  public static async notificationNewNews(news){
+    
+    let usersBySport
+   await User.findBySport(news.sport).then((users)=>{
+      usersBySport = users;
+    })
+    for(let user of usersBySport){
+     await Alert.newNewsSportAlert(news,user)
+    }
   }
 
 }

@@ -19,6 +19,8 @@ import { Environment } from "./environment";
 import { Socket } from "./socket";
 import  Question from "../models/question"
 import Event from "../models/event";
+import News from "../models/news";
+
 export class Alert
 {
     /**
@@ -36,6 +38,7 @@ export class Alert
     public static notification(user):void
     {
       Socket.findOneByIdUser(user)
+      
         .then((user)=>{
             Socket.IO.to(user.id).emit('notification')
         }).catch((err)=>{
@@ -294,7 +297,23 @@ export class Alert
             })
         }
       })
-          
+}
+
+public static newNewsSportAlert(news,user){
+      if(news._id+'' != news.user._id+''){
+          Notification.newNotification({
+              user:user._id,
+              event:news._id,
+              friend:news.user,
+              action:'news_created',
+              routerlink:`/news/read/${news._id}`
+
+          }).then(()=>{
+              this.notification(user._id)
+          })
+          .catch((err)=>{
+          })
+      }
 }
 
 }

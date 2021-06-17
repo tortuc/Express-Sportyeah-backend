@@ -32,10 +32,11 @@ const schema = createSchema({
     principalSubtitle:Type.string(),
     principalImage:Type.string(),
     principalVideo:Type.string(),
+    principalYoutube:Type.string(),
     audioNews:Type.string(),
     originPrincipaMedia : Type.string({default:null}),
     origin:Type.string({default:null}),
-    sport   : Type.string({required:true,enum:['soccer', 'basketball','tennis',
+    sport   : Type.string({required: false,enum:['soccer', 'basketball','tennis',
     'baseball','golf','running','volleyball','swimming','boxing','table tennis','rugby','football','esport','various']})  ,   
     stream  : Type.boolean({default:false}),
     postStream : Type.string({required:false,default:null}),
@@ -45,6 +46,7 @@ const schema = createSchema({
     privated : Type.boolean({default:false}),
     programatedDate        : Type.date({default:null}),
     programated       : Type.boolean({default:false}),
+    draftCopy: Type.boolean({default:false}),
     edited  : Type.date({defualt:null}),
     views  :[Type.string({default: 0})]
 });
@@ -61,7 +63,7 @@ const News = typedModel('News', schema, undefined, undefined, {
 
     findNews(){
         return News
-            .find({deleted:false,programated:false,stream:false})
+            .find({deleted:false,draftCopy:false,programated:false,stream:false})
             .populate('user')
             .sort({date:-1})
             //.skip(skip)
@@ -70,7 +72,7 @@ const News = typedModel('News', schema, undefined, undefined, {
 
     findNewsStreaming(){
         return News
-            .find({deleted:false,programated:false,stream:true})
+            .find({deleted:false,draftCopy:false,programated:false,stream:true})
             .populate('user')
             .sort({date:-1})
             //.skip(skip)
@@ -90,7 +92,7 @@ const News = typedModel('News', schema, undefined, undefined, {
 
     findBySport(sport){
         return News
-            .find({sport,deleted:false,programated:false})
+            .find({sport,deleted:false,draftCopy:false,programated:false})
             .populate('user')
             .sort({date:-1})
             //.skip(skip)
@@ -102,7 +104,7 @@ const News = typedModel('News', schema, undefined, undefined, {
      */
     findMyNewss(user){
         
-        return News.find({user,deleted:false,programated:false})
+        return News.find({user,deleted:false,draftCopy:false,programated:false})
         .populate('user')
         .sort({date:-1})
         //.skip(skip)
@@ -118,6 +120,18 @@ const News = typedModel('News', schema, undefined, undefined, {
         .populate('user')
         .sort({date:-1})
         //.skip(skip)
+        .limit(10)
+    },
+
+     /**
+     * Obtiene los News de un usuario que son borradores
+     * @param user Id del usuario
+     */
+      findMyNewsDraft(user){
+        
+        return News.find({user,deleted:false,draftCopy:true})
+        .populate('user')
+        .sort({date:-1})
         .limit(10)
     },
 

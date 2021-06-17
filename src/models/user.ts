@@ -252,6 +252,15 @@ const User = typedModel("User", schema, undefined, undefined, {
     });
   },
 
+   /**
+   * Obtiene el usuario por el deporte
+   *
+   * @param {string} sport    El deporte del usuario
+   */
+    findBySport(sport: string) {
+      return User.find({ sport });
+    },
+
   /**
    * Crea un nuevo usuario
    *

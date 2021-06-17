@@ -49,6 +49,7 @@ export class QuestionController extends BaseController {
    * @method get
    */
   public create(request: Request, response: Response) {
+console.log(request.body.finishVotes);
 
     Question.create(request.body.user,request.body.finishVotes)
       .then((resp:any) => {
