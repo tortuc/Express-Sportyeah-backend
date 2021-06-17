@@ -1,4 +1,4 @@
-import { Net } from './net';
+import { Net } from "./net";
 /**
  * App
  *
@@ -61,8 +61,11 @@ export class App {
           "https://www.sportyeah.com",
           "http://localhost:8100",
           "https://admin.sportyeah.com",
-           "capacitor://localhost",
+          "capacitor://localhost",
           "http://localhost",
+          "https://test.sportyeah.com",
+          "https://app-test.sportyeah.com",
+          "https://admin-test.sportyeah.com",
         ],
       })
     );
@@ -140,10 +143,6 @@ export class App {
    * @return {void}
    */
   public static run(): void {
-    
-    
-    
-    
     // Obtiene la aplicación
     let application: App = App.get();
 
@@ -167,8 +166,7 @@ export class App {
       application.route();
 
       console.info(`[OK] ${moment} Las rutas han sido cargadas con éxito`);
-      
-      
+
       // Inicia la conexión a Mongo
       Mongoose.startConnection();
 
