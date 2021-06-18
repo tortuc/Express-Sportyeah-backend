@@ -84,6 +84,16 @@ NewsRouter.get('/own/:id', newsController.findMyNewss);
  NewsRouter.get('/deleted/:id', newsController.findMyNewsDeleted);
 
 /**
+ * Obtiene las noticias que son borradores de un usuario por id
+ * 
+ * 
+ * @route /v1/news/draft/:id
+ * @method get
+ */
+ NewsRouter.get('/draft/:id', newsController.findMyNewsDraft);
+
+
+/**
  * Obtiene las noticias programadas de un usuario por id
  * 
  * 
