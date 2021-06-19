@@ -269,12 +269,12 @@ const User = typedModel("User", schema, undefined, undefined, {
   },
 
    /**
-   * Obtiene el usuario por el deporte
+   * Obtiene el usuario por el deporte, excepto el id del usuario que se le pase
    *
    * @param {string} sport    El deporte del usuario
    */
     findBySport(sport: string) {
-      return User.find({ sport });
+      return User.find({ sport});
     },
 
   /**
