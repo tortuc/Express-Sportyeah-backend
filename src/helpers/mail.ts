@@ -147,14 +147,13 @@ export class Mail {
     const { ip, country } = geo;
     const { name, last_name, email, username, browser } = user;
     let title = await Translate.get("email.new_user.title", "es");
-    let sport = await Translate.get(`sports.${user.sport}`, "es");
+    let sport = await Translate.get(`allSports.${user.sport}`, "es");
     let sportImage = `https://app.sportyeah.com/assets/sports/${user.sport}.png`;
-    let profile_search =
-      user.profile_user == "player"
-        ? `profile_user.${user.profile_user}.${user.sport}`
-        : `profile_user.${user.profile_user}`;
 
-    let profile = await Translate.get(profile_search, "es");
+    let profile = await Translate.get(
+      `profile_user.${user.profile_user}`,
+      "es"
+    );
 
     const context = {
       name,
@@ -170,7 +169,7 @@ export class Mail {
       country,
       browser,
       appInfo: null,
-      map:null
+      map: null,
     };
     return context;
   }
@@ -189,7 +188,7 @@ export class Mail {
       usersInfo,
       posts,
       used,
-      news
+      news,
     };
 
     return appInfo;
