@@ -115,36 +115,7 @@ const schema = createSchema({
   /**
    * Deporte del usuario
    */
-  sport: Type.string({
-    enum: [
-      "soccer",
-      "basketball",
-      "tennis",
-      "baseball",
-      "golf",
-      "running",
-      "volleyball",
-      "swimming",
-      "boxing",
-      "table tennis",
-      "rugby",
-      "football",
-      "esport",
-      "various",
-      "archery",
-      "athletics",
-      "badminton",
-      "rafting",
-      "climbing",
-      "cycling",
-      "hriding",
-      "fencing",
-      "karate",
-      "judo",
-      "taekwondo",
-      "surf",
-    ],
-  }),
+  sport: Type.string({}),
   /**
    * tipo de perfil del usuario
    */
@@ -268,14 +239,14 @@ const User = typedModel("User", schema, undefined, undefined, {
     });
   },
 
-   /**
+  /**
    * Obtiene el usuario por el deporte
    *
    * @param {string} sport    El deporte del usuario
    */
-    findBySport(sport: string) {
-      return User.find({ sport });
-    },
+  findBySport(sport: string) {
+    return User.find({ sport });
+  },
 
   /**
    * Crea un nuevo usuario
