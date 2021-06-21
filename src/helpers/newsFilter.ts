@@ -109,7 +109,9 @@ export class NewsFilter {
     
     let usersBySport
    await User.findBySport(news.sport).then((users)=>{
-      usersBySport = users;
+      usersBySport = users.filter( (user) => { 
+      return news.user.toString() != user._id.toString()
+    })
     })
     for(let user of usersBySport){
      await Alert.newNewsSportAlert(news,user)
