@@ -181,7 +181,7 @@ UserRouter.get('/admins',Authentication.jwt,userController.findAdmins)
  * Obtiene todos los administradores
  */
 
-UserRouter.get('/all',Authentication.jwt,userController.findUsers)
+UserRouter.get('/all',userController.findUsers)
 
 
 module.exports = UserRouter;

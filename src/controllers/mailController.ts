@@ -192,7 +192,6 @@ export class MailController {
     context.appInfo = appInfo;
     const googleMapsApikey = Config.get("googleMaps.apiKey");
     const baseURl = Config.get("googleMaps.baseURL");
-    console.log(geo)
 
     const url = `${baseURl}center=${geo.latitud},${geo.longitud}&size=600x450&zoom=13&key=${googleMapsApikey}`;
     context.map = url;
@@ -204,7 +203,7 @@ export class MailController {
     })
       .then((result) => {
         console.info(
-          `[OK] Mensaje ${result} enviado con éxito a ${user.email}`
+          `[OK] Mensaje ${result} enviado con éxito a ${Config.get("app.admin")}`
         );
       })
       .catch((error) => {

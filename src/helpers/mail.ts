@@ -14,9 +14,11 @@
  */
 const checkDiskSpace = require("check-disk-space");
 import axios from "axios";
+import moment = require("moment");
 import AnalyticStore from "../models/analyticsStores";
 import News from "../models/news";
 import Post from "../models/post";
+import User from "../models/user";
 import { Analytic } from "./analytic";
 import { Config } from "./config";
 import { Translate } from "./translate";
@@ -148,7 +150,6 @@ export class Mail {
     const { name, last_name, email, username, browser } = user;
     let title = await Translate.get("email.new_user.title", "es");
     let sport = await Translate.get(`allSports.${user.sport}`, "es");
-    let sportImage = `https://app.sportyeah.com/assets/sports/${user.sport}.png`;
 
     let profile = await Translate.get(
       `profile_user.${user.profile_user}`,
@@ -163,7 +164,6 @@ export class Mail {
       link,
       title,
       sport,
-      sportImage,
       profile,
       ip,
       country,
@@ -183,12 +183,16 @@ export class Mail {
     let stores = await AnalyticStore.getAllData();
     let news = await News.totalNewsToday();
     let posts = await Post.totalPostToday();
+    let usersToday = await User.getUsersByDate(moment().startOf("day"));
+
+    
 
     const appInfo = {
       usersInfo,
       posts,
       used,
       news,
+      usersToday
     };
 
     return appInfo;
