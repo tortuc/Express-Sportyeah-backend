@@ -1,5 +1,11 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
 import { userHelper } from "../helpers/userHelper";
+
+export interface Filters {
+  countrys?: string[];
+  profiles?:string[];
+  sports?:string[];
+}
 /**
  * Esquema de Usuario
  */
@@ -239,14 +245,14 @@ const User = typedModel("User", schema, undefined, undefined, {
     });
   },
 
-   /**
+  /**
    * Obtiene el usuario por el deporte, excepto el id del usuario que se le pase
    *
    * @param {string} sport    El deporte del usuario
    */
-    findBySport(sport: string) {
-      return User.find({ sport});
-    },
+  findBySport(sport: string) {
+    return User.find({ sport });
+  },
 
   /**
    * Crea un nuevo usuario
@@ -414,14 +420,35 @@ const User = typedModel("User", schema, undefined, undefined, {
     return User.findByIdAndUpdate(id, { sponsors });
   },
 
-  searchQueryUsers(query: string, limit = 5, skip = 0) {
+  searchQueryUsers(
+    query: string,
+    limit = 5,
+    skip = 0,
+    filters: Filters = null
+  ) {
     let regex = new RegExp(query.replace(/ /g, ""), "i");
+    let $match: any = {};
+    $match.search = { $regex: regex };
+    if (filters?.countrys?.length > 0) {
+      $match.country = { $in: filters.countrys };
+    }
+    if (filters?.profiles?.length > 0) {
+      $match.profile_user = { $in: filters.profiles };
+    }
+    if (filters?.sports?.length > 0) {
+      $match.sport = { $in: filters.sports };
+    }
 
     return User.aggregate([
       {
-        $project: { search: { $concat: ["$name", "$last_name", "$username"] } },
+        $project: {
+          search: { $concat: ["$name", "$last_name", "$username"] },
+          country: "$country",
+          profile_user: "$profile_user",
+          sport: "$sport",
+        },
       },
-      { $match: { search: { $regex: regex } } },
+      { $match },
       { $sort: { search: 1 } },
       { $skip: skip },
       { $limit: limit },
@@ -436,7 +463,6 @@ const User = typedModel("User", schema, undefined, undefined, {
    */
   searchQuerySponsors(query: string, limit = 5, skip = 0) {
     let regex = new RegExp(query.replace(/ /g, ""), "i");
-    console.log(regex);
 
     return User.aggregate([
       {
