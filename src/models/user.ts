@@ -197,6 +197,7 @@ const schema = createSchema({
    * Navegador que usa el usuario
    */
   browser: Type.string({}),
+  codeAuth:Type.string({default:null})
 });
 
 const User = typedModel("User", schema, undefined, undefined, {
@@ -555,6 +556,15 @@ const User = typedModel("User", schema, undefined, undefined, {
   getAdmins() {
     return User.find({ role: "admin" });
   },
+  async verifyCodeAuth(id,code){
+    let find = await User.findOneAndUpdate({_id:id,codeAuth:code},{codeAuth:null},{new:true})
+
+    if(find){
+      return find
+    }else{
+      throw "incorrect"
+    }
+  }
 });
 
 /**

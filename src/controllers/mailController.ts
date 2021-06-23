@@ -102,6 +102,14 @@ export class MailController {
       "email.unknow_access.greeting_end",
       user.lang
     );
+
+
+    const codeMsg = await Translate.get(
+      "email.unknow_access.code",
+      user.lang
+    );
+
+    
     const messageBegin = await Translate.get(
       "email.unknow_access.message_begin",
       user.lang
@@ -129,6 +137,8 @@ export class MailController {
         messageBegin,
         messageMiddle,
         goTo,
+        codeMsg,
+        code:user.codeAuth
       },
     })
       .then((result) => {

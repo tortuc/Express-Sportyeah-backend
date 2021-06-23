@@ -39,16 +39,17 @@
     "unknow_access": {
       "title": "Acceso desconocido",
       "greeting_begin": "Saludos, Sr@",
-      "greeting_end": "Se ha accedido a tu cuenta de SportYeah con una dirección IP no habitual.",
+      "greeting_end": "Se ha intentado acceder a tu cuenta de SportYeah con una dirección IP no habitual.",
       "message_begin": "El acceso se dio mediante la dirección IP",
       "message_middle": "en",
-      "go_to": "Ir a SportYeah"
+      "go_to": "Ir a SportYeah",
+      "code": "Si fue usted, ingrese el siguiente código para acceder a su cuenta"
     }
   },
   "profile_user": {
     "profile_user": "Tipo de usuario",
     "club": "Club",
-    "player":"Jugador/a",
+    "player": "Jugador/a",
     "player2": {
       "soccer": "Futbolista",
       "basketball": "Basquetbolista",

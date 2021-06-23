@@ -14,7 +14,8 @@
         "greeting_end":"Votre compte SportYeah a été consulté avec une adresse IP inhabituelle.",
         "message_begin": "L'accès a été donné par adresse IP",
         "message_middle": "au",
-        "go_to": "Aller à SportOuais"
+        "go_to": "Aller à SportOuais",
+        "code": "Si c'était vous, entrez le code suivant pour accéder à votre compte"
       }
   }
 }

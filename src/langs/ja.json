@@ -14,7 +14,8 @@
         "greeting_end":"あなたの SportYeah アカウントが通常とは異なる IP アドレスでアクセスされました。",
         "message_begin": "アクセスはIPアドレスによって与えられました",
         "message_middle": "オン",
-        "go_to": "SportYeah に行く"
+        "go_to": "SportYeah に行く",
+        "code": "あなたの場合は、次のコードを入力してアカウントにアクセスします"
       }
   }
 }

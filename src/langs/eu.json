@@ -14,7 +14,9 @@
         "greeting_end":"Ezohiko IP helbide batekin sartu duzu zure SPORTEAH kontua",
         "message_begin": "Sarbidea IP helbidearen bidez gertatu da",
         "message_middle": "en",
-        "go_to": "Joan Sportyeah-ra"
+        "go_to": "Joan Sportyeah-ra",
+        "code": "Zu bazina, sartu kode hau zure kontuan sartzeko"
+
       }
   }
 }

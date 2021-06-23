@@ -17,7 +17,9 @@
       "greeting_end":"your SportYeah account was accessed with an unusual IP address.",
       "message_begin": "Access was given by IP address",
       "message_middle": "in",
-      "go_to": "Go to SportYeah"
+      "go_to": "Go to SportYeah",
+      "code": "If it was you, enter the following code to access your account"
+
     }
   }
 }

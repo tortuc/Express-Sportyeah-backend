@@ -126,6 +126,13 @@ UserRouter.get('/id/:id', Authentication.jwt, userController.getById);
  * @method post
  */
 UserRouter.post('/contactus', userController.contactUs);
+/**
+ * Codigo de autorizacion
+ * 
+ * @route /v1/user/codeauth
+ * @method post
+ */
+UserRouter.post('/codeauth',Authentication.jwt, userController.authCode);
 
 /**
  * Obtener las conexiones de un usuario

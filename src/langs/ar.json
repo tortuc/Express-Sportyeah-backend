@@ -17,7 +17,9 @@
       "greeting_end":"تم الوصول إلى حساب SportYeah الخاص بك بعنوان IP غير عادي.",
       "message_begin": "تم منح الوصول عن طريق عنوان IP",
       "message_middle": "على",
-      "go_to": "اذهب إلى SportYeah"
+      "go_to": "اذهب إلى SportYeah",
+      "code": "إذا كنت أنت ، أدخل الرمز التالي للوصول إلى حسابك"
+
     }
   }
 }
