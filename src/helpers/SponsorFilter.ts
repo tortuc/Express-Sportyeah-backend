@@ -81,7 +81,7 @@
      public static async getSponsorViewsCountHours(day, user,from,name) {
       let days = [];
       for (let index = 0; index < 24; index++) {
-        let start = moment(day).startOf("day");
+        let start = moment(day).startOf("hour");
         days.push(
           await Sponsor.getVisitsByHour(user, start.add(index, "hour"),from,name)
         );

@@ -9,26 +9,11 @@ import { createSchema, Type, typedModel } from "ts-mongoose";
  * @link https://www.npmjs.com/package/ts-mongoose
  */
 
-export interface IAptitudes {
-  _id: string;
-  userId: string;
-  position: string;
-  federationTeam: string;
-  place: string;
-  eventDate: Date;
-  title: string;
-  description: string;
-  multimediaContent: string[];
-  date: Date;
-  deleted: boolean;
-}
-
-
 /**
  * Define el esquema del modelo
  */
 const schema = createSchema({
-  userId: Type.objectId({required: true,ref:'User'}),
+  userId: Type.objectId({ required: true, ref: "User" }),
   title: Type.string({ required: true }),
   score: Type.string({ required: true }),
   date: Type.date({ default: Date.now }),
@@ -40,8 +25,8 @@ const Aptitudes = typedModel("aptitude", schema, undefined, undefined, {
    * Devuelva la informacion de un Experiencia
    * @param id `_id` del aptitudes
    */
-  getAptitudesByUser(userId:string) {
-    return Aptitudes.find({userId});
+  getAptitudesByUser(userId: string) {
+    return Aptitudes.find({ userId });
   },
 
   /**
@@ -64,7 +49,7 @@ const Aptitudes = typedModel("aptitude", schema, undefined, undefined, {
    * @param aptitudes Experiencia con los nuevos datos
    */
   updateAptitudes(id, aptitude) {
-    return Aptitudes.findOneAndUpdate({_id:id},aptitude);
+    return Aptitudes.findOneAndUpdate({ _id: id }, aptitude, { new: true });
   },
   /**
    * Devuelva la informacion de un Experiencia

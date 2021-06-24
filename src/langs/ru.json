@@ -1,0 +1,21 @@
+{
+  "testbasic":"Is Working!!",
+  "test": {
+    "hello": "Hello!"
+  },
+  "sports": {
+    "baseball": "Baseball",
+    "soccer": "Fooball"
+  },
+  "email": {
+    "unknow_access": {
+        "title": "Неизвестный доступ",
+        "greeting_begin": "Привет, сэр",
+        "greeting_end":"К вашей учетной записи SportYeah обращались с необычного IP-адреса.",
+        "message_begin": "Доступ предоставлен по IP-адресу",
+        "message_middle": "на",
+        "go_to": "Перейти в спорт",
+        "code": "Если это были вы, введите следующий код для доступа к своей учетной записи."
+      }
+  }
+}

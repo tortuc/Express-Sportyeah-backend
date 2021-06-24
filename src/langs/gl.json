@@ -1,0 +1,22 @@
+{
+  "testbasic":"Is Working!!",
+  "test": {
+    "hello": "Hello!"
+  },
+  "sports": {
+    "baseball": "Baseball",
+    "soccer": "Fooball"
+  },
+  "email": {
+    "unknow_access": {
+        "title": "Acceso descoñecido",
+        "greeting_begin": "Un saúdo, señor",
+        "greeting_end":"Accedeuse á túa conta SportYeah cun enderezo IP inusual.",
+        "message_begin": "O acceso deuse por enderezo IP",
+        "message_middle": "en",
+        "go_to": "Vaia a SportYeah",
+        "code": "Se fuches ti, introduce o seguinte código para acceder á túa conta"
+
+      }
+  }
+}

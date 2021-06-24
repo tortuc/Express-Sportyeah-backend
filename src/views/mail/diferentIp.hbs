@@ -1,36 +1,29 @@
 {{> header}}
-            <h1>Acceso desconocido</h1>
+            <h1>{{title}}</h1>
 
             <p>
               
-                Saludos, Sr@ <span style="font-weight: 600;">{{name}}</span> <span style="font-weight: 600;">{{last_name}}</span>, Se ha accedido a tu cuenta de SportYeah con una dirección IP no habitual.
+                {{greetingBegin}} <span style="font-weight: 600;">{{name}}</span> <span style="font-weight: 600;">{{last_name}}</span>, {{greetingEnd}}
             </p>
+            <p>{{codeMsg}}</p>
+            <h1 style="color:#2a4c78;text-align:center">{{code}}</h1>
             <p>
-                El acceso se dio mediante la dirección IP <span style="font-weight: 600;">{{ip}}</span>, en <span style="font-weight: 600;">{{city}}</span>, <span style="font-weight: 600;">{{country}}</span>.
+                {{messageBegin}} <span style="font-weight: 600;">{{ip}}</span>, {{messageMiddle}} <span style="font-weight: 600;">{{city}}</span>, <span style="font-weight: 600;">{{country}}</span>.
             </p>
          
+            <img style="border-radius: 5px; border: solid 2px #385d88" src="{{mapUrl}}" alt="GMAPS">
 
          <div style="margin-top:5rem;width: 100%;text-align:center !important;">
-            <a href="{{link}}" style="font-size: 14px;
+            <a href="{{link}}" style="font-size: 18px;
                 padding: 6px 12px;
                 margin-bottom: 0;
                 display: inline-block;
                 text-decoration: none;
-                text-align: center;
-                white-space: nowrap;
-                vertical-align: middle;
-                -ms-touch-action: manipulation;
-                touch-action: manipulation;
-                background: #006400;
+                background: #2a4c78;
                 color: white;
-                border-radius: 5px;
-                cursor: pointer;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                background-image: none;
-                border: 1px solid transparent;">Ir a SportYeah</a>
+                border-radius: 20px;
+                cursor: pointer;                         
+                border: 1px solid transparent;">{{goTo}}</a>
          </div>
           
          

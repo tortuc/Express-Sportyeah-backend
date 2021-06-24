@@ -11,6 +11,7 @@
  import { Environment } from "./environment";
  import { Admin } from "./admin";
  import { QuestionHelper } from "./question"
+ import { NewsFilter } from "./newsFilter"
  export class Mongoose {
    /**
     * Una instancia única del objeto
@@ -77,7 +78,14 @@
          )}:${Config.get("mongo.development.port")}/${Config.get(
            "mongo.development.database"
          )}`;
-       } else {
+       } else if (Environment.get() == Environment.Test){
+        connectionString = `mongodb://${Config.get(
+          "mongo.test.server"
+        )}:${Config.get("mongo.test.port")}/${Config.get(
+          "mongo.test.database"
+        )}`;
+       }
+       else {
          connectionString = `mongodb://${Config.get(
            "mongo.production.server"
          )}:${Config.get("mongo.production.port")}/${Config.get(
@@ -99,6 +107,7 @@
          .then(() => {
            Admin.createAdmin();
            QuestionHelper.Init();
+           NewsFilter.Init();
            resolve(connectionString);
          })
          .catch((error) => {

@@ -1,6 +1,11 @@
 import { createSchema, Type, typedModel } from "ts-mongoose";
 import { userHelper } from "../helpers/userHelper";
-import Experience from "./experience";
+
+export interface Filters {
+  countrys?: string[];
+  profiles?:string[];
+  sports?:string[];
+}
 /**
  * Esquema de Usuario
  */
@@ -61,20 +66,20 @@ const schema = createSchema({
    * Imagen de perfil del usuario
    */
   photo: Type.string({
-    default: "https://files.sportyeah.com/v1/image/get/1616530480396",
+    default: "https://files.sportyeah.com/v1/image/get/1624031790350.jpeg",
   }),
   /**
    * banner del usuario (portada)
    */
   photoBanner: Type.string({
-    default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
+    default: "https://files.sportyeah.com/v1/image/get/1624031847836.jpeg",
   }),
   /**
    * Slider (esto no puede ser asi)
    */
   slider: [
     Type.string({
-      default: "https://files.sportyeah.com/v1/image/get/1620692250035.jpeg",
+      default: "https://files.sportyeah.com/v1/image/get/1623464740734.jpeg",
     }),
   ],
   /**
@@ -116,24 +121,7 @@ const schema = createSchema({
   /**
    * Deporte del usuario
    */
-  sport: Type.string({
-    enum: [
-      "soccer",
-      "basketball",
-      "tennis",
-      "baseball",
-      "golf",
-      "running",
-      "volleyball",
-      "swimming",
-      "boxing",
-      "table tennis",
-      "rugby",
-      "football",
-      "esport",
-      "various",
-    ],
-  }),
+  sport: Type.string({}),
   /**
    * tipo de perfil del usuario
    */
@@ -152,6 +140,7 @@ const schema = createSchema({
       "sponsor",
       "executive",
       "administration",
+      "referee",
     ],
     default: null,
   }),
@@ -164,7 +153,7 @@ const schema = createSchema({
    */
   authorize: Type.boolean({ default: true }),
   /**
-   * Patrocinadores ( esto no puede ir asi)
+   * Si el usuario es un patrocinador, podra editar su tarjeta
    */
   sponsor_info: Type.object().of({
     name: Type.string({ default: "SportYeah" }),
@@ -196,6 +185,19 @@ const schema = createSchema({
    * Variable de control para saber si el usuario leyo el mensaje de el perfil
    */
   msgProfile: Type.boolean({ default: false }),
+
+  socialNetworks: Type.object().of({
+    tiktok: Type.string({ default: null }),
+    facebook: Type.string({ default: null }),
+    linkedin: Type.string({ default: null }),
+    instagram: Type.string({ default: null }),
+    twitter: Type.string({ default: null }),
+  }),
+  /**
+   * Navegador que usa el usuario
+   */
+  browser: Type.string({}),
+  codeAuth:Type.string({default:null})
 });
 
 const User = typedModel("User", schema, undefined, undefined, {
@@ -242,6 +244,15 @@ const User = typedModel("User", schema, undefined, undefined, {
     return User.findOne({ recover_password_token: token }).populate({
       path: "experiences",
     });
+  },
+
+  /**
+   * Obtiene el usuario por el deporte, excepto el id del usuario que se le pase
+   *
+   * @param {string} sport    El deporte del usuario
+   */
+  findBySport(sport: string) {
+    return User.find({ sport });
   },
 
   /**
@@ -410,14 +421,35 @@ const User = typedModel("User", schema, undefined, undefined, {
     return User.findByIdAndUpdate(id, { sponsors });
   },
 
-  searchQueryUsers(query: string, limit = 5, skip = 0) {
+  searchQueryUsers(
+    query: string,
+    limit = 5,
+    skip = 0,
+    filters: Filters = null
+  ) {
     let regex = new RegExp(query.replace(/ /g, ""), "i");
+    let $match: any = {};
+    $match.search = { $regex: regex };
+    if (filters?.countrys?.length > 0) {
+      $match.country = { $in: filters.countrys };
+    }
+    if (filters?.profiles?.length > 0) {
+      $match.profile_user = { $in: filters.profiles };
+    }
+    if (filters?.sports?.length > 0) {
+      $match.sport = { $in: filters.sports };
+    }
 
     return User.aggregate([
       {
-        $project: { search: { $concat: ["$name", "$last_name", "$username"] } },
+        $project: {
+          search: { $concat: ["$name", "$last_name", "$username"] },
+          country: "$country",
+          profile_user: "$profile_user",
+          sport: "$sport",
+        },
       },
-      { $match: { search: { $regex: regex } } },
+      { $match },
       { $sort: { search: 1 } },
       { $skip: skip },
       { $limit: limit },
@@ -432,7 +464,6 @@ const User = typedModel("User", schema, undefined, undefined, {
    */
   searchQuerySponsors(query: string, limit = 5, skip = 0) {
     let regex = new RegExp(query.replace(/ /g, ""), "i");
-    console.log(regex);
 
     return User.aggregate([
       {
@@ -525,6 +556,15 @@ const User = typedModel("User", schema, undefined, undefined, {
   getAdmins() {
     return User.find({ role: "admin" });
   },
+  async verifyCodeAuth(id,code){
+    let find = await User.findOneAndUpdate({_id:id,codeAuth:code},{codeAuth:null},{new:true})
+
+    if(find){
+      return find
+    }else{
+      throw "incorrect"
+    }
+  }
 });
 
 /**

@@ -1,0 +1,21 @@
+{
+  "testbasic":"Is Working!!",
+  "test": {
+    "hello": "Hello!"
+  },
+  "sports": {
+    "baseball": "Baseball",
+    "soccer": "Fooball"
+  },
+  "email": {
+    "unknow_access": {
+        "title": "未知訪問",
+        "greeting_begin": "問候，先生",
+        "greeting_end":"您的 SportYeah 帳戶被一個不尋常的 IP 地址訪問。",
+        "message_begin": "通過 IP 地址授予訪問權限",
+        "message_middle": "上",
+        "go_to": "前往 SportYeah",
+        "code": "如果是您，请输入以下代码访问您的帐户"
+      }
+  }
+}

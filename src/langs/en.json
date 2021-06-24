@@ -1,0 +1,25 @@
+{
+  "testbasic": "Is Working!!",
+  "test": {
+    "hello": "Hello!"
+  },
+  "sports": {
+    "baseball": "Baseball",
+    "soccer": "Fooball"
+  },
+  "email": {
+    "new_user": {
+      "title": "A user has registered on SportYeah!"
+    },
+    "unknow_access": {
+      "title": "Unknown access",
+      "greeting_begin": "Greetings, Sr@",
+      "greeting_end":"your SportYeah account was accessed with an unusual IP address.",
+      "message_begin": "Access was given by IP address",
+      "message_middle": "in",
+      "go_to": "Go to SportYeah",
+      "code": "If it was you, enter the following code to access your account"
+
+    }
+  }
+}

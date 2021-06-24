@@ -33,6 +33,21 @@ import Post from "../models/post";
 import Friend from "../models/friend";
 import { userHelper } from "../helpers/userHelper";
 
+function generate(n) {
+  var add = 1,
+    max = 12 - add; // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.
+
+  if (n > max) {
+    return generate(max) + generate(n - max);
+  }
+
+  max = Math.pow(10, n + add);
+  var min = max / 10; // Math.pow(10, n) basically
+  var number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  return ("" + number).substring(add);
+}
+
 export class UserController extends BaseController {
   /**
    * El constructor
@@ -72,8 +87,6 @@ export class UserController extends BaseController {
   public async create(request: Request, response: Response) {
     // Crea el usuario
 
-    console.log(request.body);
-
     let newUser = new User(request.body);
 
     // Codifica la contraseña
@@ -85,6 +98,8 @@ export class UserController extends BaseController {
     // Crea un nuevo usuario
     await User.create(newUser)
       .then((user) => {
+        console.log("creado", user);
+
         const validationLink: string = `${Web.getUrl()}/verification?token=${
           user.verification_token
         }`;
@@ -102,6 +117,8 @@ export class UserController extends BaseController {
         response.status(HttpResponse.Ok).json(user);
       })
       .catch((error) => {
+        console.log(error);
+
         response.status(HttpResponse.BadRequest).json(error);
       });
   }
@@ -160,15 +177,23 @@ export class UserController extends BaseController {
             if (geo) {
               geo.user = user._id;
               Connection.create(geo);
-              Connection.diferentIp(geo).catch((error) => {
-                // Envía el coreo de acceso desconocido
-                Mailer.unknowAccess(user, geo, Web.getUrl());
+              Connection.diferentIp(geo)
+                .then(() => {
+                  response.status(HttpResponse.Ok).json(token);
+                })
+                .catch(async (error) => {
+                  // Envía el coreo de acceso desconocido
+                  let userModified = await User.findByIdAndUpdate(
+                    user._id,
+                    { codeAuth: generate(6) },
+                    { new: true }
+                  );
+                  Mailer.unknowAccess(userModified, geo, Web.getUrl());
+                  response.status(HttpResponse.Ok).json(token);
 
-                console.error(`[ERROR] ${error}`);
-              });
+                  console.error(`[ERROR] ${error}`);
+                });
             }
-
-            response.status(HttpResponse.Ok).json(token);
           }
         } else {
           // Se ha fallado la contraseña
@@ -213,7 +238,8 @@ export class UserController extends BaseController {
     User.verification(token)
       .then((user) => {
         // Envía el correo de una nueva ha sido creada al administrador del sitio
-        Mailer.newAccountCreated(user, Web.getUrl());
+        let geo = Net.geoIp(Net.ip(request));
+        Mailer.newAccountCreated(user, Web.getUrl(), geo);
 
         // Crea el token de sesión JWT y lo devuelve
         const token = Authentication.token(user);
@@ -511,6 +537,19 @@ export class UserController extends BaseController {
       .catch((err) => {
         // retornamos error
         response.status(HttpResponse.BadRequest).send("cannot get admins");
+      });
+  }
+
+  public authCode(request: Request, response: Response) {
+    const { code } = request.body;
+    const { id } = request.body.decoded;
+
+    User.verifyCodeAuth(id, code)
+      .then((user) => {
+        response.status(HttpResponse.Ok).json(user);
+      })
+      .catch((error) => {
+        response.status(HttpResponse.BadRequest).send(error);
       });
   }
 }

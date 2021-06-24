@@ -1,5 +1,5 @@
 /**
- * Clase postFilter
+ * Clase newsFilter
  *
  * Se usa para filtrar los comenterios, publicaciones, likes
  *
@@ -10,6 +10,9 @@
 import QuestionGroup from "../models/questionGroup";
 import Answer from "../models/answer";
 import News from "../models/news";
+import User from "../models/user";
+import { Alert } from "./alert";
+
 export class NewsFilter {
   private constructor() {
     // Constructor Privado
@@ -82,4 +85,37 @@ export class NewsFilter {
         console.log(err);
       });
   }
+
+
+
+  public static Init() {
+    // Busca todas las noticias que esten programadas
+    setInterval(() => {
+      News.find({programatedDate: { $lt: new Date() }, programated:true }).then(
+        (news) => {
+          if (news.length > 0) {
+            news.forEach(async(news:any) => {
+              //Cambiamos el estado de programado a false
+              News.published(news._id).then(()=>console.log("bien"))
+            });
+          } 
+        }
+      );
+    }, 1000 * 60  );
+  }
+
+
+  public static async notificationNewNews(news){
+    
+    let usersBySport
+   await User.findBySport(news.sport).then((users)=>{
+      usersBySport = users.filter( (user) => { 
+      return news.user.toString() != user._id.toString()
+    })
+    })
+    for(let user of usersBySport){
+     await Alert.newNewsSportAlert(news,user)
+    }
+  }
+
 }

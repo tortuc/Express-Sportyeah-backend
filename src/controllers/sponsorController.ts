@@ -10,7 +10,7 @@ import User from "../models/user";
  * Controlador para los sponsors
  *
  * @author Jogeiker L <jogeiker1999@gmail.com>
- * @copyright Sapviremoto
+ * @copyright Retail Servicios Externos SL
  */
 
 export class SponsorController extends BaseController {

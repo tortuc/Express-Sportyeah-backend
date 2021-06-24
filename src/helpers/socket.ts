@@ -47,6 +47,10 @@ export class Socket {
           "http://localhost:4200",
           "capacitor://localhost",
           "http://localhost",
+          "https://test.sportyeah.com",
+          "https://app-test.sportyeah.com",
+          "https://admin-test.sportyeah.com",
+
         ],
         methods: ["GET", "POST"],
       },

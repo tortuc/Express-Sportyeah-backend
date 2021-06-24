@@ -70,7 +70,7 @@ friendRoute.delete('/unfollow/:id',Authentication.jwt, friendController.unFollow
    * @route /v1/friend/query/:query
    * @method get
    */
-  friendRoute.get(
+  friendRoute.put(
     "/query/:query/:skip",
     friendController.searchUserQuerySkip
   );

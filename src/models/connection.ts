@@ -49,11 +49,13 @@ const Connection = typedModel('Connection', schema, undefined, undefined, {
         .then((connections) => {
             let different = 0
             connections.forEach((connection, i, arr) => {
+                
                 if (connection.ip != geo.ip) 
                 {
                     different += 1
                 }
-
+                console.log('different', different);
+                
                 if (i == arr.length - 1) 
                 {                                  
                     if (different == 3) 
