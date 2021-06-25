@@ -75,7 +75,7 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
       .populate("user")
       .sort({ date: -1 })
       .skip(skip)
-      .limit(15)
+      .limit(10)
   },
   /**
    * Obtiene todos los comentarios de un comment
@@ -86,7 +86,7 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
       .populate("user")
       .sort({ date: -1 })
       .skip(skip)
-      .limit(15)
+      .limit(5)
   },
   /**
    * Obtiene la cantidad de comentarios en un post
