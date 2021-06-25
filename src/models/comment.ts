@@ -17,6 +17,10 @@ const schema = createSchema({
    */
   post: Type.objectId({ required: false, ref: "Post" }),
   /**
+   * _id de el post
+   */
+  comment: Type.objectId({ required: false, ref: "Comment" }),
+  /**
    * _id de la noticia
    */
   news: Type.objectId({ default: null, required: false, ref: "News" }),
@@ -74,6 +78,17 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
       .limit(15)
   },
   /**
+   * Obtiene todos los comentarios de un comment
+   * @param comment id del comment
+   */
+  getRespondsByComments(comment, skip = 0) {
+    return Comment.find({ comment, deleted: false })
+      .populate("user")
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(15)
+  },
+  /**
    * Obtiene la cantidad de comentarios en un post
    * @param post id del post
    */
@@ -88,6 +103,15 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
    */
    getCountOfCommentsByNews(news) {
     return Comment.countDocuments({ news, deleted: false })
+      .populate("user")
+      .sort({ date: -1 });
+  },
+  /**
+   * Obtiene la cantidad de comentarios (respuestas) en un comentario
+   * @param comment id del comment
+   */
+   getCountOfCommentsByComment(comment) {
+    return Comment.countDocuments({ comment, deleted: false })
       .populate("user")
       .sort({ date: -1 });
   },
@@ -116,6 +140,9 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
 
   userCommentPost(user,post){
     return Comment.findOne({user,post})
+  },
+  userRespondComment(user,comment){
+    return Comment.findOne({user,comment})
   },
 
   userCommentNews(user,news){

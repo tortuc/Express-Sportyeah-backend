@@ -15,6 +15,7 @@ import { createSchema, Type, typedModel } from "ts-mongoose";
  */
 const schema = createSchema({
   post: Type.objectId({ required: false, ref: "Post" }),
+  comment: Type.objectId({ required: false, ref: "Comment" }),
   news: Type.objectId({ default: null, required: false, ref: "News" }),
   user: Type.objectId({ required: true, ref: "User" }),
   date: Type.date({ default: Date.now }),
@@ -39,9 +40,28 @@ const Like = typedModel("Like", schema, undefined, undefined, {
       return new Like(like).save();
     }
   },
+  /**
+   * Da like a un comentario, si ya existe una reaccion eliminada, con el mismo comentario y el mismo user, se reactiva
+   * @param like Dar like a un Post
+   */
+   async addLikeComment(like) {
+    let oldLike = await Like.findOneAndUpdate(
+      { comment: like.comment, user: like.user, deleted: true },
+      { deleted: false, type: like.type },
+      { new: true }
+    );
+    if (oldLike) {
+      return oldLike;
+    } else {
+      return new Like(like).save();
+    }
+  },
 
   getLikesByPost(post) {
     return Like.countDocuments({ post, deleted: false });
+  },
+  getLikesByComment(comment) {
+    return Like.countDocuments({ comment, deleted: false });
   },
   dislike(id) {
     return Like.findByIdAndUpdate(id, { deleted: true });
@@ -81,6 +101,30 @@ const Like = typedModel("Like", schema, undefined, undefined, {
       .limit(15)
       .sort({ date: -1 });
   },
+  /**
+   * Retorna 15 reacciones, de cualquier tipo en un comentario
+   * @param comment
+   * @param skip
+   * @returns
+   */
+   allReactionsCommentUsers(comment, skip) {
+    return Like.find({ comment, deleted: false })
+      .populate("user")
+      .skip(skip)
+      .limit(15)
+      .sort({ date: -1 });
+  },
+   /**
+   * Retorna 15 reacciones de un solo tipo
+  
+   * @param comment 
+   * @param type 
+   * @param skip 
+   * @returns 
+   */
+    reactionsByTypeCommentUsers(comment,type,skip){
+      return Like.find({comment,deleted:false,type}).populate('user').skip(skip).limit(10).sort({date:-1})
+    },
    /**
    * Retorna 15 reacciones de un solo tipo
    * 1 = likes
@@ -168,6 +212,16 @@ const Like = typedModel("Like", schema, undefined, undefined, {
     userReactToNews(news, user) {
       return Like.findOne({ news, user, deleted: false });
     },
+
+   /**
+   * Retorna si un usuario reacciono a un comentario
+   * @param comment _id del comentario
+   * @param user _id del usuario
+   * @returns
+   */
+    userReactToComment(comment, user) {
+      return Like.findOne({ comment, user, deleted: false });
+    },
   /**
    * Cambia el tipo de una reaccion
    * @param id _id del like
@@ -202,6 +256,21 @@ const Like = typedModel("Like", schema, undefined, undefined, {
    countTotalOfEachReactionNews(news) {
     return Like.aggregate([
       { $match: { news: { $eq: new mongo.ObjectId(news) }, deleted: false } },
+      {
+        $group: {
+          _id: "$type",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+  },
+  /**
+   * Retorna la cantidad de reacciones por tipo, de un comentario
+   * post _id
+   */
+   countTotalOfEachReactionComment(comment) {
+    return Like.aggregate([
+      { $match: { comment: { $eq: new mongo.ObjectId(comment) }, deleted: false } },
       {
         $group: {
           _id: "$type",

@@ -218,6 +218,12 @@ export class Router {
      * @route /v1/structure/...
      */
     this.route.use("/v1/structure", require("./structureRoute"));
+    /**
+     * Manejador de rutas de comentarios
+     *
+     * @route /v1/comment/...
+     */
+    this.route.use("/v1/comment", require("./commentRoute"));
   }
 
  
