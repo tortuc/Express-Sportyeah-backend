@@ -197,7 +197,8 @@ const schema = createSchema({
    * Navegador que usa el usuario
    */
   browser: Type.string({}),
-  codeAuth:Type.string({default:null})
+  codeAuth:Type.string({default:null}),
+  ip:Type.string({})
 });
 
 const User = typedModel("User", schema, undefined, undefined, {

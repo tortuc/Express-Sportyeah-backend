@@ -155,7 +155,7 @@ export class UserController extends BaseController {
     let password: string = request.body.password;
 
     User.auth(email, password)
-      .then((user) => {
+      .then(async (user) => {
         // Se comprueba si las contraseñas coinciden
         if (Crypto.compare(password, user.password)) {
           if (!user.verified) {
@@ -173,7 +173,7 @@ export class UserController extends BaseController {
 
             // Guardar la conexión con los datos de geolocalización
             let geo = Net.geoIp(Net.ip(request));
-
+            await User.findByIdAndUpdate(user._id,{ip:geo.ip},{new:true})
             if (geo) {
               geo.user = user._id;
               Connection.create(geo);

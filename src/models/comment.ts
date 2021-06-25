@@ -43,6 +43,11 @@ const schema = createSchema({
    * fecha del comentario
    */
   date: Type.date({ default: Date.now }),
+    /**
+   * Fecha en la que se edito el comentario
+   */
+     edited: Type.date({ defualt: null }),
+
   /**
    * si el comentario fue eliminado
    */
@@ -99,7 +104,7 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
    * @param comment comentario con los nuevos datos
    */
   updateComment(id, comment) {
-    return Comment.findByIdAndUpdate(id, comment);
+    return Comment.findByIdAndUpdate(id, comment,{new:true}).populate("user post question");
   },
   /**
    * Devuelva la informacion de un comentario
