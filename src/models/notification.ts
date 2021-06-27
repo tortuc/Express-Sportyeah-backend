@@ -14,7 +14,7 @@ import { createSchema, Type, typedModel } from 'ts-mongoose';
  */
 const schema = createSchema({
     user        : Type.objectId({required: true,ref:'User'}),
-    action      : Type.string({enum:["like","comment","shared","mention","mention_comment","follow","unfollow","questionEnd","invited_event","news_created"]}),
+    action      : Type.string({required:true}),
     friend      : Type.objectId({ref:'User',default:null}),
     post        : Type.objectId({ref:'Post',default:null}),
     comment     : Type.objectId({ref:'Comment',default:null}),

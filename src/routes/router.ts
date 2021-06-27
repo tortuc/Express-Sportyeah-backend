@@ -224,6 +224,12 @@ export class Router {
      * @route /v1/comment/...
      */
     this.route.use("/v1/comment", require("./commentRoute"));
+    /**
+     * Manejador de rutas de reportes
+     *
+     * @route /v1/report/...
+     */
+    this.route.use("/v1/report", require("./reportRoute"));
   }
 
  

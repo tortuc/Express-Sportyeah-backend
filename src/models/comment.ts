@@ -120,7 +120,7 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
    * @param id  id del comentario
    */
   deleteComment(id) {
-    return Comment.findByIdAndUpdate(id, { deleted: true });
+    return Comment.findByIdAndUpdate(id, { deleted: true },{new:true});
   },
   /**
    * Editar un comentario
