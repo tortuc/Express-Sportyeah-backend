@@ -84,7 +84,7 @@ const Comment = typedModel("Comment", schema, undefined, undefined, {
   getRespondsByComments(comment, skip = 0) {
     return Comment.find({ comment, deleted: false })
       .populate("user")
-      .sort({ date: -1 })
+      .sort({ date: 1 })
       .skip(skip)
       .limit(5)
   },
